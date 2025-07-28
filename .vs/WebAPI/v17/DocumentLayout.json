@@ -1,0 +1,125 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{62C0224B-8843-4D42-95CB-A64673308CF8}|Data\\Data.csproj|c:\\disco - d\\documentos\\gabi\\utn\\3er a\u00F1o\\net\\pr\u00E1ctica\\tp-integrador\\webapi\\data\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{62C0224B-8843-4D42-95CB-A64673308CF8}|Data\\Data.csproj|solutionrelative:data\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C0A4ED59-9A3A-4348-B994-FFF856D6095B}|DTOs\\DTOs.csproj|c:\\disco - d\\documentos\\gabi\\utn\\3er a\u00F1o\\net\\pr\u00E1ctica\\tp-integrador\\webapi\\dtos\\usuariodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C0A4ED59-9A3A-4348-B994-FFF856D6095B}|DTOs\\DTOs.csproj|solutionrelative:dtos\\usuariodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FBD1E2D-747E-4DDB-856E-307679E7317B}|Domain.Model\\Domain.Model.csproj|c:\\disco - d\\documentos\\gabi\\utn\\3er a\u00F1o\\net\\pr\u00E1ctica\\tp-integrador\\webapi\\domain.model\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9FBD1E2D-747E-4DDB-856E-307679E7317B}|Domain.Model\\Domain.Model.csproj|solutionrelative:domain.model\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A93E763-65AA-456A-BE71-BBD6851B9CB2}|WebAPI\\WebAPI.csproj|c:\\disco - d\\documentos\\gabi\\utn\\3er a\u00F1o\\net\\pr\u00E1ctica\\tp-integrador\\webapi\\webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A93E763-65AA-456A-BE71-BBD6851B9CB2}|WebAPI\\WebAPI.csproj|solutionrelative:webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9FBD1E2D-747E-4DDB-856E-307679E7317B}|Domain.Model\\Domain.Model.csproj|c:\\disco - d\\documentos\\gabi\\utn\\3er a\u00F1o\\net\\pr\u00E1ctica\\tp-integrador\\webapi\\domain.model\\businessentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9FBD1E2D-747E-4DDB-856E-307679E7317B}|Domain.Model\\Domain.Model.csproj|solutionrelative:domain.model\\businessentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:3:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:4:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\Data\\Class1.cs",
+              "RelativeDocumentMoniker": "Data\\Class1.cs",
+              "ToolTip": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\Data\\Class1.cs",
+              "RelativeToolTip": "Data\\Class1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T20:34:10.46Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsuarioDTO.cs",
+              "DocumentMoniker": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\DTOs\\UsuarioDTO.cs",
+              "RelativeDocumentMoniker": "DTOs\\UsuarioDTO.cs",
+              "ToolTip": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\DTOs\\UsuarioDTO.cs",
+              "RelativeToolTip": "DTOs\\UsuarioDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T20:22:24.809Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\Domain.Model\\Usuario.cs",
+              "RelativeDocumentMoniker": "Domain.Model\\Usuario.cs",
+              "ToolTip": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\Domain.Model\\Usuario.cs",
+              "RelativeToolTip": "Domain.Model\\Usuario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T20:02:21.843Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BusinessEntity.cs",
+              "DocumentMoniker": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\Domain.Model\\BusinessEntity.cs",
+              "RelativeDocumentMoniker": "Domain.Model\\BusinessEntity.cs",
+              "ToolTip": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\Domain.Model\\BusinessEntity.cs",
+              "RelativeToolTip": "Domain.Model\\BusinessEntity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T19:54:54.93Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\WebAPI\\Program.cs",
+              "RelativeDocumentMoniker": "WebAPI\\Program.cs",
+              "ToolTip": "C:\\Disco - D\\Documentos\\GABI\\UTN\\3er A\u00D1O\\Net\\Pr\u00E1ctica\\TP-INTEGRADOR\\WebAPI\\WebAPI\\Program.cs",
+              "RelativeToolTip": "WebAPI\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T19:51:07.586Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
