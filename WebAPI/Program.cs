@@ -1,4 +1,7 @@
 using Domain.Model;
+using Application.Services;
+using DTOs;
+
 namespace WebAPI
 {
     public class Program
@@ -30,9 +33,54 @@ namespace WebAPI
 
             app.MapControllers();
 
-            app.Run();
+            app.MapGet("/usuarios/{id}", (int id) =>
+            {
 
-            Usuario gabi = new Usuario();
+                UsuarioService usuarioService = new UsuarioService();
+
+                UsuarioDTO dto = usuarioService.Get(id);
+
+                if (dto == null)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(dto); 
+            });
+
+            app.MapGet("/usuarios/", () =>
+            {
+                UsuarioService usuarioService = new UsuarioService();
+
+                List<UsuarioDTO> usuariosDTO = usuarioService.GetAll();
+
+                if (usuariosDTO.Count == 0)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(usuariosDTO);
+            });
+
+            app.MapPost("/usuarios/", (UsuarioDTO dto) =>
+            {
+                try
+                {
+                    UsuarioService usuarioService = new UsuarioService();
+
+                    UsuarioDTO usuarioDTO = usuarioService.Add(dto);
+
+                    return Results.Ok(usuarioDTO);
+
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
+
+            });
+
+            app.Run();
         }
     }
 }
