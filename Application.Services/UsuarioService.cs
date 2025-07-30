@@ -9,7 +9,6 @@ namespace Application.Services
 
         public UsuarioDTO Get(int id) { 
         
-           
             Usuario usuario = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
 
             if (usuario == null)

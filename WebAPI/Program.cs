@@ -1,6 +1,8 @@
 using Domain.Model;
 using Application.Services;
 using DTOs;
+using Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI
 {
@@ -69,6 +71,17 @@ namespace WebAPI
                     return Results.BadRequest(new { error = er.Message });
                 }
 
+            });
+            app.MapDelete("/usuarios/{id}", (int id) =>
+            {
+                Usuario userToDelete = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
+                if(userToDelete == null)
+                {
+                    return Results.BadRequest(new {error = $"User not found"} );
+                }
+                UsuarioInMemory.Usuarios.Remove(userToDelete);
+                return Results.Ok(new { message = $"Deleted user succesfully: {userToDelete.Nombre}, {userToDelete.Apellido}" });
+                
             });
 
             app.Run();
