@@ -40,7 +40,7 @@ namespace Domain.Model
             NombreUsuario = nombreUsuario;
             FechaAlta = fechaAlta;
         }
-
+        
 
 
     }

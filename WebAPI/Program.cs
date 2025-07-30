@@ -3,6 +3,7 @@ using Application.Services;
 using DTOs;
 using Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 
 namespace WebAPI
 {
@@ -13,7 +14,10 @@ namespace WebAPI
             var builder = WebApplication.CreateBuilder(args); //app builder que configura la app
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+                    });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -72,16 +76,42 @@ namespace WebAPI
                 }
 
             });
+            
+            app.MapPatch("/usuarios/{id}", (int id, UsuarioDTO dto) => 
+            {
+                /*try
+                {
+                    Usuario user = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
+                    if (user == null)
+                    {
+                        return Results.NotFound(new { error = "User not found" });
+                    }
+                    if (dto.Id != null) { user.Id = dto.Id; }
+                    if (dto.Nombre != null) { user.Nombre = dto.Nombre; }
+                    if (dto.Apellido != null) { user.Apellido = dto.Apellido; }
+                    if (dto.NombreUsuario != null) { user.NombreUsuario = dto.NombreUsuario; }
+                    if (dto.Habilitado != null) { user.Habilitado = dto.Habilitado; }
+                    if (dto.Email != null) { user.Email = dto.Email; }
+                    if (dto.FechaAlta != null) { user.FechaAlta = dto.FechaAlta; }
+                    if (dto.Clave != null) { user.Clave = dto.Clave; }
+                    return Results.Ok();
+                }catch(ArgumentException)
+                {
+                    return Results.BadRequest(new { message = "Bad Request"});
+                }
+                */
+            });
+
             app.MapDelete("/usuarios/{id}", (int id) =>
             {
-                Usuario userToDelete = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
-                if(userToDelete == null)
+                UsuarioDTO userDeleteded = usuarioService.Remove(id);
+                if (userDeleteded == null)
                 {
-                    return Results.BadRequest(new {error = $"User not found"} );
+                    return Results.NotFound();
                 }
-                UsuarioInMemory.Usuarios.Remove(userToDelete);
-                return Results.Ok(new { message = $"Deleted user succesfully: {userToDelete.Nombre}, {userToDelete.Apellido}" });
-                
+                return Results.Ok(userDeleteded);
+
+
             });
 
             app.Run();

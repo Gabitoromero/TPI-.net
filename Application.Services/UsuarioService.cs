@@ -30,8 +30,6 @@ namespace Application.Services
 
             return dto;
         }
-
-
         public List<UsuarioDTO> GetAll()
         {
             return UsuarioInMemory.Usuarios.Select(usuario => new UsuarioDTO
@@ -46,14 +44,14 @@ namespace Application.Services
             }).ToList();
 
         }
-
-
-
         public UsuarioDTO Add(UsuarioDTO dto)
         {
 
             if (UsuarioInMemory.Usuarios.Any(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase))){
-                throw new ArgumentException("Email ya en uso " + dto.Email);
+                throw new ArgumentException("This Email alredy exists: " + dto.Email);
+            }
+            if (dto.Habilitado == null || dto.NombreUsuario == null || dto.Nombre == null || dto.Apellido == null || dto.Clave == null || dto.Email == null) {
+                throw new ArgumentException("Properties non-nulleable are null");
             }
 
             int id = GetNextId();
@@ -65,7 +63,7 @@ namespace Application.Services
                 dto.Apellido,
                 dto.Clave,
                 dto.Email,
-                dto.Habilitado,
+                dto.Habilitado.Value,
                 dto.Nombre,
                 dto.NombreUsuario,
                 fechaAlta
@@ -73,6 +71,24 @@ namespace Application.Services
 
             UsuarioInMemory.Usuarios.Add(usuario);
             return dto;
+
+        }
+        public UsuarioDTO Remove(int id)
+        {
+            Usuario userToDelete = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
+
+            if (userToDelete == null){
+                return null;
+            }
+            UsuarioDTO userDeletedDTO = new UsuarioDTO
+            {
+                Id = userToDelete.Id,
+                NombreUsuario = userToDelete.NombreUsuario,
+                Email = userToDelete.Email
+            };
+
+            UsuarioInMemory.Usuarios.Remove(userToDelete);
+            return userDeletedDTO;
 
         }
         private int GetNextId()
