@@ -47,11 +47,13 @@ namespace Application.Services
         public UsuarioDTO Add(UsuarioDTO dto)
         {
 
-            if (UsuarioInMemory.Usuarios.Any(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase))){
-                throw new ArgumentException("This Email alredy exists: " + dto.Email);
-            }
+            
             if (dto.Habilitado == null || dto.NombreUsuario == null || dto.Nombre == null || dto.Apellido == null || dto.Clave == null || dto.Email == null) {
                 throw new ArgumentException("Properties non-nulleable are null");
+            }
+            if (UsuarioInMemory.Usuarios.Any(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new ArgumentException("This Email alredy exists: " + dto.Email);
             }
 
             int id = GetNextId();
@@ -73,14 +75,14 @@ namespace Application.Services
             return dto;
 
         }
-        public UsuarioDTO Remove(int id)
+        public UsuarioDeletedDTO Remove(int id)
         {
             Usuario userToDelete = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
 
             if (userToDelete == null){
                 return null;
             }
-            UsuarioDTO userDeletedDTO = new UsuarioDTO
+            UsuarioDeletedDTO userDeletedDTO = new UsuarioDeletedDTO
             {
                 Id = userToDelete.Id,
                 NombreUsuario = userToDelete.NombreUsuario,

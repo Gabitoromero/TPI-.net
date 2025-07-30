@@ -43,7 +43,7 @@ namespace WebAPI
 
                 if (dto == null)
                 {
-                    return Results.NotFound();
+                    return Results.NotFound(new { message= "User not found"});
                 }
 
                 return Results.Ok(dto); 
@@ -104,10 +104,10 @@ namespace WebAPI
 
             app.MapDelete("/usuarios/{id}", (int id) =>
             {
-                UsuarioDTO userDeleteded = usuarioService.Remove(id);
+                UsuarioDeletedDTO userDeleteded = usuarioService.Remove(id);
                 if (userDeleteded == null)
                 {
-                    return Results.NotFound();
+                    return Results.NotFound(new { data = "User not found" });
                 }
                 return Results.Ok(userDeleteded);
 
