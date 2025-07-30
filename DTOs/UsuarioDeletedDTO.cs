@@ -8,9 +8,9 @@ namespace DTOs
 {
      public class UsuarioDeletedDTO
      {
-        public int? Id { get; set; }
-        public string? Email { get; set; }
-        public string? NombreUsuario { get; set; }
+        public int Id { get; set; }
+        public string Email { get; set; }
+        public string NombreUsuario { get; set; }
 
 
      }

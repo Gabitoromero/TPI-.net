@@ -79,27 +79,12 @@ namespace WebAPI
             
             app.MapPatch("/usuarios/{id}", (int id, UsuarioDTO dto) => 
             {
-                /*try
+                UsuarioDTO userDto = usuarioService.Patch(id, dto);
+                if (userDto == null)
                 {
-                    Usuario user = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
-                    if (user == null)
-                    {
-                        return Results.NotFound(new { error = "User not found" });
-                    }
-                    if (dto.Id != null) { user.Id = dto.Id; }
-                    if (dto.Nombre != null) { user.Nombre = dto.Nombre; }
-                    if (dto.Apellido != null) { user.Apellido = dto.Apellido; }
-                    if (dto.NombreUsuario != null) { user.NombreUsuario = dto.NombreUsuario; }
-                    if (dto.Habilitado != null) { user.Habilitado = dto.Habilitado; }
-                    if (dto.Email != null) { user.Email = dto.Email; }
-                    if (dto.FechaAlta != null) { user.FechaAlta = dto.FechaAlta; }
-                    if (dto.Clave != null) { user.Clave = dto.Clave; }
-                    return Results.Ok();
-                }catch(ArgumentException)
-                {
-                    return Results.BadRequest(new { message = "Bad Request"});
+                     return Results.NotFound(new { message = "User not found" });
                 }
-                */
+                  return Results.Ok(userDto);
             });
 
             app.MapDelete("/usuarios/{id}", (int id) =>
