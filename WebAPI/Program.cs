@@ -8,10 +8,9 @@ namespace WebAPI
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            var builder = WebApplication.CreateBuilder(args); //app builder que configura la app
 
             // Add services to the container.
-
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -27,17 +26,13 @@ namespace WebAPI
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
+
+            UsuarioService usuarioService = new UsuarioService();
 
             app.MapGet("/usuarios/{id}", (int id) =>
             {
-
-                UsuarioService usuarioService = new UsuarioService();
-
                 UsuarioDTO dto = usuarioService.Get(id);
 
                 if (dto == null)
@@ -50,8 +45,6 @@ namespace WebAPI
 
             app.MapGet("/usuarios/", () =>
             {
-                UsuarioService usuarioService = new UsuarioService();
-
                 List<UsuarioDTO> usuariosDTO = usuarioService.GetAll();
 
                 if (usuariosDTO.Count == 0)
@@ -66,8 +59,6 @@ namespace WebAPI
             {
                 try
                 {
-                    UsuarioService usuarioService = new UsuarioService();
-
                     UsuarioDTO usuarioDTO = usuarioService.Add(dto);
 
                     return Results.Ok(usuarioDTO);
