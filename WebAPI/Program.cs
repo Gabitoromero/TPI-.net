@@ -1,10 +1,11 @@
-using Domain.Model;
 using Application.Services;
 using Data;
+using Domain.Model;
+using DTOs.EspecialidadDTOs;
+using DTOs.ModuloDTOs;
+using DTOs.UsuarioDTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
-using DTOs.UsuarioDTOs;
-using DTOs.EspecialidadDTOs;
 
 namespace WebAPI
 {
@@ -145,8 +146,61 @@ namespace WebAPI
 
 
             });
-            
+
+
+            //CRUD - Modulo ---------------------------------------------------------------------------------------------------------------------------
+            ModuloService moduloService = new ModuloService();
+
+            app.MapGet("/modulos/{id}", (int id) =>
+            {
+                ModuloDTO dto = moduloService.Get(id);
+
+                if (dto == null)
+                {
+                    return Results.NotFound(new { message = "Modulo not found" });
+                }
+
+                return Results.Ok(dto);
+            });
+
+            app.MapGet("/modulos/", () =>
+            {
+                List<ModuloDTO> modulosDTO = moduloService.GetAll();
+
+                if (modulosDTO.Count == 0)
+                {
+                    return Results.NotFound(new { message = "Modulos not found" });
+                }
+
+                return Results.Ok(modulosDTO);
+            }); 
+
+            app.MapPost("/modulos/", (NewModuloDTO dto) =>
+            {
+                try
+                {
+                    ModuloDTO moduloDTO = moduloService.Add(dto);
+                    return Results.Ok(moduloDTO);
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
+            }); 
+            app.MapDelete("/modulos/{id}", (int id) =>
+            {
+                ModuloDTO moduloDeleted = moduloService.Remove(id);
+                if (moduloDeleted == null)
+                {
+                    return Results.NotFound(new { data = "Modulo not found" });
+                }
+                return Results.Ok(moduloDeleted);
+            }); 
+
+
+
             app.Run();
+
         }
     }
 }
