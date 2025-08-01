@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Model", "Domain.Mode
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTOs", "DTOs\DTOs.csproj", "{C0A4ED59-9A3A-4348-B994-FFF856D6095B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsLogIn", "WinFormsLogIn\WinFormsLogIn.csproj", "{0410B6BA-D2A7-43DB-8581-716DD7DE7F50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsForms", "WinFormsLogIn\WindowsForms.csproj", "{0410B6BA-D2A7-43DB-8581-716DD7DE7F50}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{62C0224B-8843-4D42-95CB-A64673308CF8}"
 EndProject
