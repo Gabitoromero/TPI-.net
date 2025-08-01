@@ -1,4 +1,4 @@
-﻿namespace DTOs.UsuarioDTOs
+﻿namespace DTOs
 {   
     public class FullUsuarioDTO 
     {

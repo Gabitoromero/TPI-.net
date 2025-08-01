@@ -3,8 +3,7 @@ using Application.Services;
 using Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
-using DTOs.UsuarioDTOs;
-using DTOs.EspecialidadDTOs;
+using DTOs;
 
 namespace WebAPI
 {
@@ -15,10 +14,7 @@ namespace WebAPI
             var builder = WebApplication.CreateBuilder(args); //app builder que configura la app
 
             // Add services to the container.
-            builder.Services.AddControllers().AddJsonOptions(options =>
-                    {
-                        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-                    });
+            builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

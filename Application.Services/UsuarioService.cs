@@ -1,6 +1,6 @@
 ﻿using Data;
 using Domain.Model;
-using DTOs.UsuarioDTOs;
+using DTOs;
 
 namespace Application.Services
 {
