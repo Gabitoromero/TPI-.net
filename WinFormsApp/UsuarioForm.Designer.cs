@@ -1,6 +1,6 @@
-﻿namespace WinFormsLogIn
+﻿namespace WinFormsApp
 {
-    partial class Form1
+    partial class UsuarioForm
     {
         /// <summary>
         ///  Required designer variable.
