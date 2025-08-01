@@ -79,16 +79,6 @@ namespace WebAPI
 
             }); //checked
 
-            app.MapPatch("/usuarios/{id}", (int id, PatchUsuarioDTO dto) => 
-            {
-                FullUsuarioDTO userDto = usuarioService.Patch(id, dto);
-                if (userDto == null)
-                {
-                     return Results.NotFound(new { message = "User not found" });
-                }
-                  return Results.Ok(userDto);
-            }); //checked
-
             app.MapDelete("/usuarios/{id}", (int id) =>
             {
                 ShowUsuarioDTO userDeleteded = usuarioService.Remove(id);
@@ -100,7 +90,7 @@ namespace WebAPI
 
 
             }); //checked
-            /*
+            
             // CRUD - Especialidad ---------------------------------------------------------------------------------------------------------------------------
             EspecialidadService especialidadService = new EspecialidadService();
 
@@ -110,11 +100,11 @@ namespace WebAPI
 
                 if (dto == null)
                 {
-                    return Results.NotFound(new { message = "User not found" });
+                    return Results.NotFound(new { message = "Especialidad not found" });
                 }
 
                 return Results.Ok(dto);
-            });
+            });//checked
 
             app.MapGet("/especialidades/", () =>
             {
@@ -122,11 +112,11 @@ namespace WebAPI
 
                 if (usuariosDTO.Count == 0)
                 {
-                    return Results.NotFound();
+                    return Results.NotFound(new { message = "Especialidad not found" });
                 }
 
                 return Results.Ok(usuariosDTO);
-            });
+            });//checked
 
             app.MapPost("/especialidades/", (NewEspecialidadDTO dto) =>
             {
@@ -144,16 +134,6 @@ namespace WebAPI
 
             });
 
-            app.MapPatch("/especialidades/{id}", (int id, EspecialidadDTO dto) =>
-            {
-                EspecialidadDTO userDto = especialidadService.Patch(id, dto);
-                if (userDto == null)
-                {
-                    return Results.NotFound(new { message = "User not found" });
-                }
-                return Results.Ok(userDto);
-            });
-
             app.MapDelete("/especialidades/{id}", (int id) =>
             {
                 EspecialidadDTO espDeleted = especialidadService.Remove(id);
@@ -165,7 +145,7 @@ namespace WebAPI
 
 
             });
-            */
+            
             app.Run();
         }
     }

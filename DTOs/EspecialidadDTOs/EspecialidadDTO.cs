@@ -11,10 +11,5 @@ namespace DTOs.EspecialidadDTOs
         public int Id { set; get; }
         public string Descripcion { set; get; }
 
-        public EspecialidadDTO(int i, string d) 
-        {
-            Id = i;
-            Descripcion = d;
-        }
     }
 }

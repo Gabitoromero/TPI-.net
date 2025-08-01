@@ -22,15 +22,15 @@ namespace Application.Services
                 return null;
             }
 
-            EspecialidadDTO dto = new EspecialidadDTO(esp.Id, esp.Descripcion);
+            EspecialidadDTO dto = new EspecialidadDTO { Id = esp.Id, Descripcion = esp.Descripcion };
 
             return dto;
-        }
+        } //checked
         public List<EspecialidadDTO> GetAll()
         {
-            return EspecialidadInMemory.Especialidades.Select(e => new EspecialidadDTO(e.Id,e.Descripcion)).ToList();
+            return EspecialidadInMemory.Especialidades.Select(e => new EspecialidadDTO{ Id = e.Id, Descripcion = e.Descripcion }).ToList();
 
-        }
+        } //checked
         public EspecialidadDTO Add(NewEspecialidadDTO e)
         {
             if ( e.Descripcion == null)
@@ -44,13 +44,12 @@ namespace Application.Services
 
             int id = GetNextId();
 
-            Especialidad newEspecialidad = new Especialidad(id,e.Descripcion);
-            EspecialidadDTO espDTO = new EspecialidadDTO(id, e.Descripcion);
-
-            EspecialidadInMemory.Especialidades.Add(newEspecialidad);
+            Especialidad newEsp = new Especialidad(id,e.Descripcion);
+            EspecialidadDTO espDTO = new EspecialidadDTO { Id= id, Descripcion= e.Descripcion };
+            EspecialidadInMemory.Especialidades.Add(newEsp);
             return espDTO;
 
-        }
+        } //checked
         public EspecialidadDTO Remove(int id)
         {
             Especialidad espToDelete = EspecialidadInMemory.Especialidades.Find(u => u.Id == id);
@@ -59,20 +58,11 @@ namespace Application.Services
             {
                 return null;
             }
-            EspecialidadDTO espDeletedDTO = new EspecialidadDTO(espToDelete.Id, espToDelete.Descripcion);
+            EspecialidadDTO espDeletedDTO = new EspecialidadDTO{ Id = espToDelete.Id, Descripcion = espToDelete.Descripcion };
             EspecialidadInMemory.Especialidades.Remove(espToDelete);
             return espDeletedDTO;
 
-        }
-        public EspecialidadDTO Patch(int id, EspecialidadDTO dto)
-        {
-            Especialidad espToUpdate = EspecialidadInMemory.Especialidades.Find(u => u.Id == id);
-
-            if (espToUpdate == null) { return null; }
-            if (dto.Id != null) { espToUpdate.Id = dto.Id; }
-            if (dto.Descripcion != null) espToUpdate.Descripcion = dto.Descripcion;
-            return new EspecialidadDTO(espToUpdate.Id, espToUpdate.Descripcion);
-        }
+        } //checked
         private int GetNextId()
         {
 

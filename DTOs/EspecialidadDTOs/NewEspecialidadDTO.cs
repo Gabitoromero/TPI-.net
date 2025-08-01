@@ -8,12 +8,8 @@ namespace DTOs.EspecialidadDTOs
 {
     public  class NewEspecialidadDTO
     {
-        public string? Descripcion { set; get; }
+        public string Descripcion { set; get; }
 
-        public NewEspecialidadDTO(string d)
-        {
-            Descripcion = d;
-        }
     }
 }
 

@@ -91,32 +91,6 @@ namespace Application.Services
             return userDeletedDTO;
 
         }
-        public FullUsuarioDTO Patch(int id, PatchUsuarioDTO dto)
-        {
-            Usuario userToUpdate = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
-
-            if (userToUpdate == null) { return null; }
-            if (dto.Id != null) { userToUpdate.Id = dto.Id.Value; }
-            if (dto.Nombre != null) userToUpdate.Nombre = dto.Nombre;
-            if (dto.Apellido != null) userToUpdate.Apellido = dto.Apellido;
-            if (dto.Clave != null) userToUpdate.Clave = dto.Clave;
-            if (dto.Email != null) userToUpdate.Email = dto.Email;
-            if (dto.NombreUsuario != null) userToUpdate.NombreUsuario = dto.NombreUsuario;
-            if (dto.Habilitado.HasValue) userToUpdate.Habilitado = dto.Habilitado.Value;
-            if (dto.FechaAlta.HasValue) userToUpdate.FechaAlta = dto.FechaAlta.Value;
-
-            return new FullUsuarioDTO
-            {
-                Id = userToUpdate.Id,
-                Nombre = userToUpdate.Nombre,
-                Apellido = userToUpdate.Apellido,
-                Email = userToUpdate.Email,
-                Clave = userToUpdate.Clave,
-                NombreUsuario = userToUpdate.NombreUsuario,
-                Habilitado = userToUpdate.Habilitado,
-                FechaAlta = userToUpdate.FechaAlta
-            };
-        }
         private int GetNextId()
         {
 
