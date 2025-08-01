@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Domain.Model
 {
@@ -40,7 +41,19 @@ namespace Domain.Model
             NombreUsuario = nombreUsuario;
             FechaAlta = fechaAlta;
         }
-        
+        /*
+        public Usuario() 
+        {
+            Id = 0;
+            Apellido = "Apellido";
+            Clave = "clave";
+            Email = "correo@email.com";
+            Habilitado = false;
+            Nombre = "Nombre";
+            NombreUsuario = "NombreUsuario";
+            FechaAlta = DateTime.Now;
+        }
+        */
 
 
     }

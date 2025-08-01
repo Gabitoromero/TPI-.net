@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Model
 {
-    internal class Especialidad
+    public class Especialidad
     {
         //Fields
         int _id;
@@ -14,5 +14,12 @@ namespace Domain.Model
         //Properties
         public int Id { get; set; }
         public string Descripcion { get; set; }
+
+        public Especialidad(int i, string d)
+        {
+            Id = i;
+            Descripcion = d;
+        }
     }
+    
 }
