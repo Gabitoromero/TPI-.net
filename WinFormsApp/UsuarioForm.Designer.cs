@@ -30,8 +30,8 @@
         {
             gridUsuarios = new DataGridView();
             btnListar = new Button();
-            btnMostrarUno = new Button();
-            numUpDownID = new NumericUpDown();
+            btnMostrarUnUser = new Button();
+            numUpDownIdUser = new NumericUpDown();
             gridUnicoUsuario = new PropertyGrid();
             btnAddUsuario = new Button();
             txtNombre = new TextBox();
@@ -46,7 +46,7 @@
             labelClave = new Label();
             gridNuevoUsuario = new PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)gridUsuarios).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numUpDownID).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numUpDownIdUser).BeginInit();
             SuspendLayout();
             // 
             // gridUsuarios
@@ -67,22 +67,22 @@
             btnListar.UseVisualStyleBackColor = true;
             btnListar.Click += btnListar_Click;
             // 
-            // btnMostrarUno
+            // btnMostrarUnUser
             // 
-            btnMostrarUno.Location = new Point(349, 6);
-            btnMostrarUno.Name = "btnMostrarUno";
-            btnMostrarUno.Size = new Size(187, 56);
-            btnMostrarUno.TabIndex = 3;
-            btnMostrarUno.Text = "Buscar";
-            btnMostrarUno.UseVisualStyleBackColor = true;
-            btnMostrarUno.Click += btnMostrarUno_Click;
+            btnMostrarUnUser.Location = new Point(349, 6);
+            btnMostrarUnUser.Name = "btnMostrarUnUser";
+            btnMostrarUnUser.Size = new Size(187, 56);
+            btnMostrarUnUser.TabIndex = 3;
+            btnMostrarUnUser.Text = "Buscar";
+            btnMostrarUnUser.UseVisualStyleBackColor = true;
+            btnMostrarUnUser.Click += btnMostrarUno_Click;
             // 
-            // numUpDownID
+            // numUpDownIdUser
             // 
-            numUpDownID.Location = new Point(542, 25);
-            numUpDownID.Name = "numUpDownID";
-            numUpDownID.Size = new Size(130, 23);
-            numUpDownID.TabIndex = 4;
+            numUpDownIdUser.Location = new Point(542, 25);
+            numUpDownIdUser.Name = "numUpDownIdUser";
+            numUpDownIdUser.Size = new Size(130, 23);
+            numUpDownIdUser.TabIndex = 4;
             // 
             // gridUnicoUsuario
             // 
@@ -206,14 +206,14 @@
             Controls.Add(txtNombre);
             Controls.Add(btnAddUsuario);
             Controls.Add(gridUnicoUsuario);
-            Controls.Add(numUpDownID);
-            Controls.Add(btnMostrarUno);
+            Controls.Add(numUpDownIdUser);
+            Controls.Add(btnMostrarUnUser);
             Controls.Add(btnListar);
             Controls.Add(gridUsuarios);
             Name = "UsuarioForm";
             Text = "Usuarios";
             ((System.ComponentModel.ISupportInitialize)gridUsuarios).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numUpDownID).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numUpDownIdUser).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -223,11 +223,11 @@
         private DataGridView gridUsuarios;
         private Button btnListar;
         private TextBox txtNombre;
-        private Button btnMostrarUno;
+        private Button btnMostrarUnUser;
         private NumericUpDown numericUpDown1;
         private PropertyGrid propertyGridUsuario;
         private NumericUpDown numericUpDownID;
-        private NumericUpDown numUpDownID;
+        private NumericUpDown numUpDownIdUser;
         private PropertyGrid GridUnicoUsuario;
         private PropertyGrid gridUnicoUsuario;
         private Button btnAddUsuario;

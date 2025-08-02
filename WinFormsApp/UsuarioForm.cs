@@ -28,7 +28,7 @@ namespace WinFormsApp
         {
             try
             {
-                int id = (int)numUpDownID.Value;
+                int id = (int)numUpDownIdUser.Value;
                 FullUsuarioDTO user = await APIUsuario.GetAsync(id);
 
                 if (user != null)
