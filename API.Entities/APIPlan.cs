@@ -6,12 +6,12 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace WindowsForms
+namespace API.Entities
 {
-    public class APIPlanes
+    public class APIPlan
     {
         private static HttpClient client = new HttpClient();
-        static APIPlanes()
+        static APIPlan()
         {
             client.BaseAddress = new Uri("https://localhost:7265/");
             client.DefaultRequestHeaders.Accept.Clear();
@@ -24,7 +24,7 @@ namespace WindowsForms
                 HttpResponseMessage response = await client.GetAsync("planes/" + id);
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadFromJsonAsync<PlanDTO>(); 
+                    return await response.Content.ReadFromJsonAsync<PlanDTO>();
                 }
                 else
                 {
@@ -65,16 +65,12 @@ namespace WindowsForms
                 throw new Exception($"Timeout retrieving plans. Error: ${ex.Message}");
             }
         }
-        public static async Task<PlanDTO> DeleteAsync(int id)
+        public static async Task DeleteAsync(int id)
         {
             try
             {
                 HttpResponseMessage resp = await client.DeleteAsync("planes/" + id);
-                if (resp.IsSuccessStatusCode)
-                {
-                    return await resp.Content.ReadFromJsonAsync<PlanDTO>();
-                }
-                else
+                if (!resp.IsSuccessStatusCode)
                 {
                     string errmen = await resp.Content.ReadAsStringAsync();
                     throw new Exception($"OOPS! Something went wrong deleting plan with ID:{id}. Error: {errmen}");
@@ -114,5 +110,30 @@ namespace WindowsForms
             }
         }
 
+        public static async Task<PlanDTO> UpdateAsync(PlanDTO dto)
+        {
+            try
+            {
+                HttpResponseMessage resp = await client.PutAsJsonAsync("planes/", dto);
+
+                if (!resp.IsSuccessStatusCode)
+                {
+                    string errorContent = await resp.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Something went wrong updating plan. Error: {errorContent}");
+                }
+
+                return await resp.Content.ReadFromJsonAsync<PlanDTO>();
+            }
+
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while updating plan. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout updating plan. Error: {ex.Message}");
+            }
+
+        }
     }
 }
