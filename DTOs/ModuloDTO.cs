@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTOs.ModuloDTOs
+namespace DTOs
 {
-    public class NewModuloDTO
+    public class ModuloDTO
     {
+        public int Id { set; get; }
         public string Descripcion { set; get; }
     }
 }

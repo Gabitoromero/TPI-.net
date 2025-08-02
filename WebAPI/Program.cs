@@ -1,13 +1,9 @@
 using Application.Services;
 using Data;
 using Domain.Model;
-using DTOs.EspecialidadDTOs;
-using DTOs.ModuloDTOs;
-using DTOs.UsuarioDTOs;
+using DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
-using DTOs.UsuarioDTOs;
-using DTOs.EspecialidadDTOs;
 
 namespace WebAPI
 {
@@ -32,7 +28,74 @@ namespace WebAPI
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
-            
+
+            //PLANES CRUD ---------------------------------------------------------------------------------------------------------------------------
+            app.MapGet("/planes/{id}", (int id) =>
+            {
+                PlanService planService = new PlanService();
+                PlanDTO dto = planService.Get(id);
+                if (dto == null)
+                {
+                    return Results.NotFound();
+                }
+                return Results.Ok(dto);
+            });
+
+            app.MapGet("/planes/", () =>
+            {
+                PlanService planService = new PlanService();
+                List<PlanDTO> planesDTO = planService.GetAll();
+                if (planesDTO.Count == 0)
+                {
+                    return Results.NotFound();
+                }
+                return Results.Ok(planesDTO);
+            });
+
+            app.MapPost("/planes/", (PlanDTO dto) =>
+            {
+                try
+                {
+                    PlanService planService = new PlanService();
+                    PlanDTO planDTO = planService.Add(dto);
+                    return Results.Ok(planDTO);
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
+            });
+
+            app.MapPut("/planes/", (PlanDTO dto) =>
+            {
+                try
+                {
+                    PlanService planService = new PlanService();
+                    PlanDTO planDTO = planService.Update(dto);
+
+                    return Results.Ok(planDTO);
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+
+                }
+            });
+
+            app.MapDelete("/planes/{id}", (int id) =>
+            {
+                try
+                {
+                    PlanService planService = new PlanService();
+                    planService.Delete(id);
+                    return Results.Ok();
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
+            });
+
             // CRUD - Usuario ---------------------------------------------------------------------------------------------------------------------------
             UsuarioService usuarioService = new UsuarioService();
 
@@ -168,8 +231,31 @@ namespace WebAPI
                     return Results.NotFound(new { message = "Modulos not found" });
                 }
 
+                return Results.Ok(modulosDTO);
             });
-            
+
+            app.MapPost("/modulos/", (NewModuloDTO dto) =>
+            {
+                try
+                {
+                    ModuloDTO moduloDTO = moduloService.Add(dto);
+                    return Results.Ok(moduloDTO);
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
+            });
+            app.MapDelete("/modulos/{id}", (int id) =>
+            {
+                ModuloDTO moduloDeleted = moduloService.Remove(id);
+                if (moduloDeleted == null)
+                {
+                    return Results.NotFound(new { data = "Modulo not found" });
+                }
+                return Results.Ok(moduloDeleted);
+            });
+
             app.Run();
 
         }
