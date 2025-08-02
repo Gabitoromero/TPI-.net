@@ -54,7 +54,7 @@ namespace API.Entities
                 else
                 {
                     string errorMensage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong getting specialities. Eror: ${errorMensage}");
+                    throw new Exception($"OOPS! Something went wrong getting specialities. Error: ${errorMensage}");
                 }
             }
             catch (HttpRequestException ex)
@@ -83,11 +83,11 @@ namespace API.Entities
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while retrieving speciality with ID:{id}. Eror:{err}");
+                throw new Exception($"OOPS! A connection error ocurred while retrieving speciality with ID:{id}. Error:{err}");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout retrieving speciality with ID:{id}. Eror:{err}");
+                throw new Exception($"Timeout retrieving speciality with ID:{id}. Error:{err}");
             }
         }
         public static async Task<EspecialidadDTO> AddAsync(NewEspecialidadDTO dto)
@@ -111,7 +111,7 @@ namespace API.Entities
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout posting speciality. Eror:{err}");
+                throw new Exception($"Timeout posting speciality. Error:{err}");
             }
         }
     }
