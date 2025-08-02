@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Services", "Application.Services\Application.Services.csproj", "{8B49D4B5-65FA-4951-A79F-EA36598F3E10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinForms", "WinFormsApp\WinForms.csproj", "{569C84A5-F7C2-4B8A-8D81-AACCCAD3773E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp", "WinFormsApp\WinFormsApp.csproj", "{569C84A5-F7C2-4B8A-8D81-AACCCAD3773E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Entities", "API.Entities\API.Entities.csproj", "{F45B05D8-B76E-4CC3-A5E9-E50CBE282441}"
 EndProject

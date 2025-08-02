@@ -101,14 +101,14 @@ namespace WebAPI
 
             app.MapGet("/especialidades/", () =>
             {
-                List<EspecialidadDTO> usuariosDTO = especialidadService.GetAll();
+                List<EspecialidadDTO> espDTO = especialidadService.GetAll();
 
-                if (usuariosDTO.Count == 0)
+                if (espDTO.Count == 0)
                 {
                     return Results.NotFound(new { message = "Especialidad not found" });
                 }
 
-                return Results.Ok(usuariosDTO);
+                return Results.Ok(espDTO);
             });//checked
 
             app.MapPost("/especialidades/", (NewEspecialidadDTO dto) =>
