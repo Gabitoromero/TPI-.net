@@ -15,7 +15,7 @@ namespace API.Entities
         private static HttpClient client = new HttpClient();
         static APIUsuario()
         {
-            client.BaseAddress = new Uri("https://localhost:5183/");
+            client.BaseAddress = new Uri("https://localhost:7265/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
