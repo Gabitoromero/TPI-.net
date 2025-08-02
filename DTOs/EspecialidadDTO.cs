@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DTOs.EspecialidadDTOs
+namespace DTOs
 {
     public class EspecialidadDTO
     {

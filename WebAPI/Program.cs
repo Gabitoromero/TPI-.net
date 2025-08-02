@@ -6,6 +6,8 @@ using DTOs.ModuloDTOs;
 using DTOs.UsuarioDTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
+using DTOs.UsuarioDTOs;
+using DTOs.EspecialidadDTOs;
 
 namespace WebAPI
 {
@@ -14,14 +16,8 @@ namespace WebAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args); //app builder que configura la app
-
-            // Add services to the container.
-            builder.Services.AddControllers().AddJsonOptions(options =>
-                    {
-                        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-                    });
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddControllers(); // Add services to the container.
+            builder.Services.AddEndpointsApiExplorer();  // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
@@ -109,14 +105,14 @@ namespace WebAPI
 
             app.MapGet("/especialidades/", () =>
             {
-                List<EspecialidadDTO> usuariosDTO = especialidadService.GetAll();
+                List<EspecialidadDTO> espDTO = especialidadService.GetAll();
 
-                if (usuariosDTO.Count == 0)
+                if (espDTO.Count == 0)
                 {
                     return Results.NotFound(new { message = "Especialidad not found" });
                 }
 
-                return Results.Ok(usuariosDTO);
+                return Results.Ok(espDTO);
             });//checked
 
             app.MapPost("/especialidades/", (NewEspecialidadDTO dto) =>
@@ -172,35 +168,12 @@ namespace WebAPI
                     return Results.NotFound(new { message = "Modulos not found" });
                 }
 
-                return Results.Ok(modulosDTO);
-            }); 
-
-            app.MapPost("/modulos/", (NewModuloDTO dto) =>
-            {
-                try
-                {
-                    ModuloDTO moduloDTO = moduloService.Add(dto);
-                    return Results.Ok(moduloDTO);
-                }
-                catch (ArgumentException er)
-                {
-                    return Results.BadRequest(new { error = er.Message });
-                }
-            }); 
-            app.MapDelete("/modulos/{id}", (int id) =>
-            {
-                ModuloDTO moduloDeleted = moduloService.Remove(id);
-                if (moduloDeleted == null)
-                {
-                    return Results.NotFound(new { data = "Modulo not found" });
-                }
-                return Results.Ok(moduloDeleted);
-            }); 
-
-
-
+            });
+            
             app.Run();
 
         }
     }
 }
+
+  
