@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             btnListarEsp = new Button();
-            button2 = new Button();
-            textBox1 = new TextBox();
+            btnAddEsp = new Button();
+            txtDesc = new TextBox();
             gridUnicaEsp = new PropertyGrid();
             gridNuevaEsp = new PropertyGrid();
             labelDescripcion = new Label();
@@ -49,23 +49,24 @@
             btnListarEsp.TabIndex = 0;
             btnListarEsp.Text = "Listar especialidades";
             btnListarEsp.UseVisualStyleBackColor = true;
-            btnListarEsp.Click += this.btnListarEsp_Click;
+            btnListarEsp.Click += btnListarEsp_Click;
             // 
-            // button2
+            // btnAddEsp
             // 
-            button2.Location = new Point(600, 12);
-            button2.Name = "button2";
-            button2.Size = new Size(140, 66);
-            button2.TabIndex = 1;
-            button2.Text = "Agregar especialidad";
-            button2.UseVisualStyleBackColor = true;
+            btnAddEsp.Location = new Point(600, 12);
+            btnAddEsp.Name = "btnAddEsp";
+            btnAddEsp.Size = new Size(140, 66);
+            btnAddEsp.TabIndex = 1;
+            btnAddEsp.Text = "Agregar especialidad";
+            btnAddEsp.UseVisualStyleBackColor = true;
+            btnAddEsp.Click += btnAddEsp_Click;
             // 
-            // textBox1
+            // txtDesc
             // 
-            textBox1.Location = new Point(749, 52);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(181, 23);
-            textBox1.TabIndex = 2;
+            txtDesc.Location = new Point(749, 52);
+            txtDesc.Name = "txtDesc";
+            txtDesc.Size = new Size(181, 23);
+            txtDesc.TabIndex = 2;
             // 
             // gridUnicaEsp
             // 
@@ -84,11 +85,12 @@
             // labelDescripcion
             // 
             labelDescripcion.AutoSize = true;
-            labelDescripcion.Location = new Point(776, 18);
+            labelDescripcion.Location = new Point(749, 21);
             labelDescripcion.Name = "labelDescripcion";
             labelDescripcion.Size = new Size(72, 15);
             labelDescripcion.TabIndex = 5;
             labelDescripcion.Text = "Descripción:";
+            labelDescripcion.Click += labelDescripcion_Click;
             // 
             // numUpDownEsp
             // 
@@ -105,6 +107,7 @@
             btnMostrarUnaEsp.TabIndex = 7;
             btnMostrarUnaEsp.Text = "Buscar";
             btnMostrarUnaEsp.UseVisualStyleBackColor = true;
+            btnMostrarUnaEsp.Click += btnMostrarUnaEsp_Click;
             // 
             // gridEsp
             // 
@@ -125,8 +128,8 @@
             Controls.Add(labelDescripcion);
             Controls.Add(gridNuevaEsp);
             Controls.Add(gridUnicaEsp);
-            Controls.Add(textBox1);
-            Controls.Add(button2);
+            Controls.Add(txtDesc);
+            Controls.Add(btnAddEsp);
             Controls.Add(btnListarEsp);
             Name = "EspecialidadForm";
             Text = "Especialidades";
@@ -140,8 +143,8 @@
         #endregion
 
         private Button btnListarEsp;
-        private Button button2;
-        private TextBox textBox1;
+        private Button btnAddEsp;
+        private TextBox txtDesc;
         private PropertyGrid gridUnicaEsp;
         private PropertyGrid gridNuevaEsp;
         private Label labelDescripcion;

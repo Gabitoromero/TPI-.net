@@ -34,7 +34,7 @@ namespace WinFormsApp
                 if (user != null)
                 {
                     gridUnicoUsuario.SelectedObject = user;
-                    //propertyGridUsuario.Enabled = false;
+                    
 
                 }
                 else
@@ -58,7 +58,7 @@ namespace WinFormsApp
         {
             try
             {
-                 PostUsuarioDTO newUser = new PostUsuarioDTO
+                PostUsuarioDTO newUser = new PostUsuarioDTO
                 {
                     Nombre = txtNombre.Text,
                     Apellido = txtApellido.Text,
@@ -75,7 +75,7 @@ namespace WinFormsApp
                 }
                 PostUsuarioDTO addedUser = await APIUsuario.AddAsync(newUser);
                 gridNuevoUsuario.SelectedObject = addedUser;
-                //propertyGridUsuario.Enabled = false;
+              
 
 
             }
@@ -83,6 +83,11 @@ namespace WinFormsApp
             {
                 MessageBox.Show($"Error al agregar usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void UsuarioForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

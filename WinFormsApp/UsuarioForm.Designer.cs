@@ -212,6 +212,7 @@
             Controls.Add(gridUsuarios);
             Name = "UsuarioForm";
             Text = "Usuarios";
+            Load += UsuarioForm_Load;
             ((System.ComponentModel.ISupportInitialize)gridUsuarios).EndInit();
             ((System.ComponentModel.ISupportInitialize)numUpDownIdUser).EndInit();
             ResumeLayout(false);
