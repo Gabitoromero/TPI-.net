@@ -138,8 +138,78 @@ namespace WebAPI
 
 
             });
-            
+
+
+
+            app.MapGet("/planes/{id}", (int id) =>
+            {
+                PlanService planService = new PlanService();
+                PlanDTO dto = planService.Get(id);
+                if (dto == null)
+                {
+                    return Results.NotFound();
+                }
+                return Results.Ok(dto);
+            });
+
+            app.MapGet("/planes/", () =>
+            {
+                PlanService planService = new PlanService();
+                List<PlanDTO> planesDTO = planService.GetAll();
+                if (planesDTO.Count == 0)
+                {
+                    return Results.NotFound();
+                }
+                return Results.Ok(planesDTO);
+            });
+
+            app.MapPost("/planes/", (PlanDTO dto) =>
+            {
+                try
+                {
+                    PlanService planService = new PlanService();
+                    PlanDTO planDTO = planService.Add(dto);
+                    return Results.Ok(planDTO);
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
+            });
+
+            app.MapPut("/planes/", (PlanDTO dto) =>
+            {
+                try
+                {
+                    PlanService planService = new PlanService();
+                    PlanDTO planDTO = planService.Update(dto);
+
+                    return Results.Ok(planDTO);
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+
+                }
+            });
+
+            app.MapDelete("/planes/{id}", (int id) =>
+            {
+                try
+                {
+                    PlanService planService = new PlanService();
+                    planService.Delete(id);
+                    return Results.Ok();
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
+            });
+
             app.Run();
         }
     }
 }
+
+  
