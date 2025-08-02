@@ -48,7 +48,7 @@ namespace API.Entities
             try
             {
                 HttpResponseMessage response = await client.GetAsync("usuarios");
-                if(response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadFromJsonAsync<List<ShowUsuarioDTO>>();
                 }
@@ -58,11 +58,11 @@ namespace API.Entities
                     throw new Exception($"OOPS! Something went wrong getting users. Eror: ${errorMensage}");
                 }
             }
-            catch(HttpRequestException ex)
+            catch (HttpRequestException ex)
             {
                 throw new Exception($"OOPS! A connection error occurred while retrieving users. Error: {ex.Message}");
             }
-            catch(TaskCanceledException ex)
+            catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout retrieving users. Error: ${ex.Message}");
             }
@@ -72,7 +72,7 @@ namespace API.Entities
             try
             {
                 HttpResponseMessage resp = await client.DeleteAsync("usuarios/" + id);
-                if(resp.IsSuccessStatusCode)
+                if (resp.IsSuccessStatusCode)
                 {
                     return await resp.Content.ReadFromJsonAsync<ShowUsuarioDTO>();
                 }
@@ -82,11 +82,11 @@ namespace API.Entities
                     throw new Exception($"OOPS! Something went wrong deleting user with ID:{id}. Error: {errmen}");
                 }
             }
-            catch(HttpRequestException err)
+            catch (HttpRequestException err)
             {
                 throw new Exception($"OOPS! A connection error ocurred while retrieving user with ID:{id}. Eror:{err}");
             }
-            catch(TaskCanceledException err)
+            catch (TaskCanceledException err)
             {
                 throw new Exception($"Timeout retrieving user with ID:{id}. Eror:{err}");
             }
@@ -106,11 +106,11 @@ namespace API.Entities
                     throw new Exception($"OOPS! Something went wrong posting user. Error:{errmen} ");
                 }
             }
-            catch(HttpRequestException err)
+            catch (HttpRequestException err)
             {
                 throw new Exception($"OOPS! A connection error ocurred while posting user. Error:{err}");
             }
-            catch(TaskCanceledException err)
+            catch (TaskCanceledException err)
             {
                 throw new Exception($"Timeout posting user. Eror:{err}");
             }
