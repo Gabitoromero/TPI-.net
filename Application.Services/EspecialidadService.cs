@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Data;
 using Domain;
 using Domain.Model;
-using DTOs.EspecialidadDTOs;
+using DTOs;
 
 namespace Application.Services
 {
