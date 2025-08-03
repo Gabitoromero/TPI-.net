@@ -73,22 +73,16 @@ namespace Application.Services
             return dto;
 
         }
-        public ShowUsuarioDTO Remove(int id)
+        public void Delete(int id)
         {
             Usuario userToDelete = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
 
             if (userToDelete == null){
-                return null;
+                throw new ArgumentException("User with ID " + id + " does not exist.");
             }
-            ShowUsuarioDTO userDeletedDTO = new ShowUsuarioDTO
-            {
-                Id = userToDelete.Id,
-                NombreUsuario = userToDelete.NombreUsuario,
-                Email = userToDelete.Email
-            };
-
+            
             UsuarioInMemory.Usuarios.Remove(userToDelete);
-            return userDeletedDTO;
+            return;
 
         }
         private int GetNextId()

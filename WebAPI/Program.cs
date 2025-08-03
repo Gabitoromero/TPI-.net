@@ -97,10 +97,11 @@ namespace WebAPI
             });
 
             // CRUD - Usuario ---------------------------------------------------------------------------------------------------------------------------
-            UsuarioService usuarioService = new UsuarioService();
+            
 
             app.MapGet("/usuarios/{id}", (int id) =>
             {
+                UsuarioService usuarioService = new UsuarioService();
                 FullUsuarioDTO dto = usuarioService.Get(id);
 
                 if (dto == null)
@@ -109,10 +110,11 @@ namespace WebAPI
                 }
 
                 return Results.Ok(dto); 
-            }); //checked
+            }); 
 
             app.MapGet("/usuarios/", () =>
             {
+                UsuarioService usuarioService = new UsuarioService();
                 List<ShowUsuarioDTO> usuariosDTO = usuarioService.GetAll();
 
                 if (usuariosDTO.Count == 0)
@@ -121,12 +123,13 @@ namespace WebAPI
                 }
 
                 return Results.Ok(usuariosDTO);
-            }); //checked
+            }); 
 
             app.MapPost("/usuarios/", (PostUsuarioDTO dto) =>
             {
                 try
                 {
+                    UsuarioService usuarioService = new UsuarioService();
                     PostUsuarioDTO usuarioDTO = usuarioService.Add(dto);
 
                     return Results.Ok(usuarioDTO);
@@ -137,19 +140,24 @@ namespace WebAPI
                     return Results.BadRequest(new { error = er.Message });
                 }
 
-            }); //checked
+            }); 
 
             app.MapDelete("/usuarios/{id}", (int id) =>
             {
-                ShowUsuarioDTO userDeleteded = usuarioService.Remove(id);
-                if (userDeleteded == null)
+                try
                 {
-                    return Results.NotFound(new { data = "User not found" });
+                    UsuarioService usuarioService = new UsuarioService();
+                    usuarioService.Delete(id);
+                    return Results.Ok();
                 }
-                return Results.Ok(userDeleteded);
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
 
+                
 
-            }); //checked
+            });
             
             // CRUD - Especialidad ---------------------------------------------------------------------------------------------------------------------------
             EspecialidadService especialidadService = new EspecialidadService();
