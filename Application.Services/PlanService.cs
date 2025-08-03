@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DTOs;
 using Data;
+using Domain.Model;
 
 namespace Application.Services
 {
@@ -42,8 +43,17 @@ namespace Application.Services
         {
             
             int id = GetNextId();
-            var plan = new Domain.Model.Plan(id, dto.Descripcion, dto.IdEspecialidad);
+            Plan plan = new Plan(id, dto.Descripcion, dto.IdEspecialidad);
+
+            Plan planEncontrado = PlanInMemory.Planes.Find(p => p.Descripcion.Equals(dto.Descripcion) && p.IdEspecialidad.Equals(dto.IdEspecialidad));
+
+            if (planEncontrado != null)
+            {
+                throw new ArgumentException("Ya existe un plan con la misma descripción y especialidad: " + dto.Descripcion);
+            }
+
             PlanInMemory.Planes.Add(plan);
+
 
             return new PlanDTO
             {

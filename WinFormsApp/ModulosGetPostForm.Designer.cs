@@ -58,6 +58,7 @@
             GridModulos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             GridModulos.Location = new Point(12, 12);
             GridModulos.Name = "GridModulos";
+            GridModulos.ReadOnly = true;
             GridModulos.Size = new Size(360, 200);
             GridModulos.TabIndex = 0;
             // 
