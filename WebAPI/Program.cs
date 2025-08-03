@@ -234,7 +234,7 @@ namespace WebAPI
                 return Results.Ok(modulosDTO);
             });
 
-            app.MapPost("/modulos/", (NewModuloDTO dto) =>
+            app.MapPost("/modulos/", (ModuloDTO dto) =>
             {
                 try
                 {
@@ -248,12 +248,29 @@ namespace WebAPI
             });
             app.MapDelete("/modulos/{id}", (int id) =>
             {
-                ModuloDTO moduloDeleted = moduloService.Remove(id);
-                if (moduloDeleted == null)
+                try
                 {
-                    return Results.NotFound(new { data = "Modulo not found" });
+                    moduloService.Delete(id);             
+                    return Results.Ok();
                 }
-                return Results.Ok(moduloDeleted);
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
+            });
+
+
+            app.MapPut("/modulos/", (ModuloDTO dto) =>
+            {
+                try
+                {
+                    ModuloDTO moduloDTO = moduloService.Update(dto);
+                    return Results.Ok(moduloDTO);
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
             });
 
             app.Run();

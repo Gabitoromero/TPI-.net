@@ -58,7 +58,6 @@
             GridPlanes.Location = new Point(24, 76);
             GridPlanes.MultiSelect = false;
             GridPlanes.Name = "GridPlanes";
-            GridPlanes.ReadOnly = true;
             GridPlanes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             GridPlanes.Size = new Size(403, 350);
             GridPlanes.TabIndex = 1;
