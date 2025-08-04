@@ -91,6 +91,30 @@ namespace API.Entities
                 throw new Exception($"Timeout retrieving user with ID:{id}. Eror:{err}");
             }
         }
+        public static async Task<PutUsuarioDTO> UpdateAsync(PutUsuarioDTO dto)
+        {
+            try
+            {
+                HttpResponseMessage resp = await client.PutAsJsonAsync("usuarios", dto);
+                if (resp.IsSuccessStatusCode)
+                {
+                    return await resp.Content.ReadFromJsonAsync<PutUsuarioDTO>();
+                }
+                else
+                {
+                    string errmen = await resp.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Something went wrong updating user with ID:{dto.Id}. Error: {errmen}");
+                }
+            }
+            catch (HttpRequestException err)
+            {
+                throw new Exception($"OOPS! A connection error ocurred while updating user with ID:{dto.Id}. Eror:{err}");
+            }
+            catch (TaskCanceledException err)
+            {
+                throw new Exception($"Timeout updating user with ID:{dto.Id}. Eror:{err}");
+            }
+        }
         public static async Task<PostUsuarioDTO> AddAsync(PostUsuarioDTO dto)
         {
             try

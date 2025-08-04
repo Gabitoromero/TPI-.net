@@ -53,6 +53,7 @@
             // 
             gridUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gridUsuarios.Location = new Point(12, 68);
+            gridUsuarios.MultiSelect = false;
             gridUsuarios.Name = "gridUsuarios";
             gridUsuarios.Size = new Size(316, 445);
             gridUsuarios.TabIndex = 0;

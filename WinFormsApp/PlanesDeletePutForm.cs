@@ -101,5 +101,10 @@ namespace WinFormsApp
 
             }
         }
+
+        private void PlanesDeletePutForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

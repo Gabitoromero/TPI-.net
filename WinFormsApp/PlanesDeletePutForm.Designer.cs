@@ -150,6 +150,7 @@
             Controls.Add(buttonListarPlanes);
             Name = "PlanesDeletePutForm";
             Text = "PlanesDeletePutForm";
+            Load += PlanesDeletePutForm_Load;
             ((System.ComponentModel.ISupportInitialize)GridPlanes).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIDEsp).EndInit();
             ResumeLayout(false);
