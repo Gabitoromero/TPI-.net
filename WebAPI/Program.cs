@@ -97,7 +97,7 @@ namespace WebAPI
             });
 
             // CRUD - Usuario ---------------------------------------------------------------------------------------------------------------------------
-            
+
 
             app.MapGet("/usuarios/{id}", (int id) =>
             {
@@ -106,11 +106,11 @@ namespace WebAPI
 
                 if (dto == null)
                 {
-                    return Results.NotFound(new { message= "User not found"});
+                    return Results.NotFound(new { message = "User not found" });
                 }
 
-                return Results.Ok(dto); 
-            }); 
+                return Results.Ok(dto);
+            });
 
             app.MapGet("/usuarios/", () =>
             {
@@ -123,7 +123,7 @@ namespace WebAPI
                 }
 
                 return Results.Ok(usuariosDTO);
-            }); 
+            });
 
             app.MapPost("/usuarios/", (PostUsuarioDTO dto) =>
             {
@@ -140,7 +140,7 @@ namespace WebAPI
                     return Results.BadRequest(new { error = er.Message });
                 }
 
-            }); 
+            });
 
             app.MapDelete("/usuarios/{id}", (int id) =>
             {
@@ -155,8 +155,21 @@ namespace WebAPI
                     return Results.BadRequest(new { error = er.Message });
                 }
 
-                
 
+
+            });
+            app.MapPut("/usuario/", (PutUsuarioDTO dto) =>
+            { 
+                try
+                {
+                    UsuarioService usuarioService = new UsuarioService();
+                    PutUsuarioDTO userUpdated = usuarioService.Update(dto);
+                    return Results.Ok(userUpdated);
+
+                } catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
             });
             
             // CRUD - Especialidad ---------------------------------------------------------------------------------------------------------------------------
