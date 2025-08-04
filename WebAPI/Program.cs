@@ -159,7 +159,7 @@ namespace WebAPI
 
             });
 
-            app.MapPut("/usuario/", (PutUsuarioDTO dto) =>
+            app.MapPut("/usuarios/", (PutUsuarioDTO dto) =>
             { 
                 try
                 {

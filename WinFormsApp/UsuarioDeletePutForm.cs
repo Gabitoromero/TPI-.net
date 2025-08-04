@@ -62,16 +62,22 @@ namespace WinFormsApp
                     return;
                 }
                 PutUsuarioDTO updatedUser = new PutUsuarioDTO();
-                
+                updatedUser.Id = int.Parse(textBoxIdUser.Text);
+
+
                 if (textBoxApellido.Text != null) { updatedUser.Apellido = textBoxApellido.Text; }
                 if (textBoxNom.Text != null) { updatedUser.Nombre = textBoxNom.Text; }
                 if(textBoxNomUser.Text!= null) { updatedUser.NombreUsuario = textBoxNomUser.Text;}
                 if (textBoxEmail.Text != null) { updatedUser.Email = textBoxEmail.Text; }
                 if (textBoxContr.Text!= null) {updatedUser.Clave = textBoxContr.Text;}
-                if (checkBoxHabilitado.Checked != null) { updatedUser.Habilitado = checkBoxHabilitado.Checked; }
+                //if (checkBoxHabilitado.Checked != null) { updatedUser.Habilitado = checkBoxHabilitado.Checked; }
+
+                updatedUser.Habilitado = checkBoxHabilitado.Checked;
+
+                MessageBox.Show(updatedUser.Apellido + updatedUser.Nombre + updatedUser.NombreUsuario + updatedUser.Email + updatedUser.Clave + updatedUser.Habilitado, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 
-                var response = await APIUsuario.UpdateAsync(updatedUser);
+                PutUsuarioDTO response = await APIUsuario.UpdateAsync(updatedUser);
                 btnListarUsuarios_Click(sender, e);
                 MessageBox.Show("User updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -92,7 +98,7 @@ namespace WinFormsApp
                     return;
                 }
                 int userId = int.Parse(textBoxIdUser.Text);
-                await APIUsuario.DeleteAsync(userId);
+                APIUsuario.DeleteAsync(userId);
                 MessageBox.Show("User deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)

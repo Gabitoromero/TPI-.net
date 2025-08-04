@@ -7,8 +7,8 @@ namespace Application.Services
     public class UsuarioService
     {
 
-        public FullUsuarioDTO Get(int id) { 
-        
+        public FullUsuarioDTO Get(int id) {
+
             Usuario usuario = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
 
             if (usuario == null)
@@ -26,7 +26,7 @@ namespace Application.Services
                 Nombre = usuario.Nombre,
                 NombreUsuario = usuario.NombreUsuario,
                 FechaAlta = usuario.FechaAlta
-            };  
+            };
 
             return dto;
         }
@@ -42,8 +42,8 @@ namespace Application.Services
         }
         public PostUsuarioDTO Add(PostUsuarioDTO dto)
         {
-            
-            if ( dto.NombreUsuario == null || dto.Nombre == null || dto.Apellido == null || dto.Clave == null || dto.Email == null) {
+
+            if (dto.NombreUsuario == null || dto.Nombre == null || dto.Apellido == null || dto.Clave == null || dto.Email == null) {
                 throw new ArgumentException("Properties non-nulleable are null");
             }
             if (UsuarioInMemory.Usuarios.Any(u => u.Email.Equals(dto.Email, StringComparison.OrdinalIgnoreCase)))
@@ -77,10 +77,10 @@ namespace Application.Services
         {
             Usuario userToDelete = UsuarioInMemory.Usuarios.Find(u => u.Id == id);
 
-            if (userToDelete == null){
+            if (userToDelete == null) {
                 throw new ArgumentException("User with ID " + id + " does not exist.");
             }
-            
+
             UsuarioInMemory.Usuarios.Remove(userToDelete);
             return;
 
@@ -93,21 +93,21 @@ namespace Application.Services
                 throw new ArgumentException($"User with ID {dto.Id} does not exist");
             }
             int filter = 0;
-            if (!string.IsNullOrWhiteSpace(dto.NombreUsuario) && !string.IsNullOrWhiteSpace(dto.Email)) { filter = 0; }
-            if (string.IsNullOrWhiteSpace(dto.NombreUsuario) ) { filter = 1; }
-            if (string.IsNullOrWhiteSpace(dto.Email) ) { filter = 2; }
+            if (string.IsNullOrWhiteSpace(dto.NombreUsuario) && string.IsNullOrWhiteSpace(dto.Email)) { filter = 0; }
+            else if (string.IsNullOrWhiteSpace(dto.NombreUsuario)) { filter = 1; }
+            else if (string.IsNullOrWhiteSpace(dto.Email)) { filter = 2; }
+
             switch (filter)
             {
                 default:
-                    Usuario userDuplicated = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && ( u.NombreUsuario == dto.NombreUsuario || u.Email == dto.Email));
+                    Usuario userDuplicated = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && (u.NombreUsuario == dto.NombreUsuario || u.Email == dto.Email));
                     if (userDuplicated != null)
                     {
-                        if (userDuplicated.NombreUsuario == dto.NombreUsuario && userDuplicated.Email == dto.Email) { throw new ArgumentException("User with username " + dto.NombreUsuario + " and email " + dto.Email + " already exists."); }                       
+                        if (userDuplicated.NombreUsuario == dto.NombreUsuario && userDuplicated.Email == dto.Email) { throw new ArgumentException("User with username " + dto.NombreUsuario + " and email " + dto.Email + " already exists."); }
                         if (userDuplicated.NombreUsuario == dto.NombreUsuario) { throw new ArgumentException("User with username " + dto.NombreUsuario + " already exists."); }
                         if (userDuplicated.Email == dto.Email) { throw new ArgumentException("User with email " + dto.Email + " already exists."); }
-                        }
-                    userToUpdate.NombreUsuario = dto.NombreUsuario;
-                    userToUpdate.Email = dto.Email;
+                    }
+
                     break;
                 case 1:
                     Usuario userDuplicated1 = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && u.Email == dto.Email);
@@ -115,18 +115,20 @@ namespace Application.Services
                     {
                         throw new ArgumentException("User with email " + dto.Email + " already exists.");
                     }
-                    userToUpdate.Email = dto.Email;
+
                     break;
+
                 case 2:
                     Usuario userDuplicated2 = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && u.NombreUsuario == dto.NombreUsuario);
                     if (userDuplicated2 != null)
                     {
                         throw new ArgumentException("User with username " + dto.NombreUsuario + " already exists.");
                     }
-                    userToUpdate.NombreUsuario = dto.NombreUsuario;
+
                     break;
-                
+
             }
+
             if (dto.Nombre != null) { userToUpdate.Nombre = dto.Nombre; }
             if (dto.Apellido != null) { userToUpdate.Apellido = dto.Apellido; }
             if (dto.Clave != null) { userToUpdate.Clave = dto.Clave; }

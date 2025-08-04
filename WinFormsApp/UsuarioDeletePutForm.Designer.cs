@@ -67,6 +67,7 @@
             gridUsers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             gridUsers.Size = new Size(395, 416);
             gridUsers.TabIndex = 1;
+            gridUsers.SelectionChanged += GridUsers_SelectionChanged;
             // 
             // checkBoxHabilitado
             // 

@@ -67,20 +67,17 @@ namespace API.Entities
                 throw new Exception($"Timeout retrieving users. Error: ${ex.Message}");
             }
         }
-        public static async Task<ShowUsuarioDTO> DeleteAsync(int id)
+        public static async void DeleteAsync(int id) //no tiene que devolver nada
         {
             try
             {
                 HttpResponseMessage resp = await client.DeleteAsync("usuarios/" + id);
-                if (resp.IsSuccessStatusCode)
-                {
-                    return await resp.Content.ReadFromJsonAsync<ShowUsuarioDTO>();
-                }
-                else
+                if (!resp.IsSuccessStatusCode)
                 {
                     string errmen = await resp.Content.ReadAsStringAsync();
                     throw new Exception($"OOPS! Something went wrong deleting user with ID:{id}. Error: {errmen}");
                 }
+                return;
             }
             catch (HttpRequestException err)
             {
@@ -103,7 +100,7 @@ namespace API.Entities
                 else
                 {
                     string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong updating user with ID:{dto.Id}. Error: {errmen}");
+                    throw new Exception($"OOPS! Something went wrong updating user with ID:{dto.Id}. Eror:{errmen}");
                 }
             }
             catch (HttpRequestException err)
