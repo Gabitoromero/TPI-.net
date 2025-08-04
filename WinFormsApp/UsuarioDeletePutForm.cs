@@ -99,7 +99,9 @@ namespace WinFormsApp
                 }
                 int userId = int.Parse(textBoxIdUser.Text);
                 APIUsuario.DeleteAsync(userId);
+                btnListarUsuarios_Click(sender, e);
                 MessageBox.Show("User deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             catch (Exception ex)
             {
