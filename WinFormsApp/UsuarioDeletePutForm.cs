@@ -56,30 +56,35 @@ namespace WinFormsApp
         {
             try
             {
-                if (string.IsNullOrEmpty(textBoxIdUser.Text))
+                if (gridUsers.Rows.Count > 0)
                 {
-                    MessageBox.Show("Please select a user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    if (string.IsNullOrEmpty(textBoxIdUser.Text))
+                    {
+                        MessageBox.Show("Please select a user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    PutUsuarioDTO updatedUser = new PutUsuarioDTO();
+                    updatedUser.Id = int.Parse(textBoxIdUser.Text);
+
+
+                    if (textBoxApellido.Text != null) { updatedUser.Apellido = textBoxApellido.Text; }
+                    if (textBoxNom.Text != null) { updatedUser.Nombre = textBoxNom.Text; }
+                    if (textBoxNomUser.Text != null) { updatedUser.NombreUsuario = textBoxNomUser.Text; }
+                    if (textBoxEmail.Text != null) { updatedUser.Email = textBoxEmail.Text; }
+                    if (textBoxContr.Text != null) { updatedUser.Clave = textBoxContr.Text; }
+                   
+
+                    updatedUser.Habilitado = checkBoxHabilitado.Checked;
+
+                    PutUsuarioDTO response = await APIUsuario.UpdateAsync(updatedUser);
+                    btnListarUsuarios_Click(sender, e);
+                    MessageBox.Show("User updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    
                 }
-                PutUsuarioDTO updatedUser = new PutUsuarioDTO();
-                updatedUser.Id = int.Parse(textBoxIdUser.Text);
-
-
-                if (textBoxApellido.Text != null) { updatedUser.Apellido = textBoxApellido.Text; }
-                if (textBoxNom.Text != null) { updatedUser.Nombre = textBoxNom.Text; }
-                if(textBoxNomUser.Text!= null) { updatedUser.NombreUsuario = textBoxNomUser.Text;}
-                if (textBoxEmail.Text != null) { updatedUser.Email = textBoxEmail.Text; }
-                if (textBoxContr.Text!= null) {updatedUser.Clave = textBoxContr.Text;}
-                //if (checkBoxHabilitado.Checked != null) { updatedUser.Habilitado = checkBoxHabilitado.Checked; }
-
-                updatedUser.Habilitado = checkBoxHabilitado.Checked;
-
-                MessageBox.Show(updatedUser.Apellido + updatedUser.Nombre + updatedUser.NombreUsuario + updatedUser.Email + updatedUser.Clave + updatedUser.Habilitado, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
-                PutUsuarioDTO response = await APIUsuario.UpdateAsync(updatedUser);
-                btnListarUsuarios_Click(sender, e);
-                MessageBox.Show("User updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                {
+                    MessageBox.Show("No existen usuarios.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {
@@ -92,16 +97,22 @@ namespace WinFormsApp
         {
             try
             {
-                if (string.IsNullOrEmpty(textBoxIdUser.Text))
-                {
-                    MessageBox.Show("Please select a user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                if (gridUsers.Rows.Count > 0) { 
+                    if (string.IsNullOrEmpty(textBoxIdUser.Text))
+                    {
+                        MessageBox.Show("Please select a user.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    int userId = int.Parse(textBoxIdUser.Text);
+                    APIUsuario.DeleteAsync(userId);
+                    btnListarUsuarios_Click(sender, e);
+                    MessageBox.Show("User deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                int userId = int.Parse(textBoxIdUser.Text);
-                APIUsuario.DeleteAsync(userId);
-                btnListarUsuarios_Click(sender, e);
-                MessageBox.Show("User deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                else
+                {
+                    
+                    MessageBox.Show("No existen usuarios.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {

@@ -92,58 +92,55 @@ namespace Application.Services
             {
                 throw new ArgumentException($"User with ID {dto.Id} does not exist");
             }
-            int filter = 0;
-            if (string.IsNullOrWhiteSpace(dto.NombreUsuario) && string.IsNullOrWhiteSpace(dto.Email)) { filter = 0; }
-            else if (string.IsNullOrWhiteSpace(dto.NombreUsuario)) { filter = 1; }
-            else if (string.IsNullOrWhiteSpace(dto.Email)) { filter = 2; }
+            PutUsuarioDTO userUpdated = new PutUsuarioDTO();
+            userUpdated.Id = userToUpdate.Id;
 
-            switch (filter)
-            {
-                default:
+
+            if (string.IsNullOrWhiteSpace(dto.NombreUsuario) || string.IsNullOrWhiteSpace(dto.Email)) {
+
                     Usuario userDuplicated = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && (u.NombreUsuario == dto.NombreUsuario || u.Email == dto.Email));
+                    if (userDuplicated != null)
+                    {
+                        if (userDuplicated.NombreUsuario == dto.NombreUsuario) { throw new ArgumentException("User with username " + dto.NombreUsuario + " already exists."); }
+                        if (userDuplicated.Email == dto.Email) { throw new ArgumentException("User with email " + dto.Email + " already exists."); }
+                    }
+                    if (dto.NombreUsuario == null) { 
+                        userUpdated.NombreUsuario = userToUpdate.NombreUsuario;
+                    }
+                    else
+                    {
+                        userUpdated.NombreUsuario = dto.NombreUsuario;
+                    }
+                    if (dto.Email == null) { userUpdated.Email = userToUpdate.Email;}
+                    else{ userUpdated.Email = dto.Email;}
+
+                    
+            }
+            else{
+
+                    Usuario userDuplicated = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && (u.Email == dto.Email || u.NombreUsuario == dto.NombreUsuario));
                     if (userDuplicated != null)
                     {
                         if (userDuplicated.NombreUsuario == dto.NombreUsuario && userDuplicated.Email == dto.Email) { throw new ArgumentException("User with username " + dto.NombreUsuario + " and email " + dto.Email + " already exists."); }
                         if (userDuplicated.NombreUsuario == dto.NombreUsuario) { throw new ArgumentException("User with username " + dto.NombreUsuario + " already exists."); }
                         if (userDuplicated.Email == dto.Email) { throw new ArgumentException("User with email " + dto.Email + " already exists."); }
                     }
-
-                    break;
-                case 1:
-                    Usuario userDuplicated1 = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && u.Email == dto.Email);
-                    if (userDuplicated1 != null)
-                    {
-                        throw new ArgumentException("User with email " + dto.Email + " already exists.");
-                    }
-
-                    break;
-
-                case 2:
-                    Usuario userDuplicated2 = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && u.NombreUsuario == dto.NombreUsuario);
-                    if (userDuplicated2 != null)
-                    {
-                        throw new ArgumentException("User with username " + dto.NombreUsuario + " already exists.");
-                    }
-
-                    break;
-
+                    userUpdated.NombreUsuario = dto.NombreUsuario;
+                    userUpdated.Email = dto.Email;
             }
+  
+            if (dto.Nombre == null) { userUpdated.Nombre = userToUpdate.Nombre; }
+            else { userUpdated.Nombre = dto.Nombre; }
 
-            if (dto.Nombre != null) { userToUpdate.Nombre = dto.Nombre; }
-            if (dto.Apellido != null) { userToUpdate.Apellido = dto.Apellido; }
-            if (dto.Clave != null) { userToUpdate.Clave = dto.Clave; }
-            if (dto.Habilitado != null) { userToUpdate.Habilitado = dto.Habilitado; }
-            
-            return new PutUsuarioDTO
-            {
-                Id = userToUpdate.Id,
-                Nombre = userToUpdate.Nombre,
-                Apellido = userToUpdate.Apellido,
-                NombreUsuario = userToUpdate.NombreUsuario,
-                Email = userToUpdate.Email,
-                Clave = userToUpdate.Clave,
-                Habilitado = userToUpdate.Habilitado
-            };
+            if (dto.Apellido == null) { userUpdated.Apellido = userToUpdate.Apellido; }
+            else { userUpdated.Apellido = dto.Apellido; }
+
+            if (dto.Clave == null) { userUpdated.Clave = userToUpdate.Clave; }
+            else { userUpdated.Clave = dto.Clave; }
+
+            userUpdated.Habilitado = dto.Habilitado;
+
+            return userUpdated;
 
         }
         private int GetNextId()
