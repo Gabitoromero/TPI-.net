@@ -5,7 +5,8 @@ using DTOs;
 namespace Application.Services
 {
     public class UsuarioService
-    {
+    { 
+        //todavia nos falta terminar el CRUD de usuario
 
         public FullUsuarioDTO Get(int id) {
 

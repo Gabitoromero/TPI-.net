@@ -97,7 +97,7 @@ namespace WebAPI
             });
 
             // CRUD - Usuario ---------------------------------------------------------------------------------------------------------------------------
-
+            //falta completar el CRUD de usuario
 
             app.MapGet("/usuarios/{id}", (int id) =>
             {
@@ -268,6 +268,7 @@ namespace WebAPI
                     return Results.BadRequest(new { error = er.Message });
                 }
             });
+
             app.MapDelete("/modulos/{id}", (int id) =>
             {
                 try
@@ -280,7 +281,6 @@ namespace WebAPI
                     return Results.BadRequest(new { error = er.Message });
                 }
             });
-
 
             app.MapPut("/modulos/", (ModuloDTO dto) =>
             {

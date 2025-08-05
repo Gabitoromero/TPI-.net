@@ -14,7 +14,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace WinFormsApp
 {
-    public partial class UsuarioDeletePutForm : Form
+    public partial class UsuarioDeletePutForm : Form     //falta completar
     {
         public UsuarioDeletePutForm()
         {

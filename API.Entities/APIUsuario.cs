@@ -10,7 +10,7 @@ using System.Net.Http.Json;
 
 namespace API.Entities
 {
-    public class APIUsuario
+    public class APIUsuario  //falta completar el CRUD de usuario
     {
         private static HttpClient client = new HttpClient();
         static APIUsuario()
