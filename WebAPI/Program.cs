@@ -97,7 +97,7 @@ namespace WebAPI
             });
 
             // CRUD - Usuario ---------------------------------------------------------------------------------------------------------------------------
-            //falta completar el CRUD de usuario
+            
 
             app.MapGet("/usuarios/{id}", (int id) =>
             {

@@ -92,7 +92,7 @@ namespace API.Entities
         {
             try
             {
-                HttpResponseMessage resp = await client.PutAsJsonAsync("usuarios", dto);
+                HttpResponseMessage resp = await client.PutAsJsonAsync("usuarios", dto); //client realiza una peticion PUT
                 if (resp.IsSuccessStatusCode)
                 {
                     return await resp.Content.ReadFromJsonAsync<PutUsuarioDTO>();

@@ -88,48 +88,45 @@ namespace Application.Services
         }
         public PutUsuarioDTO Update(PutUsuarioDTO dto)
         {
-            Usuario userToUpdate = UsuarioInMemory.Usuarios.Find(u => u.Id == dto.Id);
+            Usuario userToUpdate = UsuarioInMemory.Usuarios.Find(u => u.Id == dto.Id);  //me traigo el usuario a modificar
             if (userToUpdate == null)
             {
                 throw new ArgumentException($"User with ID {dto.Id} does not exist");
             }
             PutUsuarioDTO userUpdated = new PutUsuarioDTO();
-            userUpdated.Id = userToUpdate.Id;
+            userUpdated.Id = userToUpdate.Id; //el id no se puede modificar
+         
 
-
-            if (string.IsNullOrWhiteSpace(dto.NombreUsuario) || string.IsNullOrWhiteSpace(dto.Email)) {
-
-                    Usuario userDuplicated = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && (u.NombreUsuario == dto.NombreUsuario || u.Email == dto.Email));
-                    if (userDuplicated != null)
-                    {
-                        if (userDuplicated.NombreUsuario == dto.NombreUsuario) { throw new ArgumentException("User with username " + dto.NombreUsuario + " already exists."); }
-                        if (userDuplicated.Email == dto.Email) { throw new ArgumentException("User with email " + dto.Email + " already exists."); }
-                    }
-                    if (dto.NombreUsuario == null) { 
-                        userUpdated.NombreUsuario = userToUpdate.NombreUsuario;
-                    }
-                    else
-                    {
-                        userUpdated.NombreUsuario = dto.NombreUsuario;
-                    }
-                    if (dto.Email == null) { userUpdated.Email = userToUpdate.Email;}
-                    else{ userUpdated.Email = dto.Email;}
-
-                    
-            }
-            else{
-
-                    Usuario userDuplicated = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && (u.Email == dto.Email || u.NombreUsuario == dto.NombreUsuario));
-                    if (userDuplicated != null)
-                    {
-                        if (userDuplicated.NombreUsuario == dto.NombreUsuario && userDuplicated.Email == dto.Email) { throw new ArgumentException("User with username " + dto.NombreUsuario + " and email " + dto.Email + " already exists."); }
-                        if (userDuplicated.NombreUsuario == dto.NombreUsuario) { throw new ArgumentException("User with username " + dto.NombreUsuario + " already exists."); }
-                        if (userDuplicated.Email == dto.Email) { throw new ArgumentException("User with email " + dto.Email + " already exists."); }
-                    }
+            if (!string.IsNullOrWhiteSpace(dto.NombreUsuario) || !string.IsNullOrWhiteSpace(dto.Email)) //si alguno de los dos campos del dto no es nulo o vacio => busco repetido existente
+            {
+                Usuario userDuplicated = UsuarioInMemory.Usuarios.Find(u => u.Id != userToUpdate.Id && (u.NombreUsuario == dto.NombreUsuario || u.Email == dto.Email));
+                if (userDuplicated != null) //valido que me haya traido un usuario existente
+                {
+                    if (userDuplicated.NombreUsuario == dto.NombreUsuario && userDuplicated.Email == dto.Email) { throw new ArgumentException("User with username " + dto.NombreUsuario + " and email " + dto.Email + " already exists."); }
+                    if (userDuplicated.NombreUsuario == dto.NombreUsuario) { throw new ArgumentException("User with username " + dto.NombreUsuario + " already exists."); }
+                    if (userDuplicated.Email == dto.Email) { throw new ArgumentException("User with email " + dto.Email + " already exists."); }
+                }
+                //tengo que validar si alguno de los dos en null para no dejar campo null o en blanco
+                if (string.IsNullOrWhiteSpace(dto.NombreUsuario)) 
+                { 
+                    userUpdated.NombreUsuario = userToUpdate.NombreUsuario;
+                }else{
                     userUpdated.NombreUsuario = dto.NombreUsuario;
+                }
+
+                if (string.IsNullOrWhiteSpace(dto.Email))
+                { 
+                    userUpdated.Email = userToUpdate.Email;
+                }else{ 
                     userUpdated.Email = dto.Email;
+                }
             }
-  
+            else
+            {
+                userUpdated.NombreUsuario = userToUpdate.NombreUsuario;
+                userUpdated.Email = userToUpdate.Email;
+            }
+
             if (dto.Nombre == null) { userUpdated.Nombre = userToUpdate.Nombre; }
             else { userUpdated.Nombre = dto.Nombre; }
 
@@ -140,6 +137,14 @@ namespace Application.Services
             else { userUpdated.Clave = dto.Clave; }
 
             userUpdated.Habilitado = dto.Habilitado;
+
+            //guardo el usuario modificado en memoria
+            userToUpdate.Nombre = userUpdated.Nombre;
+            userToUpdate.Apellido = userUpdated.Apellido;
+            userUpdated.Clave = userToUpdate.Clave;
+            userToUpdate.Email = userUpdated.Email;
+            userToUpdate.NombreUsuario = userUpdated.NombreUsuario;
+            userToUpdate.Habilitado = userUpdated.Habilitado;
 
             return userUpdated;
 
