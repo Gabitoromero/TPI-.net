@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Data;
-using Domain;
+﻿using Data;
 using Domain.Model;
 using DTOs;
 
@@ -12,22 +6,25 @@ namespace Application.Services
 {
     public class EspecialidadService
     {
-        public EspecialidadDTO Get(int id)
+        private readonly EspecialidadRepository _repository;
+
+        public EspecialidadService(EspecialidadRepository especialidadRepository)
         {
-            var especialidadRepository = new EspecialidadRepository();
-            Especialidad esp = especialidadRepository.Get(id);
+            _repository = especialidadRepository;
+        }
+        public EspecialidadDTO? Get(int id)
+        {
+            Especialidad esp = _repository.Get(id);
 
             if (esp == null) return null;
-          
-
+  
             EspecialidadDTO dto = new EspecialidadDTO { Id = esp.Id, Descripcion = esp.Descripcion };
 
             return dto;
-        } //checked
+        } 
         public List<EspecialidadDTO> GetAll()
         {
-            var especialidadRepository = new EspecialidadRepository();
-            List<Especialidad> especialidades = especialidadRepository.GetAll();
+            List<Especialidad> especialidades = _repository.GetAll();
 
             return especialidades.Select(e => new EspecialidadDTO
             {

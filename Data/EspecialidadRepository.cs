@@ -5,21 +5,14 @@ namespace Data
 {
     public class EspecialidadRepository
     {
-        private AcademiaContext CreateContext()
+        private readonly AcademiaContext _context;
+
+        public EspecialidadRepository(AcademiaContext context)
         {
-            return new AcademiaContext();
+            _context = context;
         }
 
-        public Especialidad? Get(int id)
-        {
-            using var context = CreateContext();
-            return context.Especialidades.FirstOrDefault(e => e.Id == id);
-        }
-        public List<Especialidad> GetAll()
-        {
-            using var context = CreateContext();
-            return context.Especialidades.ToList();
-        }
-        
+        public Especialidad? Get(int id) => _context.Especialidades.FirstOrDefault(e => e.Id == id);
+        public List<Especialidad> GetAll() => _context.Especialidades.ToList();
     }
 }

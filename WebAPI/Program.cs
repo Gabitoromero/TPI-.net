@@ -16,6 +16,14 @@ namespace WebAPI
             builder.Services.AddEndpointsApiExplorer();  // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddSwaggerGen();
 
+            // DI
+            // NOTA: lo normal seria que dependan de una interaz, ejemplo IEspecialidadRepository, de forma que el dia de mañana si cambio a EspecialidadRepositoryV2 : IEspecialidadRepository
+            // no tengo que cambiar casi nada, pero bueno, lo hicimos con la intencion de probar inyeccion de dependencias, la realidad es que no vamos a cambiar los repos
+
+            builder.Services.AddDbContext<AcademiaContext>();
+            builder.Services.AddScoped<EspecialidadRepository>();
+            builder.Services.AddScoped<EspecialidadService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

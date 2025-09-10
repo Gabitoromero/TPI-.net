@@ -11,7 +11,7 @@ namespace Data
     {
         public DbSet<Especialidad> Especialidades { get; set; }
 
-        internal AcademiaContext()
+        public AcademiaContext()
         {
             this.Database.EnsureCreated();
         }

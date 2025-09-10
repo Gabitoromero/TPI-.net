@@ -8,11 +8,10 @@ namespace WebAPI
     {
         public static void MapEspecialidadEndpoints(this WebApplication app){
             // CRUD - Especialidad ---------------------------------------------------------------------------------------------------------------------------
-            EspecialidadService especialidadService = new EspecialidadService();
 
-            app.MapGet("/especialidades/{id}", (int id) =>
+            app.MapGet("/especialidades/{id}", (int id, EspecialidadService service) =>
             {
-                EspecialidadDTO dto = especialidadService.Get(id);
+                EspecialidadDTO dto = service.Get(id);
 
                 if (dto == null)
                 {
@@ -22,9 +21,9 @@ namespace WebAPI
                 return Results.Ok(dto);
             });//checked
 
-            app.MapGet("/especialidades/", () =>
+            app.MapGet("/especialidades/", (EspecialidadService service) =>
             {
-                List<EspecialidadDTO> espDTO = especialidadService.GetAll();
+                List<EspecialidadDTO> espDTO = service.GetAll();
 
                 if (espDTO.Count == 0)
                 {
