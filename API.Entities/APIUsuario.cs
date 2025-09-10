@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 using DTOs;
 using System.Net.Http.Json;
 
-namespace API.Entities
+namespace API.Clients
 {
     public class APIUsuario  //falta completar el CRUD de usuario
     {

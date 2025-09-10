@@ -1,4 +1,4 @@
-using API.Entities;
+using API.Clients;
 using Domain.Model;
 using DTOs;
 

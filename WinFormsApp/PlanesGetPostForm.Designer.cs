@@ -154,6 +154,7 @@
             Controls.Add(buttonListarPlanes);
             Name = "PlanesGetPostForm";
             Text = "PlanesForm";
+            Load += PlanesGetPostForm_Load;
             ((System.ComponentModel.ISupportInitialize)numIDPlan).EndInit();
             ((System.ComponentModel.ISupportInitialize)GridPlanes).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIDEsp).EndInit();

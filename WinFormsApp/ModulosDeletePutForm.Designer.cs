@@ -118,6 +118,7 @@
             Controls.Add(buttonListarModulos);
             Name = "ModulosDeletePutForm";
             Text = "Módulos - Modificar / Eliminar";
+            Load += ModulosDeletePutForm_Load;
             ((System.ComponentModel.ISupportInitialize)GridModulos).EndInit();
             ResumeLayout(false);
             PerformLayout();
