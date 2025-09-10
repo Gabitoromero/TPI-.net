@@ -15,10 +15,10 @@ namespace Domain.Model
         public int Id { get; set; }
         public string Descripcion { get; set; }
 
-        public Especialidad(int i, string d)
+        public Especialidad(int id, string descripcion)
         {
-            Id = i;
-            Descripcion = d;
+            Id = id;
+            Descripcion = descripcion;
         }
     }
     

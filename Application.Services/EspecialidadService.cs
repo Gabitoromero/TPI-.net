@@ -14,13 +14,11 @@ namespace Application.Services
     {
         public EspecialidadDTO Get(int id)
         {
+            var especialidadRepository = new EspecialidadRepository();
+            Especialidad esp = especialidadRepository.Get(id);
 
-            Especialidad esp = EspecialidadInMemory.Especialidades.Find(u => u.Id == id);
-
-            if (esp == null)
-            {
-                return null;
-            }
+            if (esp == null) return null;
+          
 
             EspecialidadDTO dto = new EspecialidadDTO { Id = esp.Id, Descripcion = esp.Descripcion };
 
@@ -28,52 +26,60 @@ namespace Application.Services
         } //checked
         public List<EspecialidadDTO> GetAll()
         {
-            return EspecialidadInMemory.Especialidades.Select(e => new EspecialidadDTO{ Id = e.Id, Descripcion = e.Descripcion }).ToList();
+            var especialidadRepository = new EspecialidadRepository();
+            List<Especialidad> especialidades = especialidadRepository.GetAll();
+
+            return especialidades.Select(e => new EspecialidadDTO
+            {
+                Id = e.Id,
+                Descripcion = e.Descripcion,
+            }).ToList();
 
         } //checked
-        public EspecialidadDTO Add(NewEspecialidadDTO e)
-        {
-            if ( e.Descripcion == null)
-            {
-                throw new ArgumentException("Properties non-nulleable are null");
-            }
-            if (EspecialidadInMemory.Especialidades.Any(u => u.Descripcion.Equals(e.Descripcion, StringComparison.OrdinalIgnoreCase)))
-            {
-                throw new ArgumentException("This description alredy exists: " + e.Descripcion);
-            }
+        /* public EspecialidadDTO Add(NewEspecialidadDTO e)
+         {
+             if ( e.Descripcion == null)
+             {
+                 throw new ArgumentException("Properties non-nulleable are null");
+             }
+             if (EspecialidadRepository.Especialidades.Any(u => u.Descripcion.Equals(e.Descripcion, StringComparison.OrdinalIgnoreCase)))
+             {
+                 throw new ArgumentException("This description alredy exists: " + e.Descripcion);
+             }
 
-            int id = GetNextId();
+             int id = GetNextId();
 
-            Especialidad newEsp = new Especialidad(id,e.Descripcion);
-            EspecialidadDTO espDTO = new EspecialidadDTO { Id= id, Descripcion= e.Descripcion };
-            EspecialidadInMemory.Especialidades.Add(newEsp);
-            return espDTO;
+             Especialidad newEsp = new Especialidad(id,e.Descripcion);
+             EspecialidadDTO espDTO = new EspecialidadDTO { Id= id, Descripcion= e.Descripcion };
+             EspecialidadRepository.Especialidades.Add(newEsp);
+             return espDTO;
 
-        } //checked
-        public EspecialidadDTO Remove(int id)
-        {
-            Especialidad espToDelete = EspecialidadInMemory.Especialidades.Find(u => u.Id == id);
+         } //checked 
+         public EspecialidadDTO Remove(int id)
+         {
+             Especialidad espToDelete = EspecialidadRepository.Especialidades.Find(u => u.Id == id);
 
-            if (espToDelete == null)
-            {
-                return null;
-            }
-            EspecialidadDTO espDeletedDTO = new EspecialidadDTO{ Id = espToDelete.Id, Descripcion = espToDelete.Descripcion };
-            EspecialidadInMemory.Especialidades.Remove(espToDelete);
-            return espDeletedDTO;
+             if (espToDelete == null)
+             {
+                 return null;
+             }
+             EspecialidadDTO espDeletedDTO = new EspecialidadDTO{ Id = espToDelete.Id, Descripcion = espToDelete.Descripcion };
+             EspecialidadRepository.Especialidades.Remove(espToDelete);
+             return espDeletedDTO;
 
-        } //checked
-        private int GetNextId()
-        {
+         } //checked
+         private int GetNextId()
+         {
 
-            if (EspecialidadInMemory.Especialidades.Count > 0)
-            {
+             if (EspecialidadRepository.Especialidades.Count > 0)
+             {
 
-                return EspecialidadInMemory.Especialidades.Max(u => u.Id) + 1;
+                 return EspecialidadRepository.Especialidades.Max(u => u.Id) + 1;
 
-            }
+             }
 
-            return 1;
-        }
+             return 1;
+         }
+        */
     }
 }

@@ -34,7 +34,7 @@ namespace WebAPI
                 return Results.Ok(espDTO);
             });//checked
 
-            app.MapPost("/especialidades/", (NewEspecialidadDTO dto) =>
+           /* app.MapPost("/especialidades/", (NewEspecialidadDTO dto) =>
             {
                 try
                 {
@@ -61,6 +61,7 @@ namespace WebAPI
 
 
             });
+           */
         }
     }
 }
