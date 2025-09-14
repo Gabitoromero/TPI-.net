@@ -155,6 +155,7 @@
             Controls.Add(GridModulos);
             Name = "ModulosGetPostForm";
             Text = "Gestión de Módulos";
+            Load += ModulosGetPostForm_Load;
             ((System.ComponentModel.ISupportInitialize)GridModulos).EndInit();
             ((System.ComponentModel.ISupportInitialize)numIDModulo).EndInit();
             ResumeLayout(false);

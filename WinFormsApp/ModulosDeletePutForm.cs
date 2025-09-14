@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using DTOs;
-using API.Entities;
+using API.Clients;
 
 namespace WinFormsApp
 {
@@ -89,6 +89,11 @@ namespace WinFormsApp
                 textIDModulo.Text = modulo.Id.ToString();
                 textDescripcion.Text = modulo.Descripcion;
             }
+        }
+
+        private void ModulosDeletePutForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

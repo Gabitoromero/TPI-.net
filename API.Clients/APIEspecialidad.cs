@@ -7,7 +7,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.Entities
+namespace API.Clients
 {
     public class APIEspecialidad
     {

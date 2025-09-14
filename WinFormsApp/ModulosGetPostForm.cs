@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using API.Entities;
+using API.Clients;
 using DTOs;
 
 namespace WinFormsApp
@@ -67,6 +67,11 @@ namespace WinFormsApp
             {
                 MessageBox.Show($"Error al agregar el módulo: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void ModulosGetPostForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using API.Entities;
+using API.Clients;
 using DTOs;
 
 namespace WinFormsApp
@@ -59,7 +59,7 @@ namespace WinFormsApp
             {
                 PlanDTO nuevoPlan = new PlanDTO();
 
-                if(string.IsNullOrWhiteSpace(textDesc.Text))
+                if (string.IsNullOrWhiteSpace(textDesc.Text))
                 {
                     MessageBox.Show("La descripción del plan no puede estar vacía.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
@@ -71,10 +71,16 @@ namespace WinFormsApp
                 PlanDTO planAñadido = await APIPlan.AddAsync(nuevoPlan);
                 GridNuevoPlan.SelectedObject = planAñadido;
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show($"Error al agregar el plan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void PlanesGetPostForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

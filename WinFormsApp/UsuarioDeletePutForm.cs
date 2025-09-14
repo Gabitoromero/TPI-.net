@@ -1,5 +1,5 @@
 ﻿using DTOs;
-using API.Entities;
+using API.Clients;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
