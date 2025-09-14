@@ -11,15 +11,15 @@ namespace WebAPI
 
             app.MapGet("/especialidades/{id}", (int id, EspecialidadService service) =>
             {
-                EspecialidadDTO dto = service.Get(id);
+                EspecialidadDTO? dto = service.Get(id);
 
                 if (dto == null)
                 {
-                    return Results.NotFound(new { message = "Especialidad not found" });
+                    return Results.NotFound(new { message = "Especialidad no encontrada" });
                 }
 
                 return Results.Ok(dto);
-            });//checked
+            });
 
             app.MapGet("/especialidades/", (EspecialidadService service) =>
             {
@@ -27,17 +27,17 @@ namespace WebAPI
 
                 if (espDTO.Count == 0)
                 {
-                    return Results.NotFound(new { message = "Especialidad not found" });
+                    return Results.NotFound(new { message = "Especialidad no encontrada" });
                 }
 
                 return Results.Ok(espDTO);
-            });//checked
+            });
 
-           /* app.MapPost("/especialidades/", (NewEspecialidadDTO dto) =>
+           app.MapPost("/especialidades/", (EspecialidadDTO dto, EspecialidadService service) =>
             {
                 try
                 {
-                    EspecialidadDTO espDTO = especialidadService.Add(dto);
+                    EspecialidadDTO espDTO = service.Add(dto);
 
                     return Results.Ok(espDTO);
 
@@ -49,18 +49,33 @@ namespace WebAPI
 
             });
 
-            app.MapDelete("/especialidades/{id}", (int id) =>
+            app.MapDelete("/especialidades/{id}", (int id, EspecialidadService service) =>
             {
-                EspecialidadDTO espDeleted = especialidadService.Remove(id);
-                if (espDeleted == null)
+                bool espDeleted = service.Delete(id);
+                if (!espDeleted)
                 {
-                    return Results.NotFound(new { data = "User not found" });
+                    return Results.NotFound(new { data = "Especialidad no encontrada" });
                 }
-                return Results.Ok(espDeleted);
-
-
+                return Results.NoContent();
             });
-           */
+
+            app.MapPut("/especialidades", (EspecialidadDTO dto, EspecialidadService service) =>
+            {
+                try
+                {
+                    bool espUpdated = service.Update(dto);
+                    if (!espUpdated)
+                    {
+                        return Results.NotFound(new { data = "Especialidad no encontrada" });
+                    }
+
+                    return Results.NoContent();
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
+            });
         }
     }
 }

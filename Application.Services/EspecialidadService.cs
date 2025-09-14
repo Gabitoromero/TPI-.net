@@ -14,7 +14,7 @@ namespace Application.Services
         }
         public EspecialidadDTO? Get(int id)
         {
-            Especialidad esp = _repository.Get(id);
+            Especialidad? esp = _repository.Get(id);
 
             if (esp == null) return null;
   
@@ -32,51 +32,26 @@ namespace Application.Services
                 Descripcion = e.Descripcion,
             }).ToList();
 
-        } //checked
-        /* public EspecialidadDTO Add(NewEspecialidadDTO e)
-         {
-             if ( e.Descripcion == null)
-             {
-                 throw new ArgumentException("Properties non-nulleable are null");
-             }
-             if (EspecialidadRepository.Especialidades.Any(u => u.Descripcion.Equals(e.Descripcion, StringComparison.OrdinalIgnoreCase)))
-             {
-                 throw new ArgumentException("This description alredy exists: " + e.Descripcion);
-             }
+        }
+        
+        public EspecialidadDTO Add(EspecialidadDTO dto)
+        {   
+            Especialidad esp = new Especialidad(0, dto.Descripcion); // El 0, al ser el default de int, ef lo ignora si la columna es autogenerada, como por ejemplo el id
+            _repository.Add(esp);
+            dto.Id = esp.Id; // Entity actualiza el objeto con el Id autogenerado solito, el que creo ef se merece un Nobel 
+            return dto;
+        }
 
-             int id = GetNextId();
+        public bool Delete(int id) { 
+            return _repository.Delete(id);
+        }
 
-             Especialidad newEsp = new Especialidad(id,e.Descripcion);
-             EspecialidadDTO espDTO = new EspecialidadDTO { Id= id, Descripcion= e.Descripcion };
-             EspecialidadRepository.Especialidades.Add(newEsp);
-             return espDTO;
+        public bool Update(EspecialidadDTO dto)
+        {
+            Especialidad esp = new Especialidad(dto.Id, dto.Descripcion);
+            return _repository.Update(esp);
 
-         } //checked 
-         public EspecialidadDTO Remove(int id)
-         {
-             Especialidad espToDelete = EspecialidadRepository.Especialidades.Find(u => u.Id == id);
+        }
 
-             if (espToDelete == null)
-             {
-                 return null;
-             }
-             EspecialidadDTO espDeletedDTO = new EspecialidadDTO{ Id = espToDelete.Id, Descripcion = espToDelete.Descripcion };
-             EspecialidadRepository.Especialidades.Remove(espToDelete);
-             return espDeletedDTO;
-
-         } //checked
-         private int GetNextId()
-         {
-
-             if (EspecialidadRepository.Especialidades.Count > 0)
-             {
-
-                 return EspecialidadRepository.Especialidades.Max(u => u.Id) + 1;
-
-             }
-
-             return 1;
-         }
-        */
     }
 }
