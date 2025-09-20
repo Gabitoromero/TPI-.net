@@ -22,10 +22,8 @@ namespace WinFormsApp
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            /*try
-            {
-                var especialidades = await APIEspecialidad.GetAllAsync();
-            }*/
+         
+            
         }
         private async void btnListarEsp_Click(object sender, EventArgs e)
         {
@@ -63,25 +61,46 @@ namespace WinFormsApp
         {
             try
             {
-                NewEspecialidadDTO nuevaEsp = new NewEspecialidadDTO();
-                nuevaEsp.Descripcion = txtDesc.Text;
-                if (string.IsNullOrWhiteSpace(nuevaEsp.Descripcion))
-                {
-                    MessageBox.Show("La descripción no puede estar vacía.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                EspecialidadDTO espAdded = await APIEspecialidad.AddAsync(nuevaEsp);
-                gridNuevaEsp.SelectedObject = espAdded;
+                var formPostEsp = new EspecialidadPostForm();
+                formPostEsp.ShowDialog();
+                this.btnListarEsp_Click(sender, e); // Actualizar la lista de especialidades después de cerrar el formulario
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al agregar especialidad: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
 
         private void labelDescripcion_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private async void btnModificarEspecialidad_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idEsp = (int)numUpDownEsp.Value;
+                EspecialidadDTO esp = await APIEspecialidad.GetAsync(idEsp);
+                if (esp != null)
+                {
+                    var formPUTDELEsp = new EspecialidadDeletePutForm(idEsp);
+                    formPUTDELEsp.ShowDialog();
+                }
+
+                this.btnListarEsp_Click(sender, e); // Actualizar la lista de especialidades después de cerrar el formulario
+                this.btnMostrarUnaEsp_Click(sender, e); // Actualizar la especialidad mostrada después de cerrar el formulario
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al modificar especialidad: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

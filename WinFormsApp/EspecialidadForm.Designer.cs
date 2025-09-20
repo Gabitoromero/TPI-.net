@@ -30,13 +30,13 @@
         {
             btnListarEsp = new Button();
             btnAddEsp = new Button();
-            txtDesc = new TextBox();
             gridUnicaEsp = new PropertyGrid();
-            gridNuevaEsp = new PropertyGrid();
-            labelDescripcion = new Label();
             numUpDownEsp = new NumericUpDown();
             btnMostrarUnaEsp = new Button();
             gridEsp = new DataGridView();
+            btnModificarEspecialidad = new Button();
+            labelBusqueda = new Label();
+            btnCerrar = new Button();
             ((System.ComponentModel.ISupportInitialize)numUpDownEsp).BeginInit();
             ((System.ComponentModel.ISupportInitialize)gridEsp).BeginInit();
             SuspendLayout();
@@ -45,7 +45,7 @@
             // 
             btnListarEsp.Location = new Point(12, 12);
             btnListarEsp.Name = "btnListarEsp";
-            btnListarEsp.Size = new Size(263, 63);
+            btnListarEsp.Size = new Size(237, 36);
             btnListarEsp.TabIndex = 0;
             btnListarEsp.Text = "Listar especialidades";
             btnListarEsp.UseVisualStyleBackColor = true;
@@ -53,57 +53,34 @@
             // 
             // btnAddEsp
             // 
-            btnAddEsp.Location = new Point(600, 12);
+            btnAddEsp.Location = new Point(107, 304);
             btnAddEsp.Name = "btnAddEsp";
-            btnAddEsp.Size = new Size(140, 66);
+            btnAddEsp.Size = new Size(84, 31);
             btnAddEsp.TabIndex = 1;
-            btnAddEsp.Text = "Agregar especialidad";
+            btnAddEsp.Text = "Agregar +";
             btnAddEsp.UseVisualStyleBackColor = true;
             btnAddEsp.Click += btnAddEsp_Click;
             // 
-            // txtDesc
-            // 
-            txtDesc.Location = new Point(749, 52);
-            txtDesc.Name = "txtDesc";
-            txtDesc.Size = new Size(181, 23);
-            txtDesc.TabIndex = 2;
-            // 
             // gridUnicaEsp
             // 
-            gridUnicaEsp.Location = new Point(284, 90);
+            gridUnicaEsp.Enabled = false;
+            gridUnicaEsp.Location = new Point(255, 106);
             gridUnicaEsp.Name = "gridUnicaEsp";
-            gridUnicaEsp.Size = new Size(306, 201);
+            gridUnicaEsp.Size = new Size(306, 185);
             gridUnicaEsp.TabIndex = 3;
-            // 
-            // gridNuevaEsp
-            // 
-            gridNuevaEsp.Location = new Point(600, 90);
-            gridNuevaEsp.Name = "gridNuevaEsp";
-            gridNuevaEsp.Size = new Size(336, 201);
-            gridNuevaEsp.TabIndex = 4;
-            // 
-            // labelDescripcion
-            // 
-            labelDescripcion.AutoSize = true;
-            labelDescripcion.Location = new Point(749, 21);
-            labelDescripcion.Name = "labelDescripcion";
-            labelDescripcion.Size = new Size(72, 15);
-            labelDescripcion.TabIndex = 5;
-            labelDescripcion.Text = "Descripción:";
-            labelDescripcion.Click += labelDescripcion_Click;
             // 
             // numUpDownEsp
             // 
-            numUpDownEsp.Location = new Point(452, 37);
+            numUpDownEsp.Location = new Point(404, 21);
             numUpDownEsp.Name = "numUpDownEsp";
             numUpDownEsp.Size = new Size(141, 23);
             numUpDownEsp.TabIndex = 6;
             // 
             // btnMostrarUnaEsp
             // 
-            btnMostrarUnaEsp.Location = new Point(284, 12);
+            btnMostrarUnaEsp.Location = new Point(255, 64);
             btnMostrarUnaEsp.Name = "btnMostrarUnaEsp";
-            btnMostrarUnaEsp.Size = new Size(156, 64);
+            btnMostrarUnaEsp.Size = new Size(306, 36);
             btnMostrarUnaEsp.TabIndex = 7;
             btnMostrarUnaEsp.Text = "Buscar";
             btnMostrarUnaEsp.UseVisualStyleBackColor = true;
@@ -112,23 +89,53 @@
             // gridEsp
             // 
             gridEsp.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            gridEsp.Location = new Point(12, 90);
+            gridEsp.Location = new Point(12, 52);
             gridEsp.Name = "gridEsp";
-            gridEsp.Size = new Size(263, 201);
+            gridEsp.Size = new Size(237, 239);
             gridEsp.TabIndex = 8;
+            // 
+            // btnModificarEspecialidad
+            // 
+            btnModificarEspecialidad.Location = new Point(332, 304);
+            btnModificarEspecialidad.Name = "btnModificarEspecialidad";
+            btnModificarEspecialidad.Size = new Size(157, 31);
+            btnModificarEspecialidad.TabIndex = 9;
+            btnModificarEspecialidad.Text = "Modificar";
+            btnModificarEspecialidad.UseVisualStyleBackColor = true;
+            btnModificarEspecialidad.Click += btnModificarEspecialidad_Click;
+            // 
+            // labelBusqueda
+            // 
+            labelBusqueda.AutoSize = true;
+            labelBusqueda.Location = new Point(288, 23);
+            labelBusqueda.Name = "labelBusqueda";
+            labelBusqueda.Size = new Size(83, 15);
+            labelBusqueda.TabIndex = 10;
+            labelBusqueda.Text = "Buscar por ID :";
+            // 
+            // btnCerrar
+            // 
+            btnCerrar.BackColor = Color.IndianRed;
+            btnCerrar.Location = new Point(12, 304);
+            btnCerrar.Name = "btnCerrar";
+            btnCerrar.Size = new Size(89, 31);
+            btnCerrar.TabIndex = 11;
+            btnCerrar.Text = "Cerrar";
+            btnCerrar.UseVisualStyleBackColor = false;
+            btnCerrar.Click += btnCerrar_Click;
             // 
             // EspecialidadForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(942, 314);
+            ClientSize = new Size(573, 347);
+            Controls.Add(btnCerrar);
+            Controls.Add(labelBusqueda);
+            Controls.Add(btnModificarEspecialidad);
             Controls.Add(gridEsp);
             Controls.Add(btnMostrarUnaEsp);
             Controls.Add(numUpDownEsp);
-            Controls.Add(labelDescripcion);
-            Controls.Add(gridNuevaEsp);
             Controls.Add(gridUnicaEsp);
-            Controls.Add(txtDesc);
             Controls.Add(btnAddEsp);
             Controls.Add(btnListarEsp);
             Name = "EspecialidadForm";
@@ -144,12 +151,12 @@
 
         private Button btnListarEsp;
         private Button btnAddEsp;
-        private TextBox txtDesc;
         private PropertyGrid gridUnicaEsp;
-        private PropertyGrid gridNuevaEsp;
-        private Label labelDescripcion;
         private NumericUpDown numUpDownEsp;
         private Button btnMostrarUnaEsp;
         private DataGridView gridEsp;
+        private Button btnModificarEspecialidad;
+        private Label labelBusqueda;
+        private Button btnCerrar;
     }
 }

@@ -28,12 +28,12 @@ namespace Application.Services
         } //checked
         public List<EspecialidadDTO> GetAll()
         {
-            return EspecialidadInMemory.Especialidades.Select(e => new EspecialidadDTO{ Id = e.Id, Descripcion = e.Descripcion }).ToList();
+            return EspecialidadInMemory.Especialidades.Select(e => new EspecialidadDTO { Id = e.Id, Descripcion = e.Descripcion }).ToList();
 
         } //checked
         public EspecialidadDTO Add(NewEspecialidadDTO e)
         {
-            if ( e.Descripcion == null)
+            if (e.Descripcion == null)
             {
                 throw new ArgumentException("Properties non-nulleable are null");
             }
@@ -44,8 +44,8 @@ namespace Application.Services
 
             int id = GetNextId();
 
-            Especialidad newEsp = new Especialidad(id,e.Descripcion);
-            EspecialidadDTO espDTO = new EspecialidadDTO { Id= id, Descripcion= e.Descripcion };
+            Especialidad newEsp = new Especialidad(id, e.Descripcion);
+            EspecialidadDTO espDTO = new EspecialidadDTO { Id = id, Descripcion = e.Descripcion };
             EspecialidadInMemory.Especialidades.Add(newEsp);
             return espDTO;
 
@@ -58,22 +58,44 @@ namespace Application.Services
             {
                 return null;
             }
-            EspecialidadDTO espDeletedDTO = new EspecialidadDTO{ Id = espToDelete.Id, Descripcion = espToDelete.Descripcion };
+            EspecialidadDTO espDeletedDTO = new EspecialidadDTO { Id = espToDelete.Id, Descripcion = espToDelete.Descripcion };
             EspecialidadInMemory.Especialidades.Remove(espToDelete);
             return espDeletedDTO;
 
         } //checked
-        private int GetNextId()
+        public EspecialidadDTO Update(EspecialidadDTO dto)
         {
-
-            if (EspecialidadInMemory.Especialidades.Count > 0)
+            Especialidad espToUpdate = EspecialidadInMemory.Especialidades.Find(u => u.Id == dto.Id);
+            if (espToUpdate == null)
             {
-
-                return EspecialidadInMemory.Especialidades.Max(u => u.Id) + 1;
-
+                return null;
             }
-
-            return 1;
+            if (dto.Descripcion == null)
+            {
+                throw new ArgumentException("Properties non-nulleable are null");
+            }
+            else
+            {
+                if (EspecialidadInMemory.Especialidades.Any(u => u.Descripcion.Equals(dto.Descripcion, StringComparison.OrdinalIgnoreCase) && u.Id != dto.Id))
+                {
+                    throw new ArgumentException("This description alredy exists: " + dto.Descripcion);
+                }
+            }
+            espToUpdate.Descripcion = dto.Descripcion;
+            return dto;
         }
+
+                private int GetNextId()
+                {
+
+                    if (EspecialidadInMemory.Especialidades.Count > 0)
+                    {
+
+                        return EspecialidadInMemory.Especialidades.Max(u => u.Id) + 1;
+
+                    }
+
+                    return 1;
+                }
     }
 }

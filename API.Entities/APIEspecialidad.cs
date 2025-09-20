@@ -66,14 +66,14 @@ namespace API.Entities
                 throw new Exception($"Timeout retrieving specialities. Error: ${ex.Message}");
             }
         }
-        public static async Task<EspecialidadDTO> DeleteAsync(int id)
+        public static async void DeleteAsync(int id)
         {
             try
             {
                 HttpResponseMessage resp = await esp.DeleteAsync("especialidades/" + id);
                 if (resp.IsSuccessStatusCode)
                 {
-                    return await resp.Content.ReadFromJsonAsync<EspecialidadDTO>();
+                    return;
                 }
                 else
                 {
@@ -112,6 +112,30 @@ namespace API.Entities
             catch (TaskCanceledException err)
             {
                 throw new Exception($"Timeout posting speciality. Error:{err}");
+            }
+        }
+        public static async Task<EspecialidadDTO> PutAsync(EspecialidadDTO dto)
+        {
+            try
+            {
+                HttpResponseMessage resp = await esp.PutAsJsonAsync("especialidades", dto);
+                if (resp.IsSuccessStatusCode)
+                {
+                    return await resp.Content.ReadFromJsonAsync<EspecialidadDTO>();
+                }
+                else
+                {
+                    string errmen = await resp.Content.ReadAsStringAsync();
+                    throw new Exception($"Error: {errmen}");
+                }
+            }
+            catch (HttpRequestException err)
+            {
+                throw new Exception($"Error:{err}");
+            }
+            catch (TaskCanceledException err)
+            {
+                throw new Exception($"Error:{err}");
             }
         }
     }

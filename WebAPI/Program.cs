@@ -119,7 +119,7 @@ namespace WebAPI
 
                 if (usuariosDTO.Count == 0)
                 {
-                    return Results.NotFound(new { message = "User not found" });
+                    return Results.NotFound(new { message = "Users do not exist" });
                 }
 
                 return Results.Ok(usuariosDTO);
@@ -221,9 +221,29 @@ namespace WebAPI
                 EspecialidadDTO espDeleted = especialidadService.Remove(id);
                 if (espDeleted == null)
                 {
-                    return Results.NotFound(new { data = "User not found" });
+                    return Results.NotFound(new { data = "Especialidad not found" });
                 }
                 return Results.Ok(espDeleted);
+
+
+            });
+
+            app.MapPut("/especialidades/", (EspecialidadDTO dto) =>
+            {
+                try
+                {
+                    EspecialidadService especialidadService = new EspecialidadService();
+                    EspecialidadDTO userUpdated = especialidadService.Update(dto);
+                    if (userUpdated == null) 
+                    { 
+                       return Results.NotFound(new { message = "Especialidad not found" });
+                    }
+                    return Results.Ok(userUpdated);
+
+                } catch (ArgumentException er)
+                {   
+                    return Results.BadRequest(new { error = er.Message });
+                } 
 
 
             });
