@@ -42,7 +42,9 @@ namespace Data
 
                 entity.HasData(
                     new { Id = 1, Descripcion = "Chef"}, 
-                    new {Id = 2, Descripcion = "Matematico"}
+                    new {Id = 2, Descripcion = "Matematico"},
+                    new {Id = 3, Descripcion = "Programador" },
+                    new {Id = 4, Descripcion = "Diseñador" }
                     );
 
             });

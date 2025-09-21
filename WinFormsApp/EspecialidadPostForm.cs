@@ -34,6 +34,7 @@ namespace WinFormsApp
                     return;
                 }
                 EspecialidadDTO espAdded = await APIEspecialidad.AddAsync(nuevaEsp);
+                MessageBox.Show("Especialidad creada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
 
             }
