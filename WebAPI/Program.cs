@@ -127,7 +127,7 @@ namespace WebAPI
 
                 if (usuariosDTO.Count == 0)
                 {
-                    return Results.NotFound(new { message = "User not found" });
+                    return Results.NotFound(new { message = "Users do not exist" });
                 }
 
                 return Results.Ok(usuariosDTO);
@@ -181,6 +181,82 @@ namespace WebAPI
                 }
             });
 
+
+            // CRUD - Especialidad ---------------------------------------------------------------------------------------------------------------------------
+            /*
+            EspecialidadService especialidadService = new EspecialidadService();
+
+            app.MapGet("/especialidades/{id}", (int id) =>
+            {
+                EspecialidadDTO dto = especialidadService.Get(id);
+
+                if (dto == null)
+                {
+                    return Results.NotFound(new { message = "Especialidad not found" });
+                }
+
+                return Results.Ok(dto);
+            });//checked
+
+            app.MapGet("/especialidades/", () =>
+            {
+                List<EspecialidadDTO> espDTO = especialidadService.GetAll();
+
+                if (espDTO.Count == 0)
+                {
+                    return Results.NotFound(new { message = "Especialidad not found" });
+                }
+
+                return Results.Ok(espDTO);
+            });//checked
+
+            app.MapPost("/especialidades/", (NewEspecialidadDTO dto) =>
+            {
+                try
+                {
+                    EspecialidadDTO espDTO = especialidadService.Add(dto);
+
+                    return Results.Ok(espDTO);
+
+                }
+                catch (ArgumentException er)
+                {
+                    return Results.BadRequest(new { error = er.Message });
+                }
+
+            });
+
+            app.MapDelete("/especialidades/{id}", (int id) =>
+            {
+                EspecialidadDTO espDeleted = especialidadService.Remove(id);
+                if (espDeleted == null)
+                {
+                    return Results.NotFound(new { data = "Especialidad not found" });
+                }
+                return Results.Ok(espDeleted);
+
+
+            });
+
+            app.MapPut("/especialidades/", (EspecialidadDTO dto) =>
+            {
+                try
+                {
+                    EspecialidadService especialidadService = new EspecialidadService();
+                    EspecialidadDTO userUpdated = especialidadService.Update(dto);
+                    if (userUpdated == null) 
+                    { 
+                       return Results.NotFound(new { message = "Especialidad not found" });
+                    }
+                    return Results.Ok(userUpdated);
+
+                } catch (ArgumentException er)
+                {   
+                    return Results.BadRequest(new { error = er.Message });
+                } 
+
+
+            });*/
             app.MapEspecialidadEndpoints();
  
             //CRUD - Modulo ---------------------------------------------------------------------------------------------------------------------------
