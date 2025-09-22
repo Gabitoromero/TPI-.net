@@ -43,13 +43,22 @@ namespace WinFormsApp
             try
             {
                 EspecialidadDTO esp = await APIEspecialidad.GetAsync((int)numUpDownEsp.Value);
-                if (esp != null)
+                // Si el servicio devolvió null (o no existe), limpiamos la property grid
+                if (esp == null)
                 {
-                    gridUnicaEsp.SelectedObject = esp;
+                    gridUnicaEsp.SelectedObject = null;
+                    gridUnicaEsp.Refresh();
+                    MessageBox.Show($"La especialidad con Id {numUpDownEsp} no existe.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
+                gridUnicaEsp.SelectedObject = esp;
+                
             }
             catch (Exception err)
             {
+                // Si ocurre cualquier error (por ejemplo 404 desde el API), limpiamos la property grid
+                gridUnicaEsp.SelectedObject = null;
+                gridUnicaEsp.Refresh();
                 MessageBox.Show($"Error al obtener especialidades: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
