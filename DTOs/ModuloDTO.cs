@@ -10,11 +10,5 @@ namespace DTOs
     {
         public int Id { set; get; }
         public string Descripcion { set; get; }
-    /*public ModuloDTO(int num, string desc)
-        {
-            Id = num;
-            Descripcion = desc;
-
-        }*/
     }
 }

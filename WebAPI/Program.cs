@@ -23,6 +23,8 @@ namespace WebAPI
             builder.Services.AddDbContext<AcademiaContext>();
             builder.Services.AddScoped<EspecialidadRepository>();
             builder.Services.AddScoped<EspecialidadService>();
+            builder.Services.AddScoped<ModuloRepository>();
+            builder.Services.AddScoped<ModuloService>();
 
             var app = builder.Build();
 
