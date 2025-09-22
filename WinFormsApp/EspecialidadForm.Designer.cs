@@ -78,7 +78,7 @@
             // 
             // btnMostrarUnaEsp
             // 
-            btnMostrarUnaEsp.Location = new Point(255, 64);
+            btnMostrarUnaEsp.Location = new Point(255, 52);
             btnMostrarUnaEsp.Name = "btnMostrarUnaEsp";
             btnMostrarUnaEsp.Size = new Size(306, 36);
             btnMostrarUnaEsp.TabIndex = 7;

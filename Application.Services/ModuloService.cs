@@ -3,24 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using DTOs;
 using Data;
+using Domain.Model;
 
 namespace Application.Services
 {
     public class ModuloService
     {
+        private readonly ModuloRepository _repository;
+        public ModuloService(ModuloRepository moduloRepository)
+        {
+            _repository = moduloRepository;
+        }
         public List<ModuloDTO> GetAll()
         {
-            return ModuloInMemory.Modulos.Select(modulo => new ModuloDTO
+            List<Modulo> modulos = _repository.GetAll();
+            return modulos.Select(m => new ModuloDTO
             {
-                Id = modulo.Id,
-                Descripcion = modulo.Descripcion
+                Id = m.Id,
+                Descripcion = m.Descripcion
             }).ToList();
         }
 
         public ModuloDTO Get(int id)
         {
-            var modulo = ModuloInMemory.Modulos.FirstOrDefault(m => m.Id == id);
-            return modulo == null ? null : new ModuloDTO
+            Modulo modulo = _repository.Get(id);
+            if (modulo == null) return null;
+            return new ModuloDTO
             {
                 Id = modulo.Id,
                 Descripcion = modulo.Descripcion
@@ -29,46 +37,23 @@ namespace Application.Services
 
         public ModuloDTO Add(ModuloDTO dto)
         {
-            int id = GetNextId();
-            var modulo = new Domain.Model.Modulo(id, dto.Descripcion);
-            ModuloInMemory.Modulos.Add(modulo);
-
-            return new ModuloDTO
-            {
-                Id = modulo.Id,
-                Descripcion = modulo.Descripcion
-            };
+            Modulo modulo = new Modulo(0, dto.Descripcion);
+            _repository.Add(modulo);
+            dto.Id = modulo.Id; 
+            return dto;
         }
 
-        public void Delete(int id)
+        public bool Delete(int id)
         {
-            var modulo = ModuloInMemory.Modulos.FirstOrDefault(m => m.Id == id);
-            if (modulo == null)
-                throw new ArgumentException($"Módulo no encontrado: {id}");
-
-            ModuloInMemory.Modulos.Remove(modulo);
+           return _repository.Delete(id);
         }
 
         public ModuloDTO Update(ModuloDTO dto)
         {
-            var modulo = ModuloInMemory.Modulos.FirstOrDefault(m => m.Id == dto.Id);
-
-            if (modulo == null)
-                throw new ArgumentException($"Módulo no encontrado: {dto.Id}");
-            modulo.Descripcion = dto.Descripcion;
-
-            return new ModuloDTO
-            {
-                Id = modulo.Id,
-                Descripcion = modulo.Descripcion
-            };
-        }
-
-        private int GetNextId()
-        {
-            return ModuloInMemory.Modulos.Count == 0
-                ? 1
-                : ModuloInMemory.Modulos.Max(m => m.Id) + 1;
+            Modulo modulo = new Modulo(dto.Id, dto.Descripcion);
+            bool updated = _repository.Update(modulo);
+            if (!updated) return null;
+            return dto;
         }
     }
 }

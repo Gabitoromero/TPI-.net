@@ -6,9 +6,9 @@ using DTOs;
 
 namespace WinFormsApp
 {
-    public partial class ModulosGetPostForm : Form
+    public partial class ModuloForm : Form
     {
-        public ModulosGetPostForm()
+        public ModuloForm()
         {
             InitializeComponent();
         }
@@ -17,7 +17,7 @@ namespace WinFormsApp
         {
             try
             {
-                List<ModuloDTO> modulos = await APIModulo.GetAllAsync();
+                var modulos = await APIModulo.GetAllAsync();
                 GridModulos.DataSource = modulos;
             }
             catch (Exception ex)
@@ -34,6 +34,8 @@ namespace WinFormsApp
 
                 if (modulo == null)
                 {
+                    GridModulo.SelectedObject = null;
+                    GridModulo.Refresh();
                     throw new Exception("No se encontró el módulo con el ID especificado.");
                 }
 
@@ -47,31 +49,26 @@ namespace WinFormsApp
 
         private async void buttonAgregarModulo_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(textDesc.Text))
-                {
-                    MessageBox.Show("La descripción del módulo no puede estar vacía.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                ModuloDTO nuevoModulo = new ModuloDTO
-                {
-                    Descripcion = textDesc.Text
-                };
-
-                ModuloDTO moduloAñadido = await APIModulo.AddAsync(nuevoModulo);
-                GridNuevoModulo.SelectedObject = moduloAñadido;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al agregar el módulo: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            ModuloPostForm modPostForm = new ModuloPostForm();
+            modPostForm.ShowDialog();
         }
 
         private void ModulosGetPostForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnModificarModulo_Click(object sender, EventArgs e)
+        {
+            int id = (int)numIDModulo.Value;
+            ModuloPutDeleteForm moduloPutDeleteForm = new ModuloPutDeleteForm(id);
+            moduloPutDeleteForm.ShowDialog();
+
+        }
+
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

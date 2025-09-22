@@ -260,70 +260,7 @@ namespace WebAPI
             app.MapEspecialidadEndpoints();
  
             //CRUD - Modulo ---------------------------------------------------------------------------------------------------------------------------
-            ModuloService moduloService = new ModuloService();
-
-            app.MapGet("/modulos/{id}", (int id) =>
-            {
-                ModuloDTO dto = moduloService.Get(id);
-
-                if (dto == null)
-                {
-                    return Results.NotFound(new { message = "Modulo not found" });
-                }
-
-                return Results.Ok(dto);
-            });
-
-            app.MapGet("/modulos/", () =>
-            {
-                List<ModuloDTO> modulosDTO = moduloService.GetAll();
-
-                if (modulosDTO.Count == 0)
-                {
-                    return Results.NotFound(new { message = "Modulos not found" });
-                }
-
-                return Results.Ok(modulosDTO);
-            });
-
-            app.MapPost("/modulos/", (ModuloDTO dto) =>
-            {
-                try
-                {
-                    ModuloDTO moduloDTO = moduloService.Add(dto);
-                    return Results.Ok(moduloDTO);
-                }
-                catch (ArgumentException er)
-                {
-                    return Results.BadRequest(new { error = er.Message });
-                }
-            });
-
-            app.MapDelete("/modulos/{id}", (int id) =>
-            {
-                try
-                {
-                    moduloService.Delete(id);             
-                    return Results.Ok();
-                }
-                catch (ArgumentException er)
-                {
-                    return Results.BadRequest(new { error = er.Message });
-                }
-            });
-
-            app.MapPut("/modulos/", (ModuloDTO dto) =>
-            {
-                try
-                {
-                    ModuloDTO moduloDTO = moduloService.Update(dto);
-                    return Results.Ok(moduloDTO);
-                }
-                catch (ArgumentException er)
-                {
-                    return Results.BadRequest(new { error = er.Message });
-                }
-            });
+            app.MapModuloEndpoints();
 
             app.Run();
 
