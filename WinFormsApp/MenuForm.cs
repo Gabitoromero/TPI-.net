@@ -24,12 +24,33 @@ namespace WinFormsApp
 
         private void btnEspecialidadesCRUD_Click(object sender, EventArgs e)
         {
-            EspecialidadForm espForm = new EspecialidadForm();
-            espForm.ShowDialog();
+            try
+            {
+                EspecialidadForm espForm = new EspecialidadForm();
+                espForm.ShowDialog();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"Error al modificar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
         private void btnCerrar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnModulosCRUD_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ModuloForm espForm = new ModuloForm();
+                espForm.ShowDialog();
+            }catch(Exception err)
+            {
+                MessageBox.Show($"Error al modificar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
     }
 }

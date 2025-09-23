@@ -54,6 +54,7 @@
             btnModulosCRUD.TabIndex = 1;
             btnModulosCRUD.Text = "Modulos";
             btnModulosCRUD.UseVisualStyleBackColor = true;
+            btnModulosCRUD.Click += btnModulosCRUD_Click;
             // 
             // btnUsuariosCRUD
             // 
@@ -91,7 +92,7 @@
             btnCerrar.TabIndex = 5;
             btnCerrar.Text = "Cerrar";
             btnCerrar.UseVisualStyleBackColor = false;
-            btnCerrar.Click += this.btnCerrar_Click;
+            btnCerrar.Click += btnCerrar_Click;
             // 
             // MenuForm
             // 

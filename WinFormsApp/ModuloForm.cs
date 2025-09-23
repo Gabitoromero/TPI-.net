@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using API.Clients;
 using DTOs;
@@ -36,21 +37,33 @@ namespace WinFormsApp
                 {
                     GridModulo.SelectedObject = null;
                     GridModulo.Refresh();
-                    throw new Exception("No se encontró el módulo con el ID especificado.");
+                    MessageBox.Show($"La especialidad con Id {numIDModulo.Value} no existe.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
 
                 GridModulo.SelectedObject = modulo;
             }
             catch (Exception ex)
             {
+                // Si ocurre cualquier error (por ejemplo 404 desde el API), limpiamos la property grid
+                GridModulo.SelectedObject = null;
+                GridModulo.Refresh();
                 MessageBox.Show($"Error al buscar el módulo: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private async void buttonAgregarModulo_Click(object sender, EventArgs e)
         {
-            ModuloPostForm modPostForm = new ModuloPostForm();
-            modPostForm.ShowDialog();
+            try
+            {
+                ModuloPostForm modPostForm = new ModuloPostForm();
+                modPostForm.ShowDialog();
+                this.buttonListarModulos_Click(sender, e);
+            }
+            catch(Exception err)
+            {
+                MessageBox.Show($"Error al modificar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ModulosGetPostForm_Load(object sender, EventArgs e)
@@ -58,12 +71,25 @@ namespace WinFormsApp
 
         }
 
-        private void btnModificarModulo_Click(object sender, EventArgs e)
+        private async void btnModificarModulo_Click(object sender, EventArgs e)
         {
-            int id = (int)numIDModulo.Value;
-            ModuloPutDeleteForm moduloPutDeleteForm = new ModuloPutDeleteForm(id);
-            moduloPutDeleteForm.ShowDialog();
+            try
+            {
+                int id = (int)numIDModulo.Value;
+                ModuloDTO mod = await APIModulo.GetAsync(id);
+                if (mod != null)
+                {
+                    ModuloPutDeleteForm moduloPutDeleteForm = new ModuloPutDeleteForm(id);
+                    moduloPutDeleteForm.ShowDialog();
 
+                }
+                this.buttonListarModulos_Click(sender, e);
+                this.buttonBuscarModulo_Click(sender, e);
+            }catch( ArgumentException err)
+            {
+                MessageBox.Show($"Error al modificar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)
