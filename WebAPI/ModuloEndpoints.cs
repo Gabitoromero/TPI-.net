@@ -9,7 +9,7 @@ namespace WebAPI
         public static void MapModuloEndpoints(this WebApplication app)
         {
             // CRUD - Modulo ---------------------------------------------------------------------------------------------------------------------------
-            app.MapGet("/modulos/{id}", ( ModuloService service, int id) =>
+            app.MapGet("/modulos/{id}", (ModuloService service, int id) =>
             {
                 ModuloDTO? dto = service.Get(id);
                 if (dto == null)
@@ -18,7 +18,7 @@ namespace WebAPI
                 }
                 return Results.Ok(dto);
             });
-            app.MapGet("/modulos/", ( ModuloService service) =>
+            app.MapGet("/modulos/", (ModuloService service) =>
             {
                 List<ModuloDTO> modDTO = service.GetAll();
                 if (modDTO.Count == 0)
@@ -27,7 +27,7 @@ namespace WebAPI
                 }
                 return Results.Ok(modDTO);
             });
-           app.MapPost("/modulos/", ( ModuloService service,  ModuloDTO dto) =>
+           app.MapPost("/modulos/", (ModuloService service, ModuloDTO dto) =>
             {
                 try
                 {
@@ -39,7 +39,7 @@ namespace WebAPI
                     return Results.BadRequest(new { error = er.Message });
                 }
             });
-            app.MapDelete("/modulos/{id}", ( ModuloService service, int id) =>
+            app.MapDelete("/modulos/{id}", (ModuloService service, int id) =>
             {
                 bool modDeleted = service.Delete(id);
                 if (!modDeleted)
@@ -48,7 +48,7 @@ namespace WebAPI
                 }
                 return Results.NoContent();
             });
-            app.MapPut("/modulos/", ( ModuloService service,  ModuloDTO dto) =>
+            app.MapPut("/modulos/", (ModuloService service, ModuloDTO dto) =>
             {
                 try
                 {
