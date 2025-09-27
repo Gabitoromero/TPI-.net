@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using System.Security.Cryptography;
 
 namespace Domain.Model
 {
@@ -28,33 +23,47 @@ namespace Domain.Model
         public string Nombre { get; set; }
         public string NombreUsuario { get; set; }
 
+        public string Salt { get; private set; }
+
         public DateTime FechaAlta { get; set; }
 
         public Usuario(int id, string apellido, string clave, string email, bool habilitado, string nombre, string nombreUsuario, DateTime fechaAlta)
         {
             Id = id;
             Apellido = apellido;
-            Clave = clave;
+            SetClave(clave);
             Email = email;
             Habilitado = habilitado;
             Nombre = nombre;
             NombreUsuario = nombreUsuario;
             FechaAlta = fechaAlta;
         }
-        /*
-        public Usuario() 
-        {
-            Id = 0;
-            Apellido = "Apellido";
-            Clave = "clave";
-            Email = "correo@email.com";
-            Habilitado = false;
-            Nombre = "Nombre";
-            NombreUsuario = "NombreUsuario";
-            FechaAlta = DateTime.Now;
-        }
-        */
 
+        public void SetClave(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentException("La contraseña no puede ser nula o vacía.", nameof(password));
+
+            if (password.Length < 6)
+                throw new ArgumentException("La contraseña debe tener al menos 6 caracteres.", nameof(password));
+
+            Salt = GenerateSalt();
+            Clave = HashPassword(password, Salt);
+        }
+
+        private static string GenerateSalt()
+        {
+            byte[] saltBytes = new byte[32];
+            RandomNumberGenerator.Fill(saltBytes);
+            return Convert.ToBase64String(saltBytes);
+        }
+
+        private static string HashPassword(string clave, string salt)
+        {
+            using var pbkdf2 = new Rfc2898DeriveBytes(clave, Convert.FromBase64String(salt), 10000, HashAlgorithmName.SHA256);
+            byte[] hashBytes = pbkdf2.GetBytes(32);
+            return Convert.ToBase64String(hashBytes);
+        }
 
     }
 
