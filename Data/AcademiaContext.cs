@@ -1,5 +1,4 @@
-﻿
-using Domain.Model;
+﻿using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
@@ -17,7 +16,7 @@ namespace Data
             this.Database.EnsureCreated();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) //configuracion de la base de datos
         {
             if (!optionsBuilder.IsConfigured)
             {
@@ -31,7 +30,7 @@ namespace Data
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder) //configuracion del modelo de datos
         {
             base.OnModelCreating(modelBuilder);
 
@@ -49,6 +48,7 @@ namespace Data
                     );
 
             });
+
             modelBuilder.Entity<Modulo>(entity =>
             {
                 entity.HasKey(e => e.Id);
