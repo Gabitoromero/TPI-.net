@@ -38,12 +38,10 @@ namespace Data
             if (existingUsuario == null) return false;
 
             existingUsuario.Apellido = usuario.Apellido;
-            existingUsuario.Clave = usuario.Clave;
             existingUsuario.Email = usuario.Email;
             existingUsuario.Habilitado = usuario.Habilitado;
             existingUsuario.Nombre = usuario.Nombre;
             existingUsuario.NombreUsuario = usuario.NombreUsuario;
-            existingUsuario.FechaAlta = usuario.FechaAlta;
 
             _context.SaveChanges();
             return true;

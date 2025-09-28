@@ -24,7 +24,7 @@ namespace Application.Services
             {
                 Id = usuario.Id,
                 Apellido = usuario.Apellido,
-                Clave = usuario.Clave,
+                Clave = usuario.ClaveHash,
                 Email = usuario.Email,
                 Habilitado = usuario.Habilitado,
                 Nombre = usuario.Nombre,

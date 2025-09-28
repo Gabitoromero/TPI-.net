@@ -1,23 +1,14 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
 
 namespace Domain.Model
 {
     public class Usuario
     {
-        //Fields
-        int _Id;
-        string _Apellido;
-        string _Clave;
-        string _Email;
-        string _Habilitado;
-        string _Nombre;
-        string _NombreUsaurio;
-        DateTime _FechaAlta;
-
         //properties
         public int Id { get; set; }
         public string Apellido { get; set; }
-        public string Clave { get; set; }
+        public string ClaveHash { get; set; }
         public string Email { get; set; }
         public bool Habilitado { get; set; }
         public string Nombre { get; set; }
@@ -39,18 +30,28 @@ namespace Domain.Model
             FechaAlta = fechaAlta;
         }
 
+        private Usuario() { }
+
         public void SetClave(string password)
         {
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("La contraseña no puede ser nula o vacía.", nameof(password));
-
             if (password.Length < 6)
                 throw new ArgumentException("La contraseña debe tener al menos 6 caracteres.", nameof(password));
 
+
             Salt = GenerateSalt();
-            Clave = HashPassword(password, Salt);
+            ClaveHash = HashPassword(password, Salt);
         }
 
+        public bool ValidatePassword(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                return false;
+
+            string hashedInput = HashPassword(password, Salt);
+            return ClaveHash == hashedInput;
+        }
         private static string GenerateSalt()
         {
             byte[] saltBytes = new byte[32];

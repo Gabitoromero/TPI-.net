@@ -73,7 +73,7 @@ namespace Data
                 entity.Property(e => e.Nombre).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Apellido).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.NombreUsuario).IsRequired().HasMaxLength(20);
-                entity.Property(e => e.Clave).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.ClaveHash).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Habilitado).HasDefaultValue(true);
                 entity.Property(e => e.FechaAlta).IsRequired();
