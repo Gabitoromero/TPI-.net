@@ -11,6 +11,6 @@ namespace DTOs
         public string Descripcion { get; set; }
         public int IdPlan { get; set; }
         public int IdEspecialidad { get; set; }
-
+        
     }
 }

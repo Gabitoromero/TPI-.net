@@ -25,6 +25,8 @@ namespace WebAPI
             builder.Services.AddScoped<EspecialidadService>();
             builder.Services.AddScoped<ModuloRepository>();
             builder.Services.AddScoped<ModuloService>();
+            builder.Services.AddScoped<PlanRepository>();
+            builder.Services.AddScoped<PlanService>();
 
             var app = builder.Build();
 
@@ -40,7 +42,9 @@ namespace WebAPI
             app.MapControllers();
 
             //PLANES CRUD ---------------------------------------------------------------------------------------------------------------------------
-            app.MapGet("/planes/{id}", (int id) =>
+            app.MapPlanEndpoints();
+            /*
+             app.MapGet("/planes/{id}", (int id) =>
             {
                 PlanService planService = new PlanService();
                 PlanDTO dto = planService.Get(id);
@@ -105,6 +109,7 @@ namespace WebAPI
                     return Results.BadRequest(new { error = er.Message });
                 }
             });
+            */
 
             // CRUD - Usuario ---------------------------------------------------------------------------------------------------------------------------
             
