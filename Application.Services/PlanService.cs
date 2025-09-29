@@ -21,12 +21,7 @@ namespace Application.Services
         public List<PlanDTO> GetAll()
         {
             List<Plan> planes = _repository.GetAll();
-            return planes.Select(p => new PlanDTO
-            {
-                IdPlan = p.IdPlan,
-                Descripcion = p.Descripcion,
-                IdEspecialidad = p.IdEspecialidad
-            }).ToList();
+            return planes.Select(p => new PlanDTO(p.IdPlan, p.Descripcion, p.IdEspecialidad)).ToList();
         }
 
         public PlanDTO Get(int id)
@@ -37,13 +32,7 @@ namespace Application.Services
                 return null;
             }
 
-            return new PlanDTO
-
-            {
-                IdPlan = plan.IdPlan,
-                Descripcion = plan.Descripcion,
-                IdEspecialidad = plan.IdEspecialidad
-            };
+            return new PlanDTO(plan.IdPlan, plan.Descripcion, plan.IdEspecialidad);
         }
 
         public PlanDTO Add(PlanDTO dto)
