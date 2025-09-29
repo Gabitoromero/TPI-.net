@@ -1,6 +1,7 @@
 ﻿using DTOs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
@@ -11,20 +12,23 @@ using System.Threading.Tasks;
 
 namespace API.Clients
 {
-    public class APIEspecialidad
+    public class APIEspecialidad : APIClientBase
     {
-        private static HttpClient esp = new HttpClient();
+        private static HttpClient esp;
         static APIEspecialidad()
         {
-            esp.BaseAddress = new Uri("https://localhost:7265/");
-            esp.DefaultRequestHeaders.Accept.Clear();
-            esp.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            esp = CreateHttpClientAsync();
         }
         public static async Task<EspecialidadDTO> GetAsync(int id)
         {
             try
             {
+                Debug.WriteLine($"🌐 Authorization Header: {esp.DefaultRequestHeaders.Authorization}");
+                Debug.WriteLine($"🌐 Scheme: {esp.DefaultRequestHeaders.Authorization?.Scheme}");
+                Debug.WriteLine($"🌐 Parameter: {esp.DefaultRequestHeaders.Authorization?.Parameter}");
+
                 HttpResponseMessage response = await esp.GetAsync("especialidades/" + id);
+                
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadFromJsonAsync<EspecialidadDTO>(); 

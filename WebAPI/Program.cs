@@ -1,23 +1,56 @@
-using Application.Services;
+﻿using Application.Services;
 using Data;
-using Domain.Model;
 using DTOs;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+
+// README: Por motivos que se nos escapan, y despues de DIAS de debuguear, 3 Ias de por medio y mas de 200 pruebas, no sabemos por que
+// el middleware de token rechaza los tokens que son generados por si mismo y que ademas coinciden en formato a la perfeccion
+// Nuestra teoria es que los paquetes instalados tienen algun conflicto extraño que no sabemos arreglar
+// Asi que por el momento el middleware de autentitacion esta bypaseado y sin efecto.
+// Realmente no tenemos ni idea que pasa y ya probamos de todo, asi que si alguien sabe que puede ser, se agradece la ayuda
+// https://jwt.io/ valida correctamente tanto los tokens generados como los que le llegan al back, pero por algun motivo el back los rechaza
 
 namespace WebAPI
 {
     public class Program
     {
         public static void Main(string[] args)
+
         {
             var builder = WebApplication.CreateBuilder(args); //app builder que configura la app
             builder.Services.AddControllers(); // Add services to the container.
             builder.Services.AddEndpointsApiExplorer();  // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddSwaggerGen();
 
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            var secretKey = jwtSettings["SecretKey"];
+            var issuer = jwtSettings["Issuer"];
+            var audience = jwtSettings["Audience"];
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = issuer,
+                        ValidateAudience = true,
+                        ValidAudience = audience,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
+            builder.Services.AddAuthorization();
+
             // DI
-            // NOTA: lo normal seria que dependan de una interaz, ejemplo IEspecialidadRepository, de forma que el dia de ma�ana si cambio a EspecialidadRepositoryV2 : IEspecialidadRepository
+            // NOTA: lo normal seria que dependan de una interaz, ejemplo IEspecialidadRepository, de forma que el dia de mañana si cambio a EspecialidadRepositoryV2 : IEspecialidadRepository
             // no tengo que cambiar casi nada, pero bueno, lo hicimos con la intencion de probar inyeccion de dependencias, la realidad es que no vamos a cambiar los repos
 
             builder.Services.AddDbContext<AcademiaContext>();
@@ -25,6 +58,9 @@ namespace WebAPI
             builder.Services.AddScoped<EspecialidadService>();
             builder.Services.AddScoped<ModuloRepository>();
             builder.Services.AddScoped<ModuloService>();
+            builder.Services.AddScoped<UsuarioRepository>();
+            builder.Services.AddScoped<UsuarioService>();
+            builder.Services.AddScoped<AuthService>();
 
             var app = builder.Build();
 
@@ -36,8 +72,10 @@ namespace WebAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
             app.UseAuthorization();
-            app.MapControllers();
+            
 
             //PLANES CRUD ---------------------------------------------------------------------------------------------------------------------------
             app.MapGet("/planes/{id}", (int id) =>
@@ -106,163 +144,12 @@ namespace WebAPI
                 }
             });
 
-            // CRUD - Usuario ---------------------------------------------------------------------------------------------------------------------------
-            
 
-            app.MapGet("/usuarios/{id}", (int id) =>
-            {
-                UsuarioService usuarioService = new UsuarioService();
-                FullUsuarioDTO dto = usuarioService.Get(id);
-
-                if (dto == null)
-                {
-                    return Results.NotFound(new { message = "User not found" });
-                }
-
-                return Results.Ok(dto);
-            });
-
-            app.MapGet("/usuarios/", () =>
-            {
-                UsuarioService usuarioService = new UsuarioService();
-                List<ShowUsuarioDTO> usuariosDTO = usuarioService.GetAll();
-
-                if (usuariosDTO.Count == 0)
-                {
-                    return Results.NotFound(new { message = "Users do not exist" });
-                }
-
-                return Results.Ok(usuariosDTO);
-            });
-
-            app.MapPost("/usuarios/", (PostUsuarioDTO dto) =>
-            {
-                try
-                {
-                    UsuarioService usuarioService = new UsuarioService();
-                    PostUsuarioDTO usuarioDTO = usuarioService.Add(dto);
-
-                    return Results.Ok(usuarioDTO);
-
-                }
-                catch (ArgumentException er)
-                {
-                    return Results.BadRequest(new { error = er.Message });
-                }
-
-            });
-
-            app.MapDelete("/usuarios/{id}", (int id) =>
-            {
-                try
-                {
-                    UsuarioService usuarioService = new UsuarioService();
-                    usuarioService.Delete(id);
-                    return Results.Ok();
-                }
-                catch (ArgumentException er)
-                {
-                    return Results.BadRequest(new { error = er.Message });
-                }
-
-
-
-            });
-
-            app.MapPut("/usuarios/", (PutUsuarioDTO dto) =>
-            { 
-                try
-                {
-                    UsuarioService usuarioService = new UsuarioService();
-                    PutUsuarioDTO userUpdated = usuarioService.Update(dto);
-                    return Results.Ok(userUpdated);
-
-                } catch (ArgumentException er)
-                {
-                    return Results.BadRequest(new { error = er.Message });
-                }
-            });
-
-
-            // CRUD - Especialidad ---------------------------------------------------------------------------------------------------------------------------
-            /*
-            EspecialidadService especialidadService = new EspecialidadService();
-
-            app.MapGet("/especialidades/{id}", (int id) =>
-            {
-                EspecialidadDTO dto = especialidadService.Get(id);
-
-                if (dto == null)
-                {
-                    return Results.NotFound(new { message = "Especialidad not found" });
-                }
-
-                return Results.Ok(dto);
-            });//checked
-
-            app.MapGet("/especialidades/", () =>
-            {
-                List<EspecialidadDTO> espDTO = especialidadService.GetAll();
-
-                if (espDTO.Count == 0)
-                {
-                    return Results.NotFound(new { message = "Especialidad not found" });
-                }
-
-                return Results.Ok(espDTO);
-            });//checked
-
-            app.MapPost("/especialidades/", (NewEspecialidadDTO dto) =>
-            {
-                try
-                {
-                    EspecialidadDTO espDTO = especialidadService.Add(dto);
-
-                    return Results.Ok(espDTO);
-
-                }
-                catch (ArgumentException er)
-                {
-                    return Results.BadRequest(new { error = er.Message });
-                }
-
-            });
-
-            app.MapDelete("/especialidades/{id}", (int id) =>
-            {
-                EspecialidadDTO espDeleted = especialidadService.Remove(id);
-                if (espDeleted == null)
-                {
-                    return Results.NotFound(new { data = "Especialidad not found" });
-                }
-                return Results.Ok(espDeleted);
-
-
-            });
-
-            app.MapPut("/especialidades/", (EspecialidadDTO dto) =>
-            {
-                try
-                {
-                    EspecialidadService especialidadService = new EspecialidadService();
-                    EspecialidadDTO userUpdated = especialidadService.Update(dto);
-                    if (userUpdated == null) 
-                    { 
-                       return Results.NotFound(new { message = "Especialidad not found" });
-                    }
-                    return Results.Ok(userUpdated);
-
-                } catch (ArgumentException er)
-                {   
-                    return Results.BadRequest(new { error = er.Message });
-                } 
-
-
-            });*/
+            app.MapAuthEndpoints();
             app.MapEspecialidadEndpoints();
- 
-            //CRUD - Modulo ---------------------------------------------------------------------------------------------------------------------------
+            app.MapUsuarioEndpoints();
             app.MapModuloEndpoints();
+            
 
             app.Run();
 
