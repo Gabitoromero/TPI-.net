@@ -10,14 +10,12 @@ using System.Net.Http.Json;
 
 namespace API.Clients
 {
-    public class APIUsuario
+    public class APIUsuario : APIClientBase
     {
-        private static HttpClient client = new HttpClient();
+        private static HttpClient client;
         static APIUsuario()
         {
-            client.BaseAddress = new Uri("https://localhost:7265/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client = CreateHttpClientAsync();
         }
 
         public static async Task<bool> LoginAsync(LoginRequest dto)
@@ -27,7 +25,9 @@ namespace API.Clients
                 HttpResponseMessage response = await client.PostAsJsonAsync("auth/login", dto);
                 if (response.IsSuccessStatusCode)
                 {
-                    return true;
+                    var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                    LoginResponse = loginResponse;
+                    return true; // Login exitoso
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {

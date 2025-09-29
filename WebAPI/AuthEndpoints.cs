@@ -7,13 +7,13 @@ namespace WebAPI
     {
         public static void MapAuthEndpoints(this WebApplication app)
         {
-            app.MapPost("/auth/login", async (LoginRequest request, AuthService _service) =>
+            app.MapPost("/auth/login", async (LoginRequest request, AuthService _service, IConfiguration configuration) =>
             {
                 try
                 {
                     var response = await _service.LoginAsync(request);
 
-                    if (response == false) // cambiar a null
+                    if (response == null)
                     {
                         return Results.Unauthorized();
                     }
@@ -24,7 +24,7 @@ namespace WebAPI
                 {
                     return Results.Problem($"Error durante el login: {ex.Message}");
                 }
-            });
+            }).AllowAnonymous(); // Quitamos la necesidad de estar autenticado para loguearse (por obvias razones)
         }
     }
 }

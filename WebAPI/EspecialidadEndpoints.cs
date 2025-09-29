@@ -9,8 +9,9 @@ namespace WebAPI
         public static void MapEspecialidadEndpoints(this WebApplication app){
             // CRUD - Especialidad ---------------------------------------------------------------------------------------------------------------------------
 
-            app.MapGet("/especialidades/{id}", (EspecialidadService service, int id) =>
+            app.MapGet("/especialidades/{id}", (EspecialidadService service, int id, HttpContext context) =>
             {
+
                 EspecialidadDTO? dto = service.Get(id);
 
                 if (dto == null)
