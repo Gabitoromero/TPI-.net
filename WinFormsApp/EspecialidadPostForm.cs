@@ -38,6 +38,10 @@ namespace WinFormsApp
                 this.Close();
 
             }
+            catch(ArgumentException err )
+            {
+                MessageBox.Show($"Error al agregar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al agregar especialidad: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

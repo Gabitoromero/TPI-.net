@@ -40,6 +40,7 @@ namespace Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
+                entity.HasIndex(e => e.Descripcion).IsUnique();
 
                 entity.HasData(
                     new { Id = 1, Descripcion = "Chef" },
@@ -55,6 +56,7 @@ namespace Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
+                entity.HasIndex(e => e.Descripcion).IsUnique();
 
                 entity.HasData(
                     new { Id = 1, Descripcion = "modulo1" },

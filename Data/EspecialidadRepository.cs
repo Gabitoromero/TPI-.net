@@ -17,23 +17,38 @@ namespace Data
 
         public bool Update(Especialidad esp)
         {
-            Especialidad? existingEsp = _context.Especialidades.Find(esp.Id);
-
-            if (existingEsp != null)
+            try
             {
-                existingEsp.Descripcion = esp.Descripcion; // Ojo que en realidad deberiamos usar setters especiales que validen los datos
-                _context.SaveChanges();
-                return true;
-            }
+                Especialidad? existingEsp = _context.Especialidades.Find(esp.Id);
 
-            return false;
+                if (existingEsp != null)
+                {
+                    existingEsp.Descripcion = esp.Descripcion; // Ojo que en realidad deberiamos usar setters especiales que validen los datos
+                    _context.SaveChanges();
+                    return true;
+                }
+
+                return false;
+            }
+            catch (ArgumentException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
+            
         }
 
         public void Add(Especialidad esp)
         {
-            _context.Especialidades.Add(esp);
-            _context.SaveChanges();
-
+            try
+            {
+                _context.Especialidades.Add(esp);
+                _context.SaveChanges();
+            }
+            catch(ArgumentException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
+            
         }
 
         public bool Delete(int id)
