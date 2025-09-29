@@ -22,7 +22,7 @@ namespace Data
             if (existingPlan != null)
             {
                 if (!_context.Especialidades.Any(e => e.Id == plan.IdEspecialidad)) throw new ArgumentException($"La especialidad {plan.IdEspecialidad} no existe.");
-                if (_context.Planes.Any(p => p.Descripcion == plan.Descripcion)) throw new ArgumentException($"Ya existe un plan con la descripcion {plan.Descripcion}.");
+                if (_context.Planes.Any(p => p.Descripcion == plan.Descripcion && p.IdPlan != plan.IdPlan)) throw new ArgumentException($"Ya existe un plan con la descripcion {plan.Descripcion}.");
                 existingPlan.Descripcion = plan.Descripcion; 
                 existingPlan.IdEspecialidad = plan.IdEspecialidad;
                 _context.SaveChanges();

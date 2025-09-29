@@ -45,6 +45,7 @@ namespace Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
+                entity.HasIndex(e => e.Descripcion).IsUnique();
 
                 entity.HasData(
                     new { Id = 1, Descripcion = "Chef"}, 
@@ -59,6 +60,7 @@ namespace Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
+                entity.HasIndex(e => e.Descripcion).IsUnique();
 
                 entity.HasData(
                     new { Id = 1, Descripcion = "modulo1"}, 
@@ -82,7 +84,7 @@ namespace Data
 
                 entity.HasData( new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1 },
                                 new { IdPlan = 2, Descripcion = "Plan Premium", IdEspecialidad = 2 },
-                                new { IdPlan = 3, Descripcion = "Plan Familiar", IdEspecialidad = 3  }
+                                new { IdPlan = 3, Descripcion = "Plan Familiar", IdEspecialidad = 3 }
                               );
             });
         }

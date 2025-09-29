@@ -88,11 +88,11 @@ namespace WinFormsApp
                 PlanListaForm_Load(sender, e); // Refresh the list after modification
 
             }
-            catch(ArgumentException err)
+            catch (ArgumentException err)
             {
                 throw new ArgumentException(err.Message);
             }
-            
+
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -100,6 +100,11 @@ namespace WinFormsApp
             PlanDetalleForm planform = new PlanDetalleForm();
             planform.ShowDialog();
             PlanListaForm_Load(sender, e);
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            //PlanDTO planDesc = await APIPlan.GetAsync();
         }
     }
 }
