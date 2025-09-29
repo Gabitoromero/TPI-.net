@@ -57,14 +57,75 @@ namespace WinFormsApp
             try
             {
                 int idUser = (int)dataGridViewUsuarios.CurrentRow.Cells["Id"].Value;
-                FullUsuarioDTO userToModify = await APIUsuario.GetAsync(idUser); 
+                FullUsuarioDTO userToModify = await APIUsuario.GetAsync(idUser);
                 UsuarioDetalle userDetailForm = new UsuarioDetalle(userToModify);
                 userDetailForm.ShowDialog();
+                UsuarioList_Load(sender, e); // Recargar la lista de usuarios después de modificar
 
             }
             catch (ArgumentException err)
             {
                 throw new ArgumentException(err.Message);
+            }
+        }
+
+        private async void btnBuscar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string nomBuscado = textBoxBuscador.Text?.Trim();
+                if (string.IsNullOrEmpty(nomBuscado))
+                {
+                    MessageBox.Show("Ingrese el nombre a buscar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (dataGridViewUsuarios.Rows.Count == 0)
+                {
+                    MessageBox.Show("No hay usuarios para buscar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                dataGridViewUsuarios.ClearSelection();
+
+                bool encontrado = false;
+                foreach (DataGridViewRow row in dataGridViewUsuarios.Rows)
+                {
+                    if (row.IsNewRow) continue;
+                    string? nombreFila = null;
+                    if (dataGridViewUsuarios.Columns.Contains("NombreUsuario"))
+                    {
+                        nombreFila = row.Cells["NombreUsuario"].Value?.ToString();
+                    }
+                    else
+                    {
+                        for (int i = 0; i < row.Cells.Count; i++)
+                        {
+                            var val = row.Cells[i].Value?.ToString();
+                            if (!string.IsNullOrEmpty(val) && val.Equals(nomBuscado, StringComparison.OrdinalIgnoreCase))
+                            {
+                                nombreFila = val;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(nombreFila) && nombreFila.IndexOf(nomBuscado, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        row.Selected = true;
+                        dataGridViewUsuarios.CurrentCell = row.Cells[0];
+                        dataGridViewUsuarios.FirstDisplayedScrollingRowIndex = row.Index;
+                        encontrado = true;
+                        break;
+                    }
+                }
+
+                if (!encontrado)
+                {
+                    MessageBox.Show("No se encontró ningún usuario con ese nombre.", "Resultado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al buscar el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

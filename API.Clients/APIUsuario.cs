@@ -119,7 +119,6 @@ namespace API.Clients
             }
         }
         
-        
         public static async Task<PutUsuarioDTO> UpdateAsync(PutUsuarioDTO dto)
         {
             try

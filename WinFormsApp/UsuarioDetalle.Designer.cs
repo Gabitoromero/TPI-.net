@@ -34,14 +34,12 @@
             apellido = new Label();
             email = new Label();
             nombreUsuario = new Label();
-            clave = new Label();
             habilitado = new Label();
             textBoxId = new TextBox();
             textBoxNombre = new TextBox();
             textBoxApellido = new TextBox();
             textBoxNomUsuario = new TextBox();
             textBoxEmail = new TextBox();
-            textBoxClave = new TextBox();
             checkBoxHabilitado = new CheckBox();
             fechaAlta = new Label();
             textBoxFechaAlta = new TextBox();
@@ -56,7 +54,7 @@
             btnGuardar.TabIndex = 0;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = false;
-            btnGuardar.Click += this.btnGuardar_Click;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // Id
             // 
@@ -103,19 +101,10 @@
             nombreUsuario.TabIndex = 5;
             nombreUsuario.Text = "Nombre de usuario :";
             // 
-            // clave
-            // 
-            clave.AutoSize = true;
-            clave.Location = new Point(31, 222);
-            clave.Name = "clave";
-            clave.Size = new Size(73, 15);
-            clave.TabIndex = 6;
-            clave.Text = "Contraseña :";
-            // 
             // habilitado
             // 
             habilitado.AutoSize = true;
-            habilitado.Location = new Point(31, 259);
+            habilitado.Location = new Point(31, 228);
             habilitado.Name = "habilitado";
             habilitado.Size = new Size(68, 15);
             habilitado.TabIndex = 7;
@@ -157,17 +146,10 @@
             textBoxEmail.Size = new Size(189, 23);
             textBoxEmail.TabIndex = 12;
             // 
-            // textBoxClave
-            // 
-            textBoxClave.Location = new Point(172, 219);
-            textBoxClave.Name = "textBoxClave";
-            textBoxClave.Size = new Size(189, 23);
-            textBoxClave.TabIndex = 13;
-            // 
             // checkBoxHabilitado
             // 
             checkBoxHabilitado.AutoSize = true;
-            checkBoxHabilitado.Location = new Point(208, 260);
+            checkBoxHabilitado.Location = new Point(172, 229);
             checkBoxHabilitado.Name = "checkBoxHabilitado";
             checkBoxHabilitado.Size = new Size(15, 14);
             checkBoxHabilitado.TabIndex = 14;
@@ -176,7 +158,7 @@
             // fechaAlta
             // 
             fechaAlta.AutoSize = true;
-            fechaAlta.Location = new Point(31, 297);
+            fechaAlta.Location = new Point(31, 270);
             fechaAlta.Name = "fechaAlta";
             fechaAlta.Size = new Size(82, 15);
             fechaAlta.TabIndex = 15;
@@ -185,7 +167,7 @@
             // textBoxFechaAlta
             // 
             textBoxFechaAlta.Enabled = false;
-            textBoxFechaAlta.Location = new Point(172, 294);
+            textBoxFechaAlta.Location = new Point(172, 267);
             textBoxFechaAlta.Name = "textBoxFechaAlta";
             textBoxFechaAlta.Size = new Size(189, 23);
             textBoxFechaAlta.TabIndex = 16;
@@ -198,14 +180,12 @@
             Controls.Add(textBoxFechaAlta);
             Controls.Add(fechaAlta);
             Controls.Add(checkBoxHabilitado);
-            Controls.Add(textBoxClave);
             Controls.Add(textBoxEmail);
             Controls.Add(textBoxNomUsuario);
             Controls.Add(textBoxApellido);
             Controls.Add(textBoxNombre);
             Controls.Add(textBoxId);
             Controls.Add(habilitado);
-            Controls.Add(clave);
             Controls.Add(nombreUsuario);
             Controls.Add(email);
             Controls.Add(apellido);
@@ -227,14 +207,12 @@
         private Label apellido;
         private Label email;
         private Label nombreUsuario;
-        private Label clave;
         private Label habilitado;
         private TextBox textBoxId;
         private TextBox textBoxNombre;
         private TextBox textBoxApellido;
         private TextBox textBoxNomUsuario;
         private TextBox textBoxEmail;
-        private TextBox textBoxClave;
         private CheckBox checkBoxHabilitado;
         private Label fechaAlta;
         private TextBox textBoxFechaAlta;

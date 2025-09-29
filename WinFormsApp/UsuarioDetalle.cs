@@ -27,44 +27,40 @@ namespace WinFormsApp
             textBoxNomUsuario.Text = _user.NombreUsuario;
             textBoxNombre.Text = _user.Nombre;
             textBoxApellido.Text = _user.Apellido;
-            textBoxClave.Text = _user.Clave;
             checkBoxHabilitado.Checked = _user.Habilitado;
+            textBoxFechaAlta.Text = _user.FechaAlta.ToString();
         }
         public async void btnGuardar_Click(object sender, EventArgs e)
         {
             try
             {
-                if(textBoxNombre.Text == null)
+                if (string.IsNullOrWhiteSpace(textBoxNombre.Text))
                 {
                     throw new Exception("El nombre no puede estar vacío");
-                }else{
-                    _user.Nombre = textBoxNombre.Text;
                 }
-                if(textBoxEmail.Text == null)
+                _user.Nombre = textBoxNombre.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(textBoxEmail.Text))
                 {
                     throw new Exception("El email no puede estar vacío");
-                }else{
-                    _user.Email = textBoxEmail.Text;
                 }
-                if(textBoxNomUsuario.Text == null)
+                _user.Email = textBoxEmail.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(textBoxNomUsuario.Text))
                 {
                     throw new Exception("El nombre de usuario no puede estar vacío");
-                }else { 
-                    _user.NombreUsuario = textBoxNomUsuario.Text;
                 }
-                if (textBoxApellido.Text == null)
+                _user.NombreUsuario = textBoxNomUsuario.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(textBoxApellido.Text))
                 {
                     throw new Exception("El apellido no puede estar vacío");
-                }else{
-                    textBoxApellido.Text = _user.Apellido;
                 }
-                if(textBoxClave.Text == null)
-                {
-                  throw new Exception("La clave no puede estar vacía");
-                }else{
-                    _user.Clave = textBoxClave.Text;
-                }
+                _user.Apellido = textBoxApellido.Text.Trim(); 
+
                 _user.Habilitado = checkBoxHabilitado.Checked;
+
+               
                 PutUsuarioDTO putUsuarioDTO = new PutUsuarioDTO
                 {
                     Id = _user.Id,

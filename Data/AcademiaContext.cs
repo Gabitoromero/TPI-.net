@@ -105,6 +105,11 @@ namespace Data
                 entity.HasIndex(e => e.NombreUsuario).IsUnique();
                 entity.HasIndex(e => e.Email).IsUnique();
 
+                entity.HasData(
+                    new Usuario(1, "Romero", "111111", "gt@email.com", true, "Gabriel Tobías", "gtr", DateTime.Now),
+                    new Usuario(2, "Romero", "222222", "mf@email.com", true, "María Florencia", "mfr", DateTime.Now),
+                    new Usuario(3, "Romero", "333333", "jm@email.com", true, "Juan Manuel", "jmr", DateTime.Now),
+                    new Usuario(4, "Lurati", "444444", "il@email.com", true, "Ignacio", "il", DateTime.Now));
             });
         }
 

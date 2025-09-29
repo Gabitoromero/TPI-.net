@@ -104,9 +104,64 @@ namespace WinFormsApp
             PlanListaForm_Load(sender, e);
         }
 
-        private void btnBuscar_Click(object sender, EventArgs e)
+        private async void btnBuscar_Click(object sender, EventArgs e)
         {
-            //PlanDTO planDesc = await APIPlan.GetAsync();
+            try
+            {
+                string descBuscada = textBoxBuscador.Text?.Trim();
+                if (string.IsNullOrEmpty(descBuscada))
+                {
+                    MessageBox.Show("Ingrese la descripción a buscar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (dataGridViewPlanes.Rows.Count == 0)
+                {
+                    MessageBox.Show("No hay planes para buscar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                dataGridViewPlanes.ClearSelection();
+
+                bool encontrado = false;
+                foreach (DataGridViewRow row in dataGridViewPlanes.Rows)
+                {
+                    if (row.IsNewRow) continue;
+                    string? descFila = null;
+                    if (dataGridViewPlanes.Columns.Contains("Descripcion"))
+                    {
+                        descFila = row.Cells["Descripcion"].Value?.ToString();
+                    }
+                    else
+                    {     
+                        for (int i = 0; i < row.Cells.Count; i++)
+                        {
+                            var val = row.Cells[i].Value?.ToString();
+                            if (!string.IsNullOrEmpty(val) && val.Equals(descBuscada, StringComparison.OrdinalIgnoreCase))
+                            {
+                                descFila = val;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(descFila) && descFila.IndexOf(descBuscada, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        row.Selected = true;
+                        dataGridViewPlanes.CurrentCell = row.Cells[0];
+                        dataGridViewPlanes.FirstDisplayedScrollingRowIndex = row.Index;
+                        encontrado = true;
+                        break;
+                    }
+                }
+
+                if (!encontrado)
+                {
+                    MessageBox.Show("No se encontró ningún plan con esa descripción.", "Resultado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al buscar el plan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
