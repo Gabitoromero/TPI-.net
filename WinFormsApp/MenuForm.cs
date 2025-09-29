@@ -56,8 +56,16 @@ namespace WinFormsApp
 
         private void btnPlanesCRUD_Click(object sender, EventArgs e)
         {
-            PlanListaForm planListaForm = new PlanListaForm();
-            planListaForm.ShowDialog();
+            try
+            {
+                PlanListaForm planListaForm = new PlanListaForm();
+                planListaForm.ShowDialog();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"Error al modificar plan: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
         }
     }
 }

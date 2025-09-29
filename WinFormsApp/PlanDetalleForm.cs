@@ -56,7 +56,7 @@ namespace WinFormsApp
         {
             this.Close();
         }
-        public async void btnGuardar_Click(object sender, EventArgs e)
+        public void btnGuardar_Click(object sender, EventArgs e)
         {
             
         }
@@ -71,7 +71,7 @@ namespace WinFormsApp
                     int idEspecialidad = (int)comboBoxEspecialidades.SelectedValue;
                     plan.Descripcion = txtBoxDescripcion.Text;
                     plan.IdEspecialidad = idEspecialidad;
-                    await APIPlan.UpdateAsync(plan);
+                    PlanDTO planUpdated = await APIPlan.UpdateAsync(plan);
                     MessageBox.Show("Plan guardado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
 
@@ -85,8 +85,6 @@ namespace WinFormsApp
                     this.Close();
 
                 }
-
-
             }
             catch (ArgumentException ex)
             {

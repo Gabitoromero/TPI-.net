@@ -99,6 +99,7 @@ namespace WinFormsApp
         {
             PlanDetalleForm planform = new PlanDetalleForm();
             planform.ShowDialog();
+            PlanListaForm_Load(sender, e);
         }
     }
 }
