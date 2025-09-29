@@ -119,28 +119,28 @@ namespace API.Clients
             }
         }
         
-        public static async Task<PutUsuarioDTO> UpdateAsync(PutUsuarioDTO dto)
+        public static async Task<bool> UpdateAsync(PutUsuarioDTO dto)
         {
             try
             {
                 HttpResponseMessage resp = await client.PutAsJsonAsync("usuarios", dto); //client realiza una peticion PUT
                 if (resp.IsSuccessStatusCode)
                 {
-                    return await resp.Content.ReadFromJsonAsync<PutUsuarioDTO>();
+                    return await resp.Content.ReadFromJsonAsync<bool>();
                 }
                 else
                 {
                     string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong updating user with ID:{dto.Id}. Eror:{errmen}");
+                    throw new Exception($"OOPS! Something went wrong updating user with ID:{dto.Id}. Error:{errmen}");
                 }
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while updating user with ID:{dto.Id}. Eror:{err}");
+                throw new Exception($"OOPS! A connection error ocurred while updating user with ID:{dto.Id}. Error:{err}");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout updating user with ID:{dto.Id}. Eror:{err}");
+                throw new Exception($"Timeout updating user with ID:{dto.Id}. Error:{err}");
             }
         }
         
