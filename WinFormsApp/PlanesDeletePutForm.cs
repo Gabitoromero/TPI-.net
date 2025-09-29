@@ -67,12 +67,9 @@ namespace WinFormsApp
             {
                 if (textDesc.Text != "" && (int)numIDEsp.Value != 0)
                 {
-                    PlanDTO plan = new PlanDTO
-                    {
-                        Descripcion = textDesc.Text,
-                        IdEspecialidad = (int)numIDEsp.Value,
-                        IdPlan = int.Parse(textIDPlan.Text)
-                    };
+                    int ides = (int)numIDEsp.Value;
+                    int idpl = int.Parse(textIDPlan.Text);
+                    PlanDTO plan = new PlanDTO(idpl, textDesc.Text,ides);
 
                     await APIPlan.UpdateAsync(plan);
                     buttonListarPlanes_Click(sender, e);

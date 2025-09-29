@@ -9,7 +9,7 @@ using System.Text;
 
 // README: Por motivos que se nos escapan, y despues de DIAS de debuguear, 3 Ias de por medio y mas de 200 pruebas, no sabemos por que
 // el middleware de token rechaza los tokens que son generados por si mismo y que ademas coinciden en formato a la perfeccion
-// Nuestra teoria es que los paquetes instalados tienen algun conflicto extraño que no sabemos arreglar
+// Nuestra teoria es que los paquetes instalados tienen algun conflicto extra�o que no sabemos arreglar
 // Asi que por el momento el middleware de autentitacion esta bypaseado y sin efecto.
 // Realmente no tenemos ni idea que pasa y ya probamos de todo, asi que si alguien sabe que puede ser, se agradece la ayuda
 // https://jwt.io/ valida correctamente tanto los tokens generados como los que le llegan al back, pero por algun motivo el back los rechaza
@@ -50,7 +50,7 @@ namespace WebAPI
             builder.Services.AddAuthorization();
 
             // DI
-            // NOTA: lo normal seria que dependan de una interaz, ejemplo IEspecialidadRepository, de forma que el dia de mañana si cambio a EspecialidadRepositoryV2 : IEspecialidadRepository
+            // NOTA: lo normal seria que dependan de una interaz, ejemplo IEspecialidadRepository, de forma que el dia de ma�ana si cambio a EspecialidadRepositoryV2 : IEspecialidadRepository
             // no tengo que cambiar casi nada, pero bueno, lo hicimos con la intencion de probar inyeccion de dependencias, la realidad es que no vamos a cambiar los repos
 
             builder.Services.AddDbContext<AcademiaContext>();
@@ -58,6 +58,8 @@ namespace WebAPI
             builder.Services.AddScoped<EspecialidadService>();
             builder.Services.AddScoped<ModuloRepository>();
             builder.Services.AddScoped<ModuloService>();
+            builder.Services.AddScoped<PlanRepository>();
+            builder.Services.AddScoped<PlanService>();
             builder.Services.AddScoped<UsuarioRepository>();
             builder.Services.AddScoped<UsuarioService>();
             builder.Services.AddScoped<AuthService>();
@@ -78,7 +80,9 @@ namespace WebAPI
             
 
             //PLANES CRUD ---------------------------------------------------------------------------------------------------------------------------
-            app.MapGet("/planes/{id}", (int id) =>
+            app.MapPlanEndpoints();
+            /*
+             app.MapGet("/planes/{id}", (int id) =>
             {
                 PlanService planService = new PlanService();
                 PlanDTO dto = planService.Get(id);
@@ -143,6 +147,7 @@ namespace WebAPI
                     return Results.BadRequest(new { error = er.Message });
                 }
             });
+            */
 
 
             app.MapAuthEndpoints();
@@ -151,7 +156,7 @@ namespace WebAPI
             app.MapModuloEndpoints();
             
 
-            app.Run();
+             app.Run();
 
         }
     }

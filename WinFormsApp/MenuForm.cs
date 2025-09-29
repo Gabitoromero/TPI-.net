@@ -46,11 +46,26 @@ namespace WinFormsApp
             {
                 ModuloForm espForm = new ModuloForm();
                 espForm.ShowDialog();
-            }catch(Exception err)
+            }
+            catch (Exception err)
             {
                 MessageBox.Show($"Error al modificar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        private void btnPlanesCRUD_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                PlanListaForm planListaForm = new PlanListaForm();
+                planListaForm.ShowDialog();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"Error al modificar plan: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
         }
     }
 }

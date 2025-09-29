@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace API.Clients
 {
@@ -100,13 +101,13 @@ namespace API.Clients
                     throw new Exception($"OOPS! Something went wrong posting plan. Error:{errmen} ");
                 }
             }
+            catch (SystemException err)
+            {
+                throw new Exception(err.Message);
+            }
             catch (HttpRequestException err)
             {
                 throw new Exception($"OOPS! A connection error ocurred while posting plan. Error:{err}");
-            }
-            catch (TaskCanceledException err)
-            {
-                throw new Exception($"Timeout posting plan. Eror:{err}");
             }
         }
 
@@ -116,22 +117,28 @@ namespace API.Clients
             {
                 HttpResponseMessage resp = await client.PutAsJsonAsync("planes/", dto);
 
-                if (!resp.IsSuccessStatusCode)
+                if (resp.IsSuccessStatusCode)
+                {
+                    return await resp.Content.ReadFromJsonAsync<PlanDTO>();
+                    /*
+                    string rawJson = await resp.Content.ReadAsStringAsync();
+                    Console.WriteLine("🔍 Contenido devuelto por la API:\n" + rawJson);
+                    return JsonSerializer.Deserialize<PlanDTO>(rawJson);
+                    */
+                }
+                else
                 {
                     string errorContent = await resp.Content.ReadAsStringAsync();
                     throw new Exception($"OOPS! Something went wrong updating plan. Error: {errorContent}");
                 }
-
-                return await resp.Content.ReadFromJsonAsync<PlanDTO>();
-            }
-
-            catch (HttpRequestException ex)
-            {
-                throw new Exception($"OOPS! A connection error occurred while updating plan. Error: {ex.Message}");
             }
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout updating plan. Error: {ex.Message}");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while updating plan. Error: {ex.Message}");
             }
 
         }

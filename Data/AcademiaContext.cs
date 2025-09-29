@@ -9,12 +9,17 @@ namespace Data
     {
         public DbSet<Especialidad> Especialidades { get; set; }
         public DbSet<Modulo> Modulos { get; set; }
+        public DbSet<Plan> Planes { get; set; }
 
         public DbSet<Usuario> Usuarios { get; set; }
 
         public AcademiaContext()
         {
+            //this.Database.EnsureCreated();
+            // Descomentar para RESETEAR la base de datos en cada ejecucion (solo en desarrollo)    
+            //this.Database.EnsureDeleted();
             this.Database.EnsureCreated();
+            
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) //configuracion de la base de datos
@@ -65,6 +70,23 @@ namespace Data
                     new { Id = 4, Descripcion = "modulo 4" }
                     );
 
+            });
+            modelBuilder.Entity<Plan>(entity =>
+            {
+                entity.HasKey(e => e.IdPlan);
+                entity.Property(e => e.IdPlan).ValueGeneratedOnAdd();
+                entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
+                entity.HasIndex(e => e.Descripcion).IsUnique();
+                entity.HasOne<Especialidad>()
+                      .WithMany()
+                      .HasForeignKey(e => e.IdEspecialidad)
+                      .OnDelete(DeleteBehavior.ClientNoAction)//validar con luta
+                      .IsRequired(); 
+
+                entity.HasData( new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1 },
+                                new { IdPlan = 2, Descripcion = "Plan Premium", IdEspecialidad = 2 },
+                                new { IdPlan = 3, Descripcion = "Plan Familiar", IdEspecialidad = 3 }
+                              );
             });
 
             modelBuilder.Entity<Usuario>(entity =>

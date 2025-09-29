@@ -73,6 +73,7 @@
             btnPlanesCRUD.TabIndex = 3;
             btnPlanesCRUD.Text = "Planes";
             btnPlanesCRUD.UseVisualStyleBackColor = true;
+            btnPlanesCRUD.Click += btnPlanesCRUD_Click;
             // 
             // labelCRUD
             // 
