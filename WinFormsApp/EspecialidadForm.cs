@@ -42,6 +42,7 @@ namespace WinFormsApp
         {
             try
             {
+
                 EspecialidadDTO esp = await APIEspecialidad.GetAsync((int)numUpDownEsp.Value);
                 // Si el servicio devolvió null (o no existe), limpiamos la property grid
                 if (esp == null)

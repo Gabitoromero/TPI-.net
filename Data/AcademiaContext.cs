@@ -2,7 +2,6 @@
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
 
 
 namespace Data
@@ -11,6 +10,8 @@ namespace Data
     {
         public DbSet<Especialidad> Especialidades { get; set; }
         public DbSet<Modulo> Modulos { get; set; }
+
+        public DbSet<Usuario> Usuarios { get; set; }
 
         public AcademiaContext()
         {
@@ -42,13 +43,14 @@ namespace Data
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
 
                 entity.HasData(
-                    new { Id = 1, Descripcion = "Chef"}, 
-                    new {Id = 2, Descripcion = "Matematico"},
-                    new {Id = 3, Descripcion = "Programador" },
-                    new {Id = 4, Descripcion = "Diseñador" }
+                    new { Id = 1, Descripcion = "Chef" },
+                    new { Id = 2, Descripcion = "Matematico" },
+                    new { Id = 3, Descripcion = "Programador" },
+                    new { Id = 4, Descripcion = "Diseñador" }
                     );
 
             });
+
             modelBuilder.Entity<Modulo>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -56,14 +58,32 @@ namespace Data
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
 
                 entity.HasData(
-                    new { Id = 1, Descripcion = "modulo1"}, 
-                    new {Id = 2, Descripcion = "modulo 2"},
-                    new {Id = 3, Descripcion = "modulo 3" },
-                    new {Id = 4, Descripcion = "modulo 4" }
+                    new { Id = 1, Descripcion = "modulo1" },
+                    new { Id = 2, Descripcion = "modulo 2" },
+                    new { Id = 3, Descripcion = "modulo 3" },
+                    new { Id = 4, Descripcion = "modulo 4" }
                     );
 
             });
+
+            modelBuilder.Entity<Usuario>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Nombre).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Apellido).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.NombreUsuario).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.ClaveHash).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Habilitado).HasDefaultValue(true);
+                entity.Property(e => e.FechaAlta).IsRequired();
+                entity.Property(e => e.Salt).IsRequired().HasMaxLength(255);
+
+                entity.HasIndex(e => e.NombreUsuario).IsUnique();
+                entity.HasIndex(e => e.Email).IsUnique();
+
+            });
         }
+
     }
- 
 }

@@ -10,15 +10,45 @@ using System.Net.Http.Json;
 
 namespace API.Clients
 {
-    public class APIUsuario  //falta completar el CRUD de usuario
+    public class APIUsuario : APIClientBase
     {
-        private static HttpClient client = new HttpClient();
+        private static HttpClient client;
         static APIUsuario()
         {
-            client.BaseAddress = new Uri("https://localhost:7265/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client = CreateHttpClientAsync();
         }
+
+        public static async Task<bool> LoginAsync(LoginRequest dto)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PostAsJsonAsync("auth/login", dto);
+                if (response.IsSuccessStatusCode)
+                {
+                    var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                    LoginResponse = loginResponse;
+                    return true; // Login exitoso
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return false; // Credenciales inválidas
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to login. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while trying to login. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout trying to login. Error: {ex.Message}");
+            }
+        }
+        /*
         public static async Task<FullUsuarioDTO> GetAsync(int id)
         {
             try
@@ -88,6 +118,7 @@ namespace API.Clients
                 throw new Exception($"Timeout retrieving user with ID:{id}. Eror:{err}");
             }
         }
+        
         public static async Task<PutUsuarioDTO> UpdateAsync(PutUsuarioDTO dto)
         {
             try
@@ -112,6 +143,7 @@ namespace API.Clients
                 throw new Exception($"Timeout updating user with ID:{dto.Id}. Eror:{err}");
             }
         }
+        */
         public static async Task<PostUsuarioDTO> AddAsync(PostUsuarioDTO dto)
         {
             try
@@ -136,6 +168,5 @@ namespace API.Clients
                 throw new Exception($"Timeout posting user. Eror:{err}");
             }
         }
-
     }
 }
