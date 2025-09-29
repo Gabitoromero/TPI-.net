@@ -9,14 +9,12 @@ using System.Text.Json;
 
 namespace API.Clients
 {
-    public class APIPlan
+    public class APIPlan : APIClientBase
     {
-        private static HttpClient client = new HttpClient();
+        private static HttpClient client;
         static APIPlan()
         {
-            client.BaseAddress = new Uri("https://localhost:7265/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client = CreateHttpClientAsync();
         }
         public static async Task<PlanDTO> GetAsync(int id)
         {
@@ -110,7 +108,6 @@ namespace API.Clients
                 throw new Exception($"OOPS! A connection error ocurred while posting plan. Error:{err}");
             }
         }
-
         public static async Task<PlanDTO> UpdateAsync(PlanDTO dto)
         {
             try

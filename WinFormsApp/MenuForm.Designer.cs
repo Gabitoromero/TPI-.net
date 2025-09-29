@@ -38,7 +38,7 @@
             // 
             // btnEspecialidadesCRUD
             // 
-            btnEspecialidadesCRUD.Location = new Point(185, 68);
+            btnEspecialidadesCRUD.Location = new Point(185, 29);
             btnEspecialidadesCRUD.Name = "btnEspecialidadesCRUD";
             btnEspecialidadesCRUD.Size = new Size(157, 37);
             btnEspecialidadesCRUD.TabIndex = 0;
@@ -48,7 +48,7 @@
             // 
             // btnModulosCRUD
             // 
-            btnModulosCRUD.Location = new Point(185, 111);
+            btnModulosCRUD.Location = new Point(185, 90);
             btnModulosCRUD.Name = "btnModulosCRUD";
             btnModulosCRUD.Size = new Size(157, 37);
             btnModulosCRUD.TabIndex = 1;
@@ -58,16 +58,17 @@
             // 
             // btnUsuariosCRUD
             // 
-            btnUsuariosCRUD.Location = new Point(185, 154);
+            btnUsuariosCRUD.Location = new Point(185, 203);
             btnUsuariosCRUD.Name = "btnUsuariosCRUD";
             btnUsuariosCRUD.Size = new Size(157, 37);
             btnUsuariosCRUD.TabIndex = 2;
             btnUsuariosCRUD.Text = "Usuarios";
             btnUsuariosCRUD.UseVisualStyleBackColor = true;
+            btnUsuariosCRUD.Click += btnUsuariosCRUD_Click;
             // 
             // btnPlanesCRUD
             // 
-            btnPlanesCRUD.Location = new Point(185, 197);
+            btnPlanesCRUD.Location = new Point(185, 147);
             btnPlanesCRUD.Name = "btnPlanesCRUD";
             btnPlanesCRUD.Size = new Size(157, 37);
             btnPlanesCRUD.TabIndex = 3;
@@ -78,9 +79,10 @@
             // labelCRUD
             // 
             labelCRUD.AutoSize = true;
-            labelCRUD.Location = new Point(222, 37);
+            labelCRUD.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelCRUD.Location = new Point(12, 9);
             labelCRUD.Name = "labelCRUD";
-            labelCRUD.Size = new Size(69, 15);
+            labelCRUD.Size = new Size(123, 30);
             labelCRUD.TabIndex = 4;
             labelCRUD.Text = "Gestion de :";
             // 

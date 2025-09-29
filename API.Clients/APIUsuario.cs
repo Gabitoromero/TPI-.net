@@ -48,31 +48,6 @@ namespace API.Clients
                 throw new Exception($"Timeout trying to login. Error: {ex.Message}");
             }
         }
-        /*
-        public static async Task<FullUsuarioDTO> GetAsync(int id)
-        {
-            try
-            {
-                HttpResponseMessage response = await client.GetAsync("usuarios/" + id);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadFromJsonAsync<FullUsuarioDTO>(); //mandamos en JSON poque el "ReadAsAsync" es de un paquete viejo
-                }
-                else
-                {
-                    string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve user with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                throw new Exception($"OOPS! A connection error occurred while retrieving user with ID:{id}. Error: {ex.Message}");
-            }
-            catch (TaskCanceledException ex)
-            {
-                throw new Exception($"Timeout retrieving user with ID: {id}. Error: {ex.Message}");
-            }
-        }
         public static async Task<List<ShowUsuarioDTO>> GetAllAsync()
         {
             try
@@ -97,7 +72,7 @@ namespace API.Clients
                 throw new Exception($"Timeout retrieving users. Error: ${ex.Message}");
             }
         }
-        public static async void DeleteAsync(int id) //no tiene que devolver nada
+        public static async Task DeleteAsync(int id) //no tiene que devolver nada
         {
             try
             {
@@ -107,7 +82,7 @@ namespace API.Clients
                     string errmen = await resp.Content.ReadAsStringAsync();
                     throw new Exception($"OOPS! Something went wrong deleting user with ID:{id}. Error: {errmen}");
                 }
-                return;
+                
             }
             catch (HttpRequestException err)
             {
@@ -118,6 +93,32 @@ namespace API.Clients
                 throw new Exception($"Timeout retrieving user with ID:{id}. Eror:{err}");
             }
         }
+        
+        public static async Task<FullUsuarioDTO> GetAsync(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync("usuarios/" + id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<FullUsuarioDTO>(); //mandamos en JSON poque el "ReadAsAsync" es de un paquete viejo
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to retrieve user with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while retrieving user with ID:{id}. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout retrieving user with ID: {id}. Error: {ex.Message}");
+            }
+        }
+        
         
         public static async Task<PutUsuarioDTO> UpdateAsync(PutUsuarioDTO dto)
         {
@@ -143,7 +144,7 @@ namespace API.Clients
                 throw new Exception($"Timeout updating user with ID:{dto.Id}. Eror:{err}");
             }
         }
-        */
+        
         public static async Task<PostUsuarioDTO> AddAsync(PostUsuarioDTO dto)
         {
             try

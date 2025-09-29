@@ -52,23 +52,25 @@ namespace WinFormsApp
         }
         public async void btnEliminar_Click(object sender, EventArgs e)
         {
-            if (dataGridViewPlanes.CurrentRow != null)
+            try
             {
-                int idPlan = (int)dataGridViewPlanes.CurrentRow.Cells["IdPlan"].Value;
-                try
+                if (dataGridViewPlanes.CurrentRow != null)
                 {
-                    await APIPlan.DeleteAsync(idPlan);
-                    MessageBox.Show("Plan eliminado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    PlanListaForm_Load(sender, e); // Refresh the list
+                  int idPlan = (int)dataGridViewPlanes.CurrentRow.Cells["IdPlan"].Value;
+                
+                        await APIPlan.DeleteAsync(idPlan);
+                        MessageBox.Show("Plan eliminado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        PlanListaForm_Load(sender, e); // Refresh the list
+                
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Error al eliminar el plan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Seleccione un plan para eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Seleccione un plan para eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"Error al eliminar el plan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

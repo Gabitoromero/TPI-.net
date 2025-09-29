@@ -21,20 +21,6 @@ namespace WinFormsApp
         {
 
         }
-
-        private void btnEspecialidadesCRUD_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                EspecialidadForm espForm = new EspecialidadForm();
-                espForm.ShowDialog();
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show($"Error al modificar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
         private void btnCerrar_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -66,6 +52,34 @@ namespace WinFormsApp
                 MessageBox.Show($"Error al modificar plan: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             }
+        }
+        private void btnEspecialidadesCRUD_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                EspecialidadForm espForm = new EspecialidadForm();
+                espForm.ShowDialog();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"Error al modificar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void btnUsuariosCRUD_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                UsuarioList formuser = new UsuarioList();
+                formuser.ShowDialog();
+
+            }
+            catch(ArgumentException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
+            
         }
     }
 }

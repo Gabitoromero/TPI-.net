@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 
 namespace API.Clients
 {
-    public class APIModulo
+    public class APIModulo : APIClientBase
     {
-        private static HttpClient client = new HttpClient();
+        private static HttpClient client;
 
         static APIModulo()
         {
-            client.BaseAddress = new Uri("https://localhost:7265/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client = CreateHttpClientAsync();
         }
 
         public static async Task<ModuloDTO> GetAsync(int id)
