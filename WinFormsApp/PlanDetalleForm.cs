@@ -69,9 +69,7 @@ namespace WinFormsApp
                 {
 
                     int idEspecialidad = (int)comboBoxEspecialidades.SelectedValue;
-                    plan.Descripcion = txtBoxDescripcion.Text;
-                    plan.IdEspecialidad = idEspecialidad;
-                    PlanDTO planUpdated = await APIPlan.UpdateAsync(plan);
+                    await APIPlan.UpdateAsync(plan);
                     MessageBox.Show("Plan guardado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
 

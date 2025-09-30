@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
-// README: Por motivos que se nos escapan, y despues de DIAS de debuguear, 3 Ias de por medio y mas de 200 pruebas, no sabemos por que
+// README: Por motivos que se nos escapan, y despues de DIAS de debuguear, no sabemos por que
 // el middleware de token rechaza los tokens que son generados por si mismo y que ademas coinciden en formato a la perfeccion
 // Nuestra teoria es que los paquetes instalados tienen algun conflicto extra�o que no sabemos arreglar
 // Asi que por el momento el middleware de autentitacion esta bypaseado y sin efecto.

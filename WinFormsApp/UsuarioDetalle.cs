@@ -30,7 +30,7 @@ namespace WinFormsApp
             checkBoxHabilitado.Checked = _user.Habilitado;
             textBoxFechaAlta.Text = _user.FechaAlta.ToString();
         }
-        public async void btnGuardar_Click(object sender, EventArgs e)
+        public void btnGuardar_Click(object sender, EventArgs e)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace WinFormsApp
                     Clave = _user.Clave,
                     Habilitado = _user.Habilitado
                 };
-                await APIUsuario.UpdateAsync(putUsuarioDTO);
+                APIUsuario.UpdateAsync(putUsuarioDTO);
                 MessageBox.Show("Usuario modificado con éxito", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }

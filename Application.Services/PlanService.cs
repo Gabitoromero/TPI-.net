@@ -55,19 +55,12 @@ namespace Application.Services
             return  _repository.Delete(id);
         }
 
-        public PlanDTO Update(PlanDTO dto)
+        public bool Update(PlanDTO dto)
         {
             try
             {
-                bool updated= _repository.Update(new Plan ( dto.IdPlan, dto.Descripcion, dto.IdEspecialidad ) );
-                if (!updated)
-                {
-                    return null;
-                }
-                else
-                {
-                    return dto;
-                }
+                return _repository.Update(new Plan ( dto.IdPlan, dto.Descripcion, dto.IdEspecialidad ) );
+                
             }
             catch(ArgumentException err)
             {

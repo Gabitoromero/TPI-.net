@@ -119,14 +119,14 @@ namespace API.Clients
             }
         }
         
-        public static async Task<bool> UpdateAsync(PutUsuarioDTO dto)
+        public static async void UpdateAsync(PutUsuarioDTO dto)
         {
             try
             {
-                HttpResponseMessage resp = await client.PutAsJsonAsync("usuarios", dto); //client realiza una peticion PUT
+                HttpResponseMessage resp = await client.PutAsJsonAsync("usuarios/", dto); //client realiza una peticion PUT
                 if (resp.IsSuccessStatusCode)
                 {
-                    return await resp.Content.ReadFromJsonAsync<bool>();
+                    return;// await resp.Content.ReadFromJsonAsync();
                 }
                 else
                 {

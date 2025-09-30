@@ -51,8 +51,8 @@ namespace WebAPI
             {
                 try
                 {
-                    PlanDTO planUpdated = service.Update(dto);
-                    if (planUpdated == null)
+                    bool planUpdated = service.Update(dto);
+                    if (!planUpdated)
                     {
                         return Results.NotFound(new { message = "Plan no encontrado" });
                     }

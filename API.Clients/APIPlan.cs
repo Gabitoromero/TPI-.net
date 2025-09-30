@@ -108,7 +108,7 @@ namespace API.Clients
                 throw new Exception($"OOPS! A connection error ocurred while posting plan. Error:{err}");
             }
         }
-        public static async Task<PlanDTO> UpdateAsync(PlanDTO dto)
+        public static async Task UpdateAsync(PlanDTO dto)
         {
             try
             {
@@ -116,12 +116,7 @@ namespace API.Clients
 
                 if (resp.IsSuccessStatusCode)
                 {
-                    return await resp.Content.ReadFromJsonAsync<PlanDTO>();
-                    /*
-                    string rawJson = await resp.Content.ReadAsStringAsync();
-                    Console.WriteLine("🔍 Contenido devuelto por la API:\n" + rawJson);
-                    return JsonSerializer.Deserialize<PlanDTO>(rawJson);
-                    */
+                    return ;
                 }
                 else
                 {
