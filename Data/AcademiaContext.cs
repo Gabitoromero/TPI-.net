@@ -12,6 +12,7 @@ namespace Data
         public DbSet<Plan> Planes { get; set; }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Curso> Cursos { get; set; }
 
         public AcademiaContext()
         {
@@ -19,7 +20,7 @@ namespace Data
             // Descomentar para RESETEAR la base de datos en cada ejecucion (solo en desarrollo)    
             //this.Database.EnsureDeleted();
             this.Database.EnsureCreated();
-            
+           
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) //configuracion de la base de datos
@@ -110,6 +111,24 @@ namespace Data
                     new Usuario(2, "Romero", "222222", "mf@email.com", true, "María Florencia", "mfr", DateTime.Now),
                     new Usuario(3, "Romero", "333333", "jm@email.com", true, "Juan Manuel", "jmr", DateTime.Now),
                     new Usuario(4, "Lurati", "444444", "il@email.com", true, "Ignacio", "il", DateTime.Now));
+            });
+
+            modelBuilder.Entity<Curso>(entity =>
+            {   
+                entity.HasKey(e => e.Id_curso);
+                entity.Property(e => e.Id_curso).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id_curso).IsRequired();
+                entity.HasIndex(e => e.Id_curso).IsUnique();
+                entity.Property(e => e.Anio_calendario).IsRequired();
+                entity.Property(e => e.Cupo).IsRequired();
+                //entity.HasOne<Materia>();
+                //entity.HasOne<Comision>();
+                entity.HasData(
+                    new Curso { Id_curso = 1, Anio_calendario = 2023, Cupo = 30 },
+                    new Curso { Id_curso = 2, Anio_calendario = 2023, Cupo = 25 },
+                    new Curso { Id_curso = 3, Anio_calendario = 2023, Cupo = 20 }
+                    );
+
             });
         }
 

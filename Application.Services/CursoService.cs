@@ -1,0 +1,88 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Data;
+using Domain.Model;
+using DTOs;
+
+namespace Application.Services
+{
+    public class CursoService
+    {
+        private readonly CursoRepository _repository;
+
+        public CursoService(CursoRepository cursoRepository)
+        {
+            _repository = cursoRepository;
+        }
+
+        public CursoDTO? Get(int id)
+        {
+           Curso curso = _repository.Get(id);
+            if (curso == null) return null;
+            return new CursoDTO
+            {
+                //FALTA AGREGAR LAS LISTAS DE MATERIAS Y COMISIONES
+                Id_curso = curso.Id_curso,
+                Anio_calendario = curso.Anio_calendario,
+                Cupo = curso.Cupo
+            };
+        }
+        public List<CursoDTO> GetAll()
+        {
+            
+            List<Curso> curso = _repository.GetAll();
+            if (curso == null) return null;
+            return curso.Select(m=> new CursoDTO
+            {
+                //FALTA AGREGAR LAS LISTAS DE MATERIAS Y COMISIONES
+                Id_curso = m.Id_curso,
+                Anio_calendario = m.Anio_calendario,
+                Cupo = m.Cupo
+            }).ToList();
+        }
+        public CursoDTO Add(CursoDTO curso)
+        {
+            try
+            {
+                Curso newCurso = new Curso
+                {
+                    Id_curso = 0,
+                    Anio_calendario = curso.Anio_calendario,
+                    Cupo = curso.Cupo
+                };
+                _repository.Add(newCurso);
+                curso.Id_curso = newCurso.Id_curso;
+                return curso;
+            }
+            catch (ArgumentException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
+        }
+        public bool Delete(int id)
+        {
+            return _repository.Delete(id);
+        }
+        public bool Update(CursoDTO dto)
+        {
+            try
+            {
+                Curso curso = new Curso
+                {
+                    Id_curso = dto.Id_curso,
+                    Anio_calendario = dto.Anio_calendario,
+                    Cupo = dto.Cupo
+                };
+                return _repository.Update(curso);
+                
+            }
+            catch (ArgumentException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
+        }
+    }
+}

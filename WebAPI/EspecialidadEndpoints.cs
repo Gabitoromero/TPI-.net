@@ -20,7 +20,7 @@ namespace WebAPI
                 }
 
                 return Results.Ok(dto);
-            });
+            }).RequireAuthorization();
 
             app.MapGet("/especialidades/", (EspecialidadService service) =>
             {

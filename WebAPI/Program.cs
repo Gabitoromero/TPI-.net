@@ -63,6 +63,8 @@ namespace WebAPI
             builder.Services.AddScoped<UsuarioRepository>();
             builder.Services.AddScoped<UsuarioService>();
             builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<CursoService>();
+            builder.Services.AddScoped<CursoRepository>();
 
             var app = builder.Build();
 
@@ -154,6 +156,7 @@ namespace WebAPI
             app.MapEspecialidadEndpoints();
             app.MapUsuarioEndpoints();
             app.MapModuloEndpoints();
+            app.MapCursoEndpoints();
             
 
              app.Run();
