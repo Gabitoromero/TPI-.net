@@ -18,15 +18,17 @@ namespace Application.Services
             _repository = cursoRepository;
         }
 
-        public CursoDTO? Get(int id)
+        public NewCursoDTO? Get(int id)
         {
            Curso curso = _repository.Get(id);
             if (curso == null) return null;
-            return new CursoDTO
+            return new NewCursoDTO
             {
                 Id_curso = curso.Id_curso,
                 Anio_calendario = curso.Anio_calendario,
                 Cupo = curso.Cupo
+                //Id_materia = curso.Id_materia,
+                //Id_comision = curso.Id_comision
             };
         }
         public List<CursoDTO> GetAll()

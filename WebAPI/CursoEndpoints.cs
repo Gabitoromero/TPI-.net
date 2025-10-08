@@ -20,7 +20,7 @@ namespace WebAPI
 
             app.MapGet("/api/cursos/{id}", (int id, CursoService cursoService) =>
             {
-                CursoDTO dto = cursoService.Get(id);
+                NewCursoDTO dto = cursoService.Get(id);
                 if (dto == null)
                 {
                     return Results.NotFound();
@@ -40,7 +40,8 @@ namespace WebAPI
                     return Results.BadRequest(new { error = err.Message });
                 }
             });
-            app.MapPut("/api/cursos/{id}", (int id, NewCursoDTO updatedCurso, CursoService cursoService) =>
+
+            app.MapPut("/api/cursos/", (NewCursoDTO updatedCurso, CursoService cursoService) =>
             {
                 try
                 {
@@ -56,6 +57,7 @@ namespace WebAPI
                     return Results.BadRequest(new { error = err.Message });
                 }
             });
+
             app.MapDelete("/api/cursos/{id}", (int id, CursoService cursoService) =>
             {
                 bool cursoDeleted = cursoService.Delete(id);
