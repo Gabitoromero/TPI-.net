@@ -28,11 +28,11 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
-            app.MapPost("/api/cursos", (CursoDTO dto, CursoService cursoService) =>
+            app.MapPost("/api/cursos", (NewCursoDTO dto, CursoService cursoService) =>
             {
                 try
                 {
-                    CursoDTO newCurso = cursoService.Add(dto);
+                    NewCursoDTO newCurso = cursoService.Add(dto);
                     return Results.Ok(newCurso);
                 }
                 catch (ArgumentException err)
@@ -40,7 +40,7 @@ namespace WebAPI
                     return Results.BadRequest(new { error = err.Message });
                 }
             });
-            app.MapPut("/api/cursos/{id}", (int id, CursoDTO updatedCurso, CursoService cursoService) =>
+            app.MapPut("/api/cursos/{id}", (int id, NewCursoDTO updatedCurso, CursoService cursoService) =>
             {
                 try
                 {

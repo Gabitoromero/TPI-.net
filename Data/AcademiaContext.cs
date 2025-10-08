@@ -81,7 +81,7 @@ namespace Data
                 entity.HasOne<Especialidad>()
                       .WithMany()
                       .HasForeignKey(e => e.IdEspecialidad)
-                      .OnDelete(DeleteBehavior.ClientNoAction)//validar con luta
+                      .OnDelete(DeleteBehavior.Cascade)//validar con luta
                       .IsRequired(); 
 
                 entity.HasData( new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1 },

@@ -24,7 +24,6 @@ namespace Application.Services
             if (curso == null) return null;
             return new CursoDTO
             {
-                //FALTA AGREGAR LAS LISTAS DE MATERIAS Y COMISIONES
                 Id_curso = curso.Id_curso,
                 Anio_calendario = curso.Anio_calendario,
                 Cupo = curso.Cupo
@@ -37,13 +36,12 @@ namespace Application.Services
             if (curso == null) return null;
             return curso.Select(m=> new CursoDTO
             {
-                //FALTA AGREGAR LAS LISTAS DE MATERIAS Y COMISIONES
                 Id_curso = m.Id_curso,
                 Anio_calendario = m.Anio_calendario,
                 Cupo = m.Cupo
             }).ToList();
         }
-        public CursoDTO Add(CursoDTO curso)
+        public NewCursoDTO Add(NewCursoDTO curso)
         {
             try
             {
@@ -52,6 +50,8 @@ namespace Application.Services
                     Id_curso = 0,
                     Anio_calendario = curso.Anio_calendario,
                     Cupo = curso.Cupo
+                    //Id_materia = curso.Id_materia,
+                    //Id_comision = curso.Id_comision
                 };
                 _repository.Add(newCurso);
                 curso.Id_curso = newCurso.Id_curso;
@@ -66,7 +66,7 @@ namespace Application.Services
         {
             return _repository.Delete(id);
         }
-        public bool Update(CursoDTO dto)
+        public bool Update(NewCursoDTO dto)
         {
             try
             {
@@ -75,6 +75,8 @@ namespace Application.Services
                     Id_curso = dto.Id_curso,
                     Anio_calendario = dto.Anio_calendario,
                     Cupo = dto.Cupo
+                    //Id_materia = dto.Id_materia,
+                    //Id_comision = dto.Id_comision
                 };
                 return _repository.Update(curso);
                 

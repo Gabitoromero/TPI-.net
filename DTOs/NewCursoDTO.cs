@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace DTOs
 {
-    public class CursoExtendidoDTO
+    public class NewCursoDTO
     {
         public int Id_curso { get; set; }
-        //public Materia materia { get; set; }
-        //public Comision comision { get; set; }
-        public int Anio_calendario { get; set; }
+        //public int Id_materia { get; set; }
+        //public int Id_comision { get; set; }
         public int Cupo { get; set; }
+        public int Anio_calendario { get; set; }
     }
 }

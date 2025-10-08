@@ -18,17 +18,25 @@ namespace Data
         public List<Plan> GetAll() => _context.Planes.ToList();
         public bool Update(Plan plan)
         {
-            Plan? existingPlan = _context.Planes.Find(plan.IdPlan);
-            if (existingPlan != null)
+            try
             {
-                if (!_context.Especialidades.Any(e => e.Id == plan.IdEspecialidad)) throw new ArgumentException($"La especialidad {plan.IdEspecialidad} no existe.");
-                if (_context.Planes.Any(p => p.Descripcion == plan.Descripcion && p.IdPlan != plan.IdPlan)) throw new ArgumentException($"Ya existe un plan con la descripcion {plan.Descripcion}.");
-                existingPlan.Descripcion = plan.Descripcion; 
-                existingPlan.IdEspecialidad = plan.IdEspecialidad;
-                _context.SaveChanges();
-                return true;
+                Plan? existingPlan = _context.Planes.Find(plan.IdPlan);
+                if (existingPlan != null)
+                {
+                    //if (!_context.Especialidades.Any(e => e.Id == plan.IdEspecialidad)) throw new ArgumentException($"La especialidad {plan.IdEspecialidad} no existe.");
+                    //if (_context.Planes.Any(p => p.Descripcion == plan.Descripcion && p.IdPlan != plan.IdPlan)) throw new ArgumentException($"Ya existe un plan con la descripcion {plan.Descripcion}.");
+                    existingPlan.Descripcion = plan.Descripcion;
+                    existingPlan.IdEspecialidad = plan.IdEspecialidad;
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
+
             }
-            return false;
+            catch (ArgumentException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
         }
         public void Add(Plan plan)
         {
