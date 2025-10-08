@@ -1,4 +1,6 @@
 ﻿using Domain.Model;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data
 {
@@ -19,9 +21,49 @@ namespace Data
 
         public void Add(Usuario usuario)
         {
-            _context.Usuarios.Add(usuario);
-            _context.SaveChanges();
-        }
+            try
+            {
+                _context.Usuarios.Add(usuario);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateException err)
+            {
+                // Check for SQL Server unique constraint / duplicate key errors
+                if (err.InnerException is SqlException sqlEx && (sqlEx.Number == 2601 || sqlEx.Number == 2627))
+                {
+                    string sqlMessage = sqlEx.Message ?? string.Empty;
+
+                    // Prefer index name checks (defined in OnModelCreating)
+                    if (sqlMessage.Contains("IX_Usuarios_Email", StringComparison.OrdinalIgnoreCase) ||
+                        sqlMessage.Contains("IX_Usuarios_Email", StringComparison.CurrentCultureIgnoreCase) ||
+                        sqlMessage.Contains("email", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new ArgumentException("El email ya existe. Intente con otro email.");
+                    }
+
+                    if (sqlMessage.Contains("IX_Usuarios_NombreUsuario", StringComparison.OrdinalIgnoreCase) ||
+                        sqlMessage.Contains("nombreusuario", StringComparison.OrdinalIgnoreCase) ||
+                        sqlMessage.Contains("nombre de usuario", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new ArgumentException("El nombre de usuario ya existe. Intente con otro nombre de usuario.");
+                    }
+
+                    // Fallback generic duplicate key message
+                    throw new ArgumentException("Ya existe un registro con un valor único duplicado. Intente con valores diferentes.");
+                }
+                
+                // Not a unique constraint violation -> rethrow original (preserve stack)
+                throw;
+            }
+            catch (ArgumentException err)
+            {
+                throw new Exception(err.Message);
+            }
+            catch (Exception err)
+            {
+                throw new Exception(err.Message);
+            }
+         }
 
         public bool Delete(int id)
         {

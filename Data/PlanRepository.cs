@@ -40,10 +40,26 @@ namespace Data
         }
         public void Add(Plan plan)
         {
-            if (!_context.Especialidades.Any(e => e.Id == plan.IdEspecialidad)) throw new ArgumentException($"La especialidad {plan.IdEspecialidad} no existe.");
-            if (_context.Planes.Any(p => p.Descripcion == plan.Descripcion)) throw new ArgumentException($"Ya existe un plan con la descripcion {plan.Descripcion}.");
-            _context.Planes.Add(plan);
-            _context.SaveChanges();
+            try
+            {
+                //if (!_context.Especialidades.Any(e => e.Id == plan.IdEspecialidad)) throw new ArgumentException($"La especialidad {plan.IdEspecialidad} no existe.");
+                //if (_context.Planes.Any(p => p.Descripcion == plan.Descripcion)) throw new ArgumentException($"Ya existe un plan con la descripcion {plan.Descripcion}.");
+                _context.Planes.Add(plan);
+                _context.SaveChanges();
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException err)
+            {
+                throw new Exception(err.Message);
+            }
+            catch (ArgumentException err)
+            {
+                throw new Exception(err.Message);
+            }
+            catch (Exception err)
+            {
+                throw new Exception(err.Message);
+            }
+
         }
         public bool Delete(int id)
         {
