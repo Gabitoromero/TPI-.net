@@ -65,7 +65,11 @@ namespace WebAPI
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<CursoService>();
             builder.Services.AddScoped<CursoRepository>();
-
+            builder.Services.AddScoped<ComisionRepository>();
+            builder.Services.AddScoped<ComisionService>();
+            builder.Services.AddScoped<MateriaRepository>();
+            builder.Services.AddScoped<MateriaService>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -88,6 +92,8 @@ namespace WebAPI
             app.MapModuloEndpoints();
             app.MapCursoEndpoints();
             app.MapPlanEndpoints();
+            app.MapComisionEndpoints();
+            app.MapMateriaEndpoints();
 
 
             app.Run();

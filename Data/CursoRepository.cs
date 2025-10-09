@@ -44,8 +44,8 @@ namespace Data
                 {
                     cursoToUpdate.Anio_calendario = curso.Anio_calendario;
                     cursoToUpdate.Cupo = curso.Cupo;
-                    //cursoToUpdate.Id_comision = curso.Id_comision;
-                    //cursoToUpdate.Id_materia = curso.Id_materia;
+                    cursoToUpdate.Id_comision = curso.Id_comision;
+                    cursoToUpdate.Id_materia = curso.Id_materia;
                     _context.SaveChanges();
                     return true;
                 }

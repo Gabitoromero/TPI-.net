@@ -26,9 +26,9 @@ namespace Application.Services
             {
                 Id_curso = curso.Id_curso,
                 Anio_calendario = curso.Anio_calendario,
-                Cupo = curso.Cupo
-                //Id_materia = curso.Id_materia,
-                //Id_comision = curso.Id_comision
+                Cupo = curso.Cupo,
+                Id_materia = curso.Id_materia,
+                Id_comision = curso.Id_comision
             };
         }
         public List<CursoDTO> GetAll()
@@ -51,9 +51,9 @@ namespace Application.Services
                 {
                     Id_curso = 0,
                     Anio_calendario = curso.Anio_calendario,
-                    Cupo = curso.Cupo
-                    //Id_materia = curso.Id_materia,
-                    //Id_comision = curso.Id_comision
+                    Cupo = curso.Cupo,
+                    Id_materia = curso.Id_materia,
+                    Id_comision = curso.Id_comision
                 };
                 _repository.Add(newCurso);
                 curso.Id_curso = newCurso.Id_curso;
@@ -76,9 +76,9 @@ namespace Application.Services
                 {
                     Id_curso = dto.Id_curso,
                     Anio_calendario = dto.Anio_calendario,
-                    Cupo = dto.Cupo
-                    //Id_materia = dto.Id_materia,
-                    //Id_comision = dto.Id_comision
+                    Cupo = dto.Cupo,
+                    Id_materia = dto.Id_materia,
+                    Id_comision = dto.Id_comision
                 };
                 return _repository.Update(curso);
                 

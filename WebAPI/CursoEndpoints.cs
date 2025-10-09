@@ -8,27 +8,27 @@ namespace WebAPI
     {
         public static void MapCursoEndpoints(this WebApplication app)
         {
-            app.MapGet("/api/cursos", (CursoService cursoService) =>
+            app.MapGet("/cursos", (CursoService cursoService) =>
             {
                 List<CursoDTO> cursosDTO = cursoService.GetAll();
                 if (cursosDTO.Count == 0)
                 {
-                    return Results.NotFound(new { message = "Planes no encontrados" });
+                    return Results.NotFound(new { message = "Cursos no encontrados" });
                 }
                 return Results.Ok(cursosDTO);
             });
 
-            app.MapGet("/api/cursos/{id}", (int id, CursoService cursoService) =>
+            app.MapGet("/cursos/{id}", (int id, CursoService cursoService) =>
             {
                 NewCursoDTO dto = cursoService.Get(id);
                 if (dto == null)
                 {
-                    return Results.NotFound();
+                    return Results.NotFound(new { message = "Curso no encontrado" });
                 }
                 return Results.Ok(dto);
             });
 
-            app.MapPost("/api/cursos", (NewCursoDTO dto, CursoService cursoService) =>
+            app.MapPost("/cursos", (NewCursoDTO dto, CursoService cursoService) =>
             {
                 try
                 {
@@ -41,7 +41,7 @@ namespace WebAPI
                 }
             });
 
-            app.MapPut("/api/cursos/", (NewCursoDTO updatedCurso, CursoService cursoService) =>
+            app.MapPut("/cursos/", (NewCursoDTO updatedCurso, CursoService cursoService) =>
             {
                 try
                 {
@@ -58,7 +58,7 @@ namespace WebAPI
                 }
             });
 
-            app.MapDelete("/api/cursos/{id}", (int id, CursoService cursoService) =>
+            app.MapDelete("/cursos/{id}", (int id, CursoService cursoService) =>
             {
                 bool cursoDeleted = cursoService.Delete(id);
                 if (!cursoDeleted)

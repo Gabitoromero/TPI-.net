@@ -29,16 +29,18 @@
         private void InitializeComponent()
         {
             btnEspecialidadesCRUD = new Button();
-            btnModulosCRUD = new Button();
+            btnMaterias = new Button();
             btnUsuariosCRUD = new Button();
             btnPlanesCRUD = new Button();
             labelCRUD = new Label();
             btnCerrar = new Button();
+            btnCursos = new Button();
+            btnComisiones = new Button();
             SuspendLayout();
             // 
             // btnEspecialidadesCRUD
             // 
-            btnEspecialidadesCRUD.Location = new Point(185, 29);
+            btnEspecialidadesCRUD.Location = new Point(39, 58);
             btnEspecialidadesCRUD.Name = "btnEspecialidadesCRUD";
             btnEspecialidadesCRUD.Size = new Size(157, 37);
             btnEspecialidadesCRUD.TabIndex = 0;
@@ -46,19 +48,19 @@
             btnEspecialidadesCRUD.UseVisualStyleBackColor = true;
             btnEspecialidadesCRUD.Click += btnEspecialidadesCRUD_Click;
             // 
-            // btnModulosCRUD
+            // btnMaterias
             // 
-            btnModulosCRUD.Location = new Point(185, 90);
-            btnModulosCRUD.Name = "btnModulosCRUD";
-            btnModulosCRUD.Size = new Size(157, 37);
-            btnModulosCRUD.TabIndex = 1;
-            btnModulosCRUD.Text = "Modulos";
-            btnModulosCRUD.UseVisualStyleBackColor = true;
-            btnModulosCRUD.Click += btnModulosCRUD_Click;
+            btnMaterias.Location = new Point(257, 117);
+            btnMaterias.Name = "btnMaterias";
+            btnMaterias.Size = new Size(157, 37);
+            btnMaterias.TabIndex = 1;
+            btnMaterias.Text = "Materias";
+            btnMaterias.UseVisualStyleBackColor = true;
+            btnMaterias.Click += btnModulosCRUD_Click;
             // 
             // btnUsuariosCRUD
             // 
-            btnUsuariosCRUD.Location = new Point(185, 203);
+            btnUsuariosCRUD.Location = new Point(39, 175);
             btnUsuariosCRUD.Name = "btnUsuariosCRUD";
             btnUsuariosCRUD.Size = new Size(157, 37);
             btnUsuariosCRUD.TabIndex = 2;
@@ -68,7 +70,7 @@
             // 
             // btnPlanesCRUD
             // 
-            btnPlanesCRUD.Location = new Point(185, 147);
+            btnPlanesCRUD.Location = new Point(39, 117);
             btnPlanesCRUD.Name = "btnPlanesCRUD";
             btnPlanesCRUD.Size = new Size(157, 37);
             btnPlanesCRUD.TabIndex = 3;
@@ -89,7 +91,7 @@
             // btnCerrar
             // 
             btnCerrar.BackColor = Color.IndianRed;
-            btnCerrar.Location = new Point(9, 263);
+            btnCerrar.Location = new Point(191, 245);
             btnCerrar.Name = "btnCerrar";
             btnCerrar.Size = new Size(67, 22);
             btnCerrar.TabIndex = 5;
@@ -97,16 +99,38 @@
             btnCerrar.UseVisualStyleBackColor = false;
             btnCerrar.Click += btnCerrar_Click;
             // 
+            // btnCursos
+            // 
+            btnCursos.Location = new Point(257, 58);
+            btnCursos.Name = "btnCursos";
+            btnCursos.Size = new Size(157, 37);
+            btnCursos.TabIndex = 6;
+            btnCursos.Text = "Cursos";
+            btnCursos.UseVisualStyleBackColor = true;
+            btnCursos.Click += btnCursos_Click;
+            // 
+            // btnComisiones
+            // 
+            btnComisiones.Location = new Point(257, 175);
+            btnComisiones.Name = "btnComisiones";
+            btnComisiones.Size = new Size(157, 37);
+            btnComisiones.TabIndex = 7;
+            btnComisiones.Text = "Comisiones";
+            btnComisiones.UseVisualStyleBackColor = true;
+            btnComisiones.Click += btnComisiones_Click;
+            // 
             // MenuForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(540, 290);
+            ClientSize = new Size(453, 286);
+            Controls.Add(btnComisiones);
+            Controls.Add(btnCursos);
             Controls.Add(btnCerrar);
             Controls.Add(labelCRUD);
             Controls.Add(btnPlanesCRUD);
             Controls.Add(btnUsuariosCRUD);
-            Controls.Add(btnModulosCRUD);
+            Controls.Add(btnMaterias);
             Controls.Add(btnEspecialidadesCRUD);
             Name = "MenuForm";
             Text = "Menú Principal";
@@ -118,10 +142,12 @@
         #endregion
 
         private Button btnEspecialidadesCRUD;
-        private Button btnModulosCRUD;
+        private Button btnMaterias;
         private Button btnUsuariosCRUD;
         private Button btnPlanesCRUD;
         private Label labelCRUD;
         private Button btnCerrar;
+        private Button btnCursos;
+        private Button btnComisiones;
     }
 }

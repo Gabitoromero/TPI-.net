@@ -14,6 +14,9 @@ namespace Data
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Curso> Cursos { get; set; }
 
+        public DbSet<Comision> Comisiones { get; set; }
+        public DbSet<Materia> Materias { get; set; }
+
         public AcademiaContext()
         {
             //this.Database.EnsureCreated();
@@ -113,20 +116,74 @@ namespace Data
                     new Usuario(4, "Lurati", "444444", "il@email.com", true, "Ignacio", "il", DateTime.Now));
             });
 
+
+            modelBuilder.Entity<Comision>(entity =>
+            {
+                entity.HasKey(c => c.Id_comision);
+                entity.Property(c => c.Id_comision).ValueGeneratedOnAdd();
+                entity.Property(c => c.Desc_comision).IsRequired().HasMaxLength(50);
+                entity.HasIndex(c => c.Desc_comision).IsUnique();
+                entity.Property(c => c.Anio_especialidad).IsRequired();
+                entity.HasOne<Plan>()
+                      .WithMany()
+                      .HasForeignKey(c => c.Id_plan)
+                      .OnDelete(DeleteBehavior.Cascade) //validar con luta
+                      .IsRequired();
+
+                entity.HasData(
+                    new { Id_comision = 1, Desc_comision = "Comision A", Anio_especialidad = 1, Id_plan = 1 },
+                    new { Id_comision = 2, Desc_comision = "Comision B", Anio_especialidad = 2, Id_plan = 1 },
+                    new { Id_comision = 3, Desc_comision = "Comision C", Anio_especialidad = 1, Id_plan = 2 },
+                    new { Id_comision = 4, Desc_comision = "Comision D", Anio_especialidad = 3, Id_plan = 2 },
+                    new { Id_comision = 5, Desc_comision = "Comision E", Anio_especialidad = 2, Id_plan = 3 }
+                    );
+            });
+
+            modelBuilder.Entity<Materia>(entity =>
+            {
+                entity.HasKey(m => m.Id_materia);
+                entity.Property(m => m.Id_materia).ValueGeneratedOnAdd();
+                entity.Property(m => m.Desc_materia).IsRequired().HasMaxLength(50);
+                entity.HasIndex(m => m.Desc_materia).IsUnique();
+                entity.Property(m => m.Hs_semanales).IsRequired();
+                entity.Property(m => m.Hs_totales).IsRequired();
+                entity.HasOne<Plan>()
+                      .WithMany()
+                      .HasForeignKey(m => m.Id_plan)
+                      .OnDelete(DeleteBehavior.Cascade) //validar con luta
+                      .IsRequired();
+
+                entity.HasData(
+                    new { Id_materia = 1, Desc_materia = "Matematica", Hs_semanales = 4, Hs_totales = 64, Id_plan = 1 },
+                    new { Id_materia = 2, Desc_materia = "Programacion", Hs_semanales = 6, Hs_totales = 96, Id_plan = 1 },
+                    new { Id_materia = 3, Desc_materia = "Diseño", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2 },
+                    new { Id_materia = 4, Desc_materia = "Quimica", Hs_semanales = 5, Hs_totales = 80, Id_plan = 2 },
+                    new { Id_materia = 5, Desc_materia = "Historia", Hs_semanales = 2, Hs_totales = 32, Id_plan = 3 }
+                    );
+            });
+
             modelBuilder.Entity<Curso>(entity =>
-            {   
+            {
                 entity.HasKey(e => e.Id_curso);
                 entity.Property(e => e.Id_curso).ValueGeneratedOnAdd();
                 entity.Property(e => e.Id_curso).IsRequired();
                 entity.HasIndex(e => e.Id_curso).IsUnique();
                 entity.Property(e => e.Anio_calendario).IsRequired();
                 entity.Property(e => e.Cupo).IsRequired();
-                //entity.HasOne<Materia>();
-                //entity.HasOne<Comision>();
+                entity.HasOne<Materia>()
+                .WithMany()
+                .HasForeignKey(c => c.Id_materia)
+                .OnDelete(DeleteBehavior.Restrict) //validar con luta
+                .IsRequired();
+                entity.HasOne<Comision>()
+                .WithMany()
+                .HasForeignKey(c => c.Id_comision)
+                .OnDelete(DeleteBehavior.Restrict) //validar con luta
+                .IsRequired();
                 entity.HasData(
-                    new Curso { Id_curso = 1, Anio_calendario = 2023, Cupo = 30 },
-                    new Curso { Id_curso = 2, Anio_calendario = 2023, Cupo = 25 },
-                    new Curso { Id_curso = 3, Anio_calendario = 2023, Cupo = 20 }
+                    new Curso { Id_curso = 1, Anio_calendario = 2023, Cupo = 30 , Id_comision = 1, Id_materia = 1},
+                    new Curso { Id_curso = 2, Anio_calendario = 2023, Cupo = 25 , Id_comision = 2, Id_materia = 2 },
+                    new Curso { Id_curso = 3, Anio_calendario = 2023, Cupo = 20 , Id_comision = 3, Id_materia = 3 }
                     );
 
             });

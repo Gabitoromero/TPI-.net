@@ -30,8 +30,8 @@ namespace WinFormsApp
         {
             try
             {
-                ModuloForm espForm = new ModuloForm();
-                espForm.ShowDialog();
+                MateriaListaForm matForm = new MateriaListaForm();
+                matForm.ShowDialog();
             }
             catch (Exception err)
             {
@@ -75,11 +75,37 @@ namespace WinFormsApp
                 formuser.ShowDialog();
 
             }
-            catch(ArgumentException err)
+            catch (ArgumentException err)
             {
                 throw new ArgumentException(err.Message);
             }
-            
+
+        }
+
+        private void btnCursos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CursoListaForm curForm = new CursoListaForm();
+                curForm.ShowDialog();
+            }
+            catch (Exception err)
+            {
+                throw new ArgumentException(err.Message);
+            }
+        }
+
+        private void btnComisiones_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ComisionListaForm comForm = new ComisionListaForm();
+                comForm.ShowDialog();
+            }
+            catch (ArgumentException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
         }
     }
 }
