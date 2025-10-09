@@ -31,16 +31,18 @@ namespace Application.Services
                 Id_comision = curso.Id_comision
             };
         }
-        public List<CursoDTO> GetAll()
+        public List<NewCursoDTO> GetAll()
         {
             
             List<Curso> curso = _repository.GetAll();
             if (curso == null) return null;
-            return curso.Select(m=> new CursoDTO
+            return curso.Select(m=> new NewCursoDTO
             {
                 Id_curso = m.Id_curso,
                 Anio_calendario = m.Anio_calendario,
-                Cupo = m.Cupo
+                Cupo = m.Cupo,
+                Id_materia = m.Id_materia,
+                Id_comision = m.Id_comision
             }).ToList();
         }
         public NewCursoDTO Add(NewCursoDTO curso)

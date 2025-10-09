@@ -17,14 +17,14 @@ namespace API.Clients
             client = CreateHttpClientAsync();
         }
 
-        public static async Task<List<CursoDTO>> GetAllAsync()
+        public static async Task<List<NewCursoDTO>> GetAllAsync()
         {
             try
             {
                 HttpResponseMessage response = await client.GetAsync("cursos");
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadFromJsonAsync<List<CursoDTO>>();
+                    return await response.Content.ReadFromJsonAsync<List<NewCursoDTO>>();
                 }
                 else
                 {

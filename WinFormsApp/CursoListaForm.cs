@@ -24,14 +24,41 @@ namespace WinFormsApp
         {
             try
             {
-                List<CursoDTO> cursos = await APICurso.GetAllAsync();
+                
+                List<NewCursoDTO> cursos = await APICurso.GetAllAsync();
+                List<ComisionDTO> comisiones = new List<ComisionDTO>();
+                List<MateriaDTO> materias = new List<MateriaDTO>();
 
-                var view = (cursos ?? new List<CursoDTO>()).Select(c => new
+                try
                 {
-                    Id_curso = c.Id_curso,
-                    Anio_calendario = c.Anio_calendario,
-                    Cupo = c.Cupo
-                }).ToList();
+                    comisiones = await APIComision.GetAllAsync();
+                }
+                catch
+                {
+                    
+                    comisiones = new List<ComisionDTO>();
+                }
+
+                try
+                {
+                    materias = await APIMateria.GetAllAsync();
+                }
+                catch
+                {
+                    
+                    materias = new List<MateriaDTO>();
+                }
+
+                var view = (cursos ?? new List<NewCursoDTO>())
+                    .Select(c => new
+                    {
+                        Id_curso = c.Id_curso,
+                        Anio_calendario = c.Anio_calendario,
+                        Cupo = c.Cupo,
+                        Comision = comisiones.FirstOrDefault(x => x.Id_comision == c.Id_comision)?.Desc_comision ?? "(sin comision)",
+                        Materia = materias.FirstOrDefault(m => m.Id_materia == c.Id_materia)?.Desc_materia ?? "(sin materia)"
+                    })
+                    .ToList();
 
                 dataGridViewCursos.DataSource = view;
             }
@@ -93,7 +120,8 @@ namespace WinFormsApp
             {
                 MessageBox.Show($"Error al eliminar el curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
+        }   
+
 
         private async void btnBuscar_Click(object sender, EventArgs e)
         {

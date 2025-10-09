@@ -36,7 +36,7 @@ namespace Data
             try
             {
                 //agrego pequeña logica porque no se como hacer que la bd no permita duplicados
-                Curso repeated = _context.Cursos.Where(Curso => Curso.Id_curso != curso.Id_curso).FirstOrDefault(c => c.Anio_calendario == curso.Anio_calendario /*&& c.Id_comision == curso.Id_comision && c.Id_materia == curso.Id_materia*/);
+                Curso repeated = _context.Cursos.Where(Curso => Curso.Id_curso != curso.Id_curso).FirstOrDefault(c => c.Anio_calendario == curso.Anio_calendario && c.Id_comision == curso.Id_comision && c.Id_materia == curso.Id_materia);
                 if (repeated != null) throw new ArgumentException("Ya existe un curso con la misma materia, comision y año calendario.");
                 
                 Curso? cursoToUpdate = _context.Cursos.Find(curso.Id_curso);

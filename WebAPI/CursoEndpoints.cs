@@ -10,7 +10,7 @@ namespace WebAPI
         {
             app.MapGet("/cursos", (CursoService cursoService) =>
             {
-                List<CursoDTO> cursosDTO = cursoService.GetAll();
+                List<NewCursoDTO> cursosDTO = cursoService.GetAll();
                 if (cursosDTO.Count == 0)
                 {
                     return Results.NotFound(new { message = "Cursos no encontrados" });

@@ -157,12 +157,12 @@ namespace Data
                 entity.HasOne<Materia>()
                 .WithMany()
                 .HasForeignKey(c => c.Id_materia)
-                .OnDelete(DeleteBehavior.Restrict) //validar con luta
+                .OnDelete(DeleteBehavior.Cascade) //validar con luta
                 .IsRequired();
                 entity.HasOne<Comision>()
                 .WithMany()
                 .HasForeignKey(c => c.Id_comision)
-                .OnDelete(DeleteBehavior.Restrict) //validar con luta
+                .OnDelete(DeleteBehavior.Cascade) //validar con luta
                 .IsRequired();
                 entity.HasData(
                     new Curso { Id_curso = 1, Anio_calendario = 2023, Cupo = 30 , Id_comision = 1, Id_materia = 1},

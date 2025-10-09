@@ -40,7 +40,7 @@
             dataGridViewCursos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCursos.Location = new Point(20, 23);
             dataGridViewCursos.Name = "dataGridViewCursos";
-            dataGridViewCursos.Size = new Size(449, 237);
+            dataGridViewCursos.Size = new Size(602, 237);
             dataGridViewCursos.TabIndex = 3;
             // 
             // btnEliminar
@@ -56,7 +56,7 @@
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(394, 275);
+            btnAgregar.Location = new Point(524, 275);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 5;
@@ -66,7 +66,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(214, 275);
+            btnModificar.Location = new Point(278, 275);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 6;
@@ -78,7 +78,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(494, 320);
+            ClientSize = new Size(634, 320);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);
             Controls.Add(btnEliminar);

@@ -16,6 +16,7 @@ namespace WinFormsApp
     public partial class PlanDetalleForm : Form
     {
         private PlanDTO plan;
+        private bool isEdit = false;
         public PlanDetalleForm()
         {
             InitializeComponent();
@@ -23,11 +24,12 @@ namespace WinFormsApp
         public PlanDetalleForm(PlanDTO plan) : this()
         {
             this.plan = plan;
+            this.isEdit = true;
         }
         public async void PlanDetalleForm_Load_1(object sender, EventArgs e)
         {
             await LoadEspecialidades();
-            if (plan != null)
+            if (isEdit && plan != null)
             {
                 txtBoxDescripcion.Text = plan.Descripcion;
             }
@@ -39,7 +41,7 @@ namespace WinFormsApp
             comboBoxEspecialidades.DataSource = especialidades;
             comboBoxEspecialidades.DisplayMember = "Descripcion";
             comboBoxEspecialidades.ValueMember = "Id";
-            if (plan != null)
+            if (isEdit && plan != null)
             {
                 if (especialidades.Any(e => e.Id == plan.IdEspecialidad))
                 {
@@ -50,6 +52,10 @@ namespace WinFormsApp
                     comboBoxEspecialidades.SelectedIndex = -1; // No selection by default
                 }
             }
+            else
+            {
+                comboBoxEspecialidades.SelectedIndex = -1;
+            }
         }
 
         public void btnCancelar_Click(object sender, EventArgs e)
@@ -58,25 +64,31 @@ namespace WinFormsApp
         }
         public void btnGuardar_Click(object sender, EventArgs e)
         {
-            
+            btnGuardar_Click_1(sender, e);
         }
 
         private async void btnGuardar_Click_1(object sender, EventArgs e)
         {
             try
             {
-                if (plan != null) //UPDATE
-                {
+                int idEspecialidad = comboBoxEspecialidades.SelectedValue != null ? (int)comboBoxEspecialidades.SelectedValue : 0;
 
-                    int idEspecialidad = (int)comboBoxEspecialidades.SelectedValue;
-                    await APIPlan.UpdateAsync(plan);
+                if (isEdit && plan != null) //UPDATE
+                {
+                    PlanDTO toSend = new PlanDTO
+                    {
+                        IdPlan = plan.IdPlan,
+                        Descripcion = txtBoxDescripcion.Text,
+                        IdEspecialidad = idEspecialidad
+                    };
+
+                    await APIPlan.UpdateAsync(toSend);
                     MessageBox.Show("Plan guardado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
 
                 }
                 else //CREATE
                 {
-                    int idEspecialidad = (int)comboBoxEspecialidades.SelectedValue;
                     PlanDTO nuevoPlan = new PlanDTO(0, txtBoxDescripcion.Text, idEspecialidad);
                     PlanDTO planAdded = await APIPlan.AddAsync(nuevoPlan);
                     MessageBox.Show("Plan agregado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);

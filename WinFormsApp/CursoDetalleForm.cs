@@ -51,11 +51,8 @@ namespace WinFormsApp
 
             if (isEdit && curso != null)
             {
-                // Id is hidden but keep value for update
-                //numericId.Value = curso.Id_curso;
                 numericAnio.Value = curso.Anio_calendario;
                 numericCupo.Value = curso.Cupo;
-                // set selected values for combos if loaded
                 if (comboBoxComision.DataSource != null)
                 {
                     var items = (System.Collections.IList)comboBoxComision.DataSource;
