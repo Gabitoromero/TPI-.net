@@ -36,7 +36,7 @@
             // 
             // btnGuardar
             // 
-            btnGuardar.BackColor = Color.MediumSeaGreen;
+            btnGuardar.BackColor = SystemColors.ActiveCaption;
             btnGuardar.Location = new Point(245, 163);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(120, 41);
