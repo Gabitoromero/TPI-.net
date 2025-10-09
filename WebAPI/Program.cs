@@ -56,8 +56,6 @@ namespace WebAPI
             builder.Services.AddDbContext<AcademiaContext>();
             builder.Services.AddScoped<EspecialidadRepository>();
             builder.Services.AddScoped<EspecialidadService>();
-            builder.Services.AddScoped<ModuloRepository>();
-            builder.Services.AddScoped<ModuloService>();
             builder.Services.AddScoped<PlanRepository>();
             builder.Services.AddScoped<PlanService>();
             builder.Services.AddScoped<UsuarioRepository>();
@@ -89,7 +87,6 @@ namespace WebAPI
             app.MapAuthEndpoints();
             app.MapEspecialidadEndpoints();
             app.MapUsuarioEndpoints();
-            app.MapModuloEndpoints();
             app.MapCursoEndpoints();
             app.MapPlanEndpoints();
             app.MapComisionEndpoints();

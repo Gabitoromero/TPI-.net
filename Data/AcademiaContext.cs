@@ -8,7 +8,6 @@ namespace Data
     public class AcademiaContext : DbContext
     {
         public DbSet<Especialidad> Especialidades { get; set; }
-        public DbSet<Modulo> Modulos { get; set; }
         public DbSet<Plan> Planes { get; set; }
 
         public DbSet<Usuario> Usuarios { get; set; }
@@ -60,21 +59,6 @@ namespace Data
 
             });
 
-            modelBuilder.Entity<Modulo>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-                entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
-                entity.HasIndex(e => e.Descripcion).IsUnique();
-
-                entity.HasData(
-                    new { Id = 1, Descripcion = "modulo1" },
-                    new { Id = 2, Descripcion = "modulo 2" },
-                    new { Id = 3, Descripcion = "modulo 3" },
-                    new { Id = 4, Descripcion = "modulo 4" }
-                    );
-
-            });
             modelBuilder.Entity<Plan>(entity =>
             {
                 entity.HasKey(e => e.IdPlan);
