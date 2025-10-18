@@ -1,18 +1,9 @@
 ﻿using Application.Services;
 using Data;
-using DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
-// README: Por motivos que se nos escapan, y despues de DIAS de debuguear, no sabemos por que
-// el middleware de token rechaza los tokens que son generados por si mismo y que ademas coinciden en formato a la perfeccion
-// Nuestra teoria es que los paquetes instalados tienen algun conflicto extra�o que no sabemos arreglar
-// Asi que por el momento el middleware de autentitacion esta bypaseado y sin efecto.
-// Realmente no tenemos ni idea que pasa y ya probamos de todo, asi que si alguien sabe que puede ser, se agradece la ayuda
-// https://jwt.io/ valida correctamente tanto los tokens generados como los que le llegan al back, pero por algun motivo el back los rechaza
 
 namespace WebAPI
 {

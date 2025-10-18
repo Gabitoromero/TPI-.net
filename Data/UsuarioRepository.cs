@@ -85,6 +85,13 @@ namespace Data
             existingUsuario.Nombre = usuario.Nombre;
             existingUsuario.NombreUsuario = usuario.NombreUsuario;
 
+            existingUsuario.Direccion = usuario.Direccion;
+            existingUsuario.Telefono = usuario.Telefono;
+            existingUsuario.Tipo = usuario.Tipo;
+            existingUsuario.Legajo = usuario.Legajo;
+            existingUsuario.FechaNacimiento = usuario.FechaNacimiento;
+            existingUsuario.IdPlan = usuario.IdPlan;
+
             _context.SaveChanges();
             return true;
         }

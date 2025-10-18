@@ -144,7 +144,7 @@ namespace API.Clients
             }
         }
         
-        public static async Task<PostUsuarioDTO> AddAsync(PostUsuarioDTO dto)
+        public static async Task<PostUsuarioDTO> AddAsync(FullUsuarioDTO dto)
         {
             try
             {

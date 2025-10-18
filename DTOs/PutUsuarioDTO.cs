@@ -22,5 +22,7 @@ namespace DTOs
         public string Clave { get; set; }
 
         public bool Habilitado { get; set; }
+
+        public int IdPlan { get; set; }
     }
 }

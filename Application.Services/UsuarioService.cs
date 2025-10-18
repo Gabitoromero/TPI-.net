@@ -5,12 +5,14 @@ using DTOs;
 namespace Application.Services
 {
     public class UsuarioService
-    { 
+    {
         private readonly UsuarioRepository _repository;
+        private readonly PlanService _planService;
 
-        public UsuarioService(UsuarioRepository usuarioRepository)
+        public UsuarioService(UsuarioRepository usuarioRepository, PlanService planService)
         {
             _repository = usuarioRepository;
+            _planService = planService;
         }
 
         public FullUsuarioDTO? Get(int id) {
@@ -24,12 +26,19 @@ namespace Application.Services
             {
                 Id = usuario.Id,
                 Apellido = usuario.Apellido,
-                Clave = usuario.ClaveHash,
+                //Clave = usuario.ClaveHash, 
                 Email = usuario.Email,
                 Habilitado = usuario.Habilitado,
                 Nombre = usuario.Nombre,
                 NombreUsuario = usuario.NombreUsuario,
-                FechaAlta = usuario.FechaAlta
+                FechaAlta = usuario.FechaAlta,
+
+                Direccion = usuario.Direccion,
+                Telefono = usuario.Telefono,
+                Tipo = usuario.Tipo,
+                Legajo = usuario.Legajo,
+                FechaNacimiento = usuario.FechaNacimiento,
+                IdPlan = usuario.IdPlan,
             };
 
             return dto;
@@ -45,11 +54,18 @@ namespace Application.Services
                 NombreUsuario = usuario.NombreUsuario
             }).ToList();
         }
-        public PostUsuarioDTO Add(PostUsuarioDTO dto)
+        public PostUsuarioDTO Add(FullUsuarioDTO dto)
         {
+            var plan = _planService.Get(dto.IdPlan);
+
+            if(plan == null)
+            {
+                throw new ArgumentException("El plan asociado no existe.");
+            }
 
             var fechaCreacion = DateTime.Now;
-            Usuario usuario = new Usuario(0, dto.Apellido, dto.Clave, dto.Email, true, dto.Nombre, dto.NombreUsuario, fechaCreacion);
+            Usuario usuario = new Usuario(0, dto.Apellido, dto.Clave, dto.Email, true, dto.Nombre, dto.NombreUsuario, fechaCreacion, 
+                dto.Direccion, dto.Telefono, dto.Tipo, dto.Legajo, dto.FechaNacimiento, dto.IdPlan);
 
             _repository.Add(usuario);
 
@@ -71,6 +87,16 @@ namespace Application.Services
 
         public bool Update(PutUsuarioDTO dto)
         {
+            if(dto.IdPlan != null)
+            {
+                var plan = _planService.Get(dto.IdPlan);
+
+                if (plan == null)
+                {
+                    throw new ArgumentException("El plan asociado no existe.");
+                }
+            }
+
             Usuario? usuario = _repository.Get(dto.Id);
 
             if (usuario == null) return false;

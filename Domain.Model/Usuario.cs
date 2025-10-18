@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace Domain.Model
 {
-    public class Usuario
+    public class Usuario : Persona
     {
         //properties
         public int Id { get; set; }
@@ -18,7 +17,8 @@ namespace Domain.Model
 
         public DateTime FechaAlta { get; set; }
 
-        public Usuario(int id, string apellido, string clave, string email, bool habilitado, string nombre, string nombreUsuario, DateTime fechaAlta)
+        public Usuario(int id, string apellido, string clave, string email, bool habilitado, string nombre, string nombreUsuario, DateTime fechaAlta, 
+            string direccion, string telefono, string tipo, int legajo, DateTime fechaNac, int idPlan) : base(direccion, telefono, tipo, legajo, fechaNac, idPlan)
         {
             Id = id;
             Apellido = apellido;
@@ -30,7 +30,7 @@ namespace Domain.Model
             FechaAlta = fechaAlta;
         }
 
-        private Usuario() { }
+        private Usuario() : base() { } // para ef
 
         public void SetClave(string password)
         {

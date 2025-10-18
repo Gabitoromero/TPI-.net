@@ -22,7 +22,7 @@ namespace Data
             // Descomentar para RESETEAR la base de datos en cada ejecucion (solo en desarrollo)    
             //this.Database.EnsureDeleted();
             this.Database.EnsureCreated();
-           
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) //configuracion de la base de datos
@@ -68,10 +68,10 @@ namespace Data
                 entity.HasOne<Especialidad>()
                       .WithMany()
                       .HasForeignKey(e => e.IdEspecialidad)
-                      .OnDelete(DeleteBehavior.Cascade)//validar con luta
-                      .IsRequired(); 
+                      .OnDelete(DeleteBehavior.Restrict)//validar con luta
+                      .IsRequired();
 
-                entity.HasData( new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1 },
+                entity.HasData(new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1 },
                                 new { IdPlan = 2, Descripcion = "Plan Premium", IdEspecialidad = 2 },
                                 new { IdPlan = 3, Descripcion = "Plan Familiar", IdEspecialidad = 3 }
                               );
@@ -90,38 +90,48 @@ namespace Data
                 entity.Property(e => e.FechaAlta).IsRequired();
                 entity.Property(e => e.Salt).IsRequired().HasMaxLength(255);
 
+                entity.Property(e => e.Direccion).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Telefono).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.Tipo).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.Legajo).IsRequired();
+                entity.Property(e => e.FechaNacimiento).IsRequired();
+
+                entity.HasOne<Plan>()
+                      .WithMany()
+                      .HasForeignKey(e => e.IdPlan)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .IsRequired();
+
                 entity.HasIndex(e => e.NombreUsuario).IsUnique();
                 entity.HasIndex(e => e.Email).IsUnique();
 
-                entity.HasData(
-                    new Usuario(1, "Romero", "111111", "gt@email.com", true, "Gabriel Tobías", "gtr", DateTime.Now),
-                    new Usuario(2, "Romero", "222222", "mf@email.com", true, "María Florencia", "mfr", DateTime.Now),
-                    new Usuario(3, "Romero", "333333", "jm@email.com", true, "Juan Manuel", "jmr", DateTime.Now),
-                    new Usuario(4, "Lurati", "444444", "il@email.com", true, "Ignacio", "il", DateTime.Now));
+                /* entity.HasData(
+                     new Usuario(1, "Romero", "111111", "gt@email.com", true, "Gabriel Tobías", "gtr", DateTime.Now, "En algun lugar", "3413244309", "admin", 52699, DateTime.Today, 1),
+             });*/
             });
 
 
             modelBuilder.Entity<Comision>(entity =>
-            {
-                entity.HasKey(c => c.Id_comision);
-                entity.Property(c => c.Id_comision).ValueGeneratedOnAdd();
-                entity.Property(c => c.Desc_comision).IsRequired().HasMaxLength(50);
-                entity.HasIndex(c => c.Desc_comision).IsUnique();
-                entity.Property(c => c.Anio_especialidad).IsRequired();
-                entity.HasOne<Plan>()
-                      .WithMany()
-                      .HasForeignKey(c => c.Id_plan)
-                      .OnDelete(DeleteBehavior.Cascade) //validar con luta
-                      .IsRequired();
+                {
+                    entity.HasKey(c => c.Id_comision);
+                    entity.Property(c => c.Id_comision).ValueGeneratedOnAdd();
+                    entity.Property(c => c.Desc_comision).IsRequired().HasMaxLength(50);
+                    entity.HasIndex(c => c.Desc_comision).IsUnique();
+                    entity.Property(c => c.Anio_especialidad).IsRequired();
+                    entity.HasOne<Plan>()
+                          .WithMany()
+                          .HasForeignKey(c => c.Id_plan)
+                          .OnDelete(DeleteBehavior.Restrict) //validar con luta
+                          .IsRequired();
 
-                entity.HasData(
-                    new { Id_comision = 1, Desc_comision = "Comision A", Anio_especialidad = 1, Id_plan = 1 },
-                    new { Id_comision = 2, Desc_comision = "Comision B", Anio_especialidad = 2, Id_plan = 1 },
-                    new { Id_comision = 3, Desc_comision = "Comision C", Anio_especialidad = 1, Id_plan = 2 },
-                    new { Id_comision = 4, Desc_comision = "Comision D", Anio_especialidad = 3, Id_plan = 2 },
-                    new { Id_comision = 5, Desc_comision = "Comision E", Anio_especialidad = 2, Id_plan = 3 }
-                    );
-            });
+                    entity.HasData(
+                        new { Id_comision = 1, Desc_comision = "Comision A", Anio_especialidad = 1, Id_plan = 1 },
+                        new { Id_comision = 2, Desc_comision = "Comision B", Anio_especialidad = 2, Id_plan = 1 },
+                        new { Id_comision = 3, Desc_comision = "Comision C", Anio_especialidad = 1, Id_plan = 2 },
+                        new { Id_comision = 4, Desc_comision = "Comision D", Anio_especialidad = 3, Id_plan = 2 },
+                        new { Id_comision = 5, Desc_comision = "Comision E", Anio_especialidad = 2, Id_plan = 3 }
+                        );
+                });
 
             modelBuilder.Entity<Materia>(entity =>
             {
@@ -134,7 +144,7 @@ namespace Data
                 entity.HasOne<Plan>()
                       .WithMany()
                       .HasForeignKey(m => m.Id_plan)
-                      .OnDelete(DeleteBehavior.Cascade) //validar con luta
+                      .OnDelete(DeleteBehavior.Restrict) //validar con luta
                       .IsRequired();
 
                 entity.HasData(
@@ -157,21 +167,21 @@ namespace Data
                 entity.HasOne<Materia>()
                 .WithMany()
                 .HasForeignKey(c => c.Id_materia)
-                .OnDelete(DeleteBehavior.Cascade) //validar con luta
+                .OnDelete(DeleteBehavior.Restrict) //validar con luta
                 .IsRequired();
                 entity.HasOne<Comision>()
                 .WithMany()
                 .HasForeignKey(c => c.Id_comision)
-                .OnDelete(DeleteBehavior.Cascade) //validar con luta
+                .OnDelete(DeleteBehavior.Restrict) //validar con luta
                 .IsRequired();
                 entity.HasData(
-                    new Curso { Id_curso = 1, Anio_calendario = 2023, Cupo = 30 , Id_comision = 1, Id_materia = 1},
-                    new Curso { Id_curso = 2, Anio_calendario = 2023, Cupo = 25 , Id_comision = 2, Id_materia = 2 },
-                    new Curso { Id_curso = 3, Anio_calendario = 2023, Cupo = 20 , Id_comision = 3, Id_materia = 3 }
+                    new Curso { Id_curso = 1, Anio_calendario = 2023, Cupo = 30, Id_comision = 1, Id_materia = 1 },
+                    new Curso { Id_curso = 2, Anio_calendario = 2023, Cupo = 25, Id_comision = 2, Id_materia = 2 },
+                    new Curso { Id_curso = 3, Anio_calendario = 2023, Cupo = 20, Id_comision = 3, Id_materia = 3 }
                     );
 
             });
         }
-
     }
 }
+    
