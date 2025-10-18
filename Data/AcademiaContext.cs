@@ -16,6 +16,8 @@ namespace Data
         public DbSet<Comision> Comisiones { get; set; }
         public DbSet<Materia> Materias { get; set; }
 
+        public DbSet<Profesor_Curso> Profesor_Cursos { get; set; }
+
         public AcademiaContext()
         {
             //this.Database.EnsureCreated();
@@ -180,6 +182,29 @@ namespace Data
                     new Curso { Id_curso = 3, Anio_calendario = 2023, Cupo = 20, Id_comision = 3, Id_materia = 3 }
                     );
 
+            });
+
+            modelBuilder.Entity<Profesor_Curso>(entity =>
+            {
+                entity.HasKey(pc => new { pc.IdDictado });
+
+                entity.Property(e => e.IdDictado).ValueGeneratedOnAdd();
+
+                entity.HasOne<Usuario>()
+                      .WithMany()
+                      .HasForeignKey(pc => pc.IdProfesor)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .IsRequired();
+
+                entity.HasOne<Curso>()
+                      .WithMany()
+                      .HasForeignKey(pc => pc.IdCurso)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .IsRequired();
+
+                entity.HasIndex(pc => new { pc.IdProfesor, pc.IdCurso }).IsUnique();
+
+                entity.Property(pc => pc.Cargo).IsRequired();
             });
         }
     }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Data;
 using Domain.Model;
 using DTOs;
@@ -13,7 +11,7 @@ namespace Application.Services
     {
         private readonly CursoRepository _repository;
 
-        public CursoService(CursoRepository cursoRepository)
+        public CursoService(CursoRepository cursoRepository, InscripcionRepository inscRepository)
         {
             _repository = cursoRepository;
         }
