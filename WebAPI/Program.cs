@@ -58,7 +58,8 @@ namespace WebAPI
             builder.Services.AddScoped<ComisionService>();
             builder.Services.AddScoped<MateriaRepository>();
             builder.Services.AddScoped<MateriaService>();
-            
+            builder.Services.AddScoped<InscripcionRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

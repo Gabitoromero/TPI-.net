@@ -39,7 +39,8 @@ namespace Application.Services
             {
                 Token = token,
                 ExpiresAt = expiresAt,
-                Username = usuario.NombreUsuario
+                Username = usuario.NombreUsuario,
+                Tipo = usuario.Tipo
             };
 
         }
@@ -59,6 +60,7 @@ namespace Application.Services
                 new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                 new Claim(ClaimTypes.Name, usuario.NombreUsuario),
                 new Claim(ClaimTypes.Email, usuario.Email),
+                new Claim(ClaimTypes.Email, usuario.Tipo),
                 new Claim("jti", Guid.NewGuid().ToString())
             };
 

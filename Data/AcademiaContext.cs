@@ -16,6 +16,10 @@ namespace Data
         public DbSet<Comision> Comisiones { get; set; }
         public DbSet<Materia> Materias { get; set; }
 
+        public DbSet<Profesor_Curso> Profesor_Cursos { get; set; }
+
+        public DbSet<Alumno_Curso> Alumno_Cursos { get; set; }
+
         public AcademiaContext()
         {
             //this.Database.EnsureCreated();
@@ -68,7 +72,7 @@ namespace Data
                 entity.HasOne<Especialidad>()
                       .WithMany()
                       .HasForeignKey(e => e.IdEspecialidad)
-                      .OnDelete(DeleteBehavior.Restrict)//validar con luta
+                      .OnDelete(DeleteBehavior.Restrict)
                       .IsRequired();
 
                 entity.HasData(new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1 },
@@ -121,7 +125,7 @@ namespace Data
                     entity.HasOne<Plan>()
                           .WithMany()
                           .HasForeignKey(c => c.Id_plan)
-                          .OnDelete(DeleteBehavior.Restrict) //validar con luta
+                          .OnDelete(DeleteBehavior.Restrict)
                           .IsRequired();
 
                     entity.HasData(
@@ -144,7 +148,7 @@ namespace Data
                 entity.HasOne<Plan>()
                       .WithMany()
                       .HasForeignKey(m => m.Id_plan)
-                      .OnDelete(DeleteBehavior.Restrict) //validar con luta
+                      .OnDelete(DeleteBehavior.Restrict)
                       .IsRequired();
 
                 entity.HasData(
@@ -167,12 +171,12 @@ namespace Data
                 entity.HasOne<Materia>()
                 .WithMany()
                 .HasForeignKey(c => c.Id_materia)
-                .OnDelete(DeleteBehavior.Restrict) //validar con luta
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
                 entity.HasOne<Comision>()
                 .WithMany()
                 .HasForeignKey(c => c.Id_comision)
-                .OnDelete(DeleteBehavior.Restrict) //validar con luta
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
                 entity.HasData(
                     new Curso { Id_curso = 1, Anio_calendario = 2023, Cupo = 30, Id_comision = 1, Id_materia = 1 },
@@ -180,6 +184,51 @@ namespace Data
                     new Curso { Id_curso = 3, Anio_calendario = 2023, Cupo = 20, Id_comision = 3, Id_materia = 3 }
                     );
 
+            });
+
+            modelBuilder.Entity<Profesor_Curso>(entity =>
+            {
+                entity.HasKey(pc => pc.IdDictado );
+
+                entity.Property(e => e.IdDictado).ValueGeneratedOnAdd();
+
+                entity.HasOne<Usuario>()
+                      .WithMany()
+                      .HasForeignKey(pc => pc.IdProfesor)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .IsRequired();
+
+                entity.HasOne<Curso>()
+                      .WithMany()
+                      .HasForeignKey(pc => pc.IdCurso)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .IsRequired();
+
+                entity.HasIndex(pc => new { pc.IdProfesor, pc.IdCurso }).IsUnique();
+
+                entity.Property(pc => pc.Cargo).IsRequired();
+            });
+
+            modelBuilder.Entity<Alumno_Curso>(entity =>
+            {
+                entity.HasKey(ac => ac.IdInscripcion);
+                entity.Property(e => e.IdInscripcion).ValueGeneratedOnAdd();
+
+                entity.HasOne<Usuario>()
+                      .WithMany()
+                      .HasForeignKey(ac => ac.IdAlumno)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .IsRequired();
+
+                entity.HasOne<Curso>()
+                      .WithMany()
+                      .HasForeignKey(ac => ac.IdCurso)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .IsRequired();
+
+                entity.HasIndex(ac => new { ac.IdAlumno, ac.IdCurso }).IsUnique();
+                entity.Property(ac => ac.Condicion).IsRequired();
+                entity.Property(ac => ac.Nota).IsRequired(false);
             });
         }
     }

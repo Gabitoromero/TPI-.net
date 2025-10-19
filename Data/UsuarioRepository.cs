@@ -19,6 +19,10 @@ namespace Data
 
         public List<Usuario> GetAll() => _context.Usuarios.ToList();
 
+        public List<Usuario> GetAllProfesores() => _context.Usuarios.Where(u => u.Tipo == "profesor").ToList();
+
+        public List<Usuario> GetAllAlumnos() => _context.Usuarios.Where(u => u.Tipo == "alumno").ToList();
+
         public void Add(Usuario usuario)
         {
             try
