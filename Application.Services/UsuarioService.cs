@@ -106,8 +106,9 @@ namespace Application.Services
             }
 
             var fechaCreacion = DateTime.Now;
+            DateTime fechaNac = dto.FechaNacimiento;
             Usuario usuario = new Usuario(0, dto.Apellido, dto.Clave, dto.Email, true, dto.Nombre, dto.NombreUsuario, fechaCreacion,
-                dto.Direccion, dto.Telefono, dto.Tipo, dto.Legajo, dto.FechaNacimiento, dto.IdPlan);
+                dto.Direccion, dto.Telefono, dto.Tipo, dto.Legajo, fechaNac, dto.IdPlan);
 
             _repository.Add(usuario);
 

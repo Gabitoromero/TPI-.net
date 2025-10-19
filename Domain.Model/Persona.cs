@@ -32,7 +32,7 @@ namespace Domain.Model
         // Evitamos tipos que no existan, y aun mas importante, evitamos que generen administradores!
         private void SetTipo(string tipo)
         {
-            if (tipo == "profesor" || tipo == "alumno")
+            if (tipo == "profesor" || tipo == "alumno" || tipo == "admin")
                 Tipo = tipo;
             else
                 throw new ArgumentException("Tipo inexistente");

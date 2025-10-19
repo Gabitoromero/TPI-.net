@@ -9,15 +9,11 @@ namespace Data
     {
         public DbSet<Especialidad> Especialidades { get; set; }
         public DbSet<Plan> Planes { get; set; }
-
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Curso> Cursos { get; set; }
-
         public DbSet<Comision> Comisiones { get; set; }
         public DbSet<Materia> Materias { get; set; }
-
         public DbSet<Profesor_Curso> Profesor_Cursos { get; set; }
-
         public DbSet<Alumno_Curso> Alumno_Cursos { get; set; }
 
         public AcademiaContext()
@@ -109,9 +105,12 @@ namespace Data
                 entity.HasIndex(e => e.NombreUsuario).IsUnique();
                 entity.HasIndex(e => e.Email).IsUnique();
 
-                /* entity.HasData(
-                     new Usuario(1, "Romero", "111111", "gt@email.com", true, "Gabriel Tobías", "gtr", DateTime.Now, "En algun lugar", "3413244309", "admin", 52699, DateTime.Today, 1),
-             });*/
+                entity.HasData(
+                    new Usuario(1, "Romero", "123456", "gt@email.com", true, "Gabriel Tobías", "gtr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3415605249", "admin", 52937, DateTime.Today, 1),
+                    new Usuario(2, "Lurati", "123456", "i@email.com", true, "Ignacio", "luta", DateTime.Now, "Córdoba 5328", "3415581214", "admin", 52401, DateTime.Today, 1),
+                    new Usuario(3, "Romero", "123456", "jm@email.com", true, "Juan Manuel", "jmr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3411234567", "alumno", 51998, DateTime.Today, 2),
+                    new Usuario(4, "Romero", "123456", "mf@email.com", true, "Maria Florencia", "mfr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3411234557", "alumno", 51008, DateTime.Today, 3)
+                    );
             });
 
 

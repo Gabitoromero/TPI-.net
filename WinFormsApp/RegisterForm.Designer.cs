@@ -41,12 +41,22 @@
             label6 = new Label();
             buttonBack = new Button();
             buttonRegister = new Button();
+            label7 = new Label();
+            textBoxDireccion = new TextBox();
+            labelTelefono = new Label();
+            maskedTextBoxTelefono = new MaskedTextBox();
+            labelFechaNac = new Label();
+            dateTimePickerFechaNacimiento = new DateTimePicker();
+            labelPlan = new Label();
+            comboBoxPlan = new ComboBox();
+            comboBoxTipoUsuario = new ComboBox();
+            label8 = new Label();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(98, 128);
+            label1.Location = new Point(80, 128);
             label1.Name = "label1";
             label1.Size = new Size(51, 15);
             label1.TabIndex = 0;
@@ -55,7 +65,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(49, 168);
+            label2.Location = new Point(21, 165);
             label2.Name = "label2";
             label2.Size = new Size(110, 15);
             label2.TabIndex = 1;
@@ -64,7 +74,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(98, 88);
+            label3.Location = new Point(80, 88);
             label3.Name = "label3";
             label3.Size = new Size(51, 15);
             label3.TabIndex = 2;
@@ -73,7 +83,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(113, 209);
+            label4.Location = new Point(95, 206);
             label4.Name = "label4";
             label4.Size = new Size(36, 15);
             label4.TabIndex = 3;
@@ -82,7 +92,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(82, 252);
+            label5.Location = new Point(64, 252);
             label5.Name = "label5";
             label5.Size = new Size(67, 15);
             label5.TabIndex = 4;
@@ -90,35 +100,35 @@
             // 
             // textBoxNombre
             // 
-            textBoxNombre.Location = new Point(165, 85);
+            textBoxNombre.Location = new Point(151, 85);
             textBoxNombre.Name = "textBoxNombre";
             textBoxNombre.Size = new Size(183, 23);
             textBoxNombre.TabIndex = 5;
             // 
             // textBoxApellido
             // 
-            textBoxApellido.Location = new Point(165, 125);
+            textBoxApellido.Location = new Point(151, 125);
             textBoxApellido.Name = "textBoxApellido";
             textBoxApellido.Size = new Size(183, 23);
             textBoxApellido.TabIndex = 6;
             // 
             // textBoxUsername
             // 
-            textBoxUsername.Location = new Point(165, 165);
+            textBoxUsername.Location = new Point(151, 162);
             textBoxUsername.Name = "textBoxUsername";
             textBoxUsername.Size = new Size(183, 23);
             textBoxUsername.TabIndex = 7;
             // 
             // textBoxEmail
             // 
-            textBoxEmail.Location = new Point(165, 206);
+            textBoxEmail.Location = new Point(151, 203);
             textBoxEmail.Name = "textBoxEmail";
             textBoxEmail.Size = new Size(183, 23);
             textBoxEmail.TabIndex = 8;
             // 
             // textBoxClave
             // 
-            textBoxClave.Location = new Point(165, 249);
+            textBoxClave.Location = new Point(151, 249);
             textBoxClave.Name = "textBoxClave";
             textBoxClave.PasswordChar = '*';
             textBoxClave.Size = new Size(183, 23);
@@ -128,7 +138,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 16F);
-            label6.Location = new Point(49, 27);
+            label6.Location = new Point(272, 27);
             label6.Name = "label6";
             label6.Size = new Size(177, 30);
             label6.TabIndex = 10;
@@ -136,29 +146,124 @@
             // 
             // buttonBack
             // 
-            buttonBack.Location = new Point(98, 298);
+            buttonBack.BackColor = Color.IndianRed;
+            buttonBack.Location = new Point(167, 357);
             buttonBack.Name = "buttonBack";
-            buttonBack.Size = new Size(116, 32);
+            buttonBack.Size = new Size(167, 32);
             buttonBack.TabIndex = 11;
             buttonBack.Text = "Volver";
-            buttonBack.UseVisualStyleBackColor = true;
+            buttonBack.UseVisualStyleBackColor = false;
             buttonBack.Click += buttonBack_Click;
             // 
             // buttonRegister
             // 
-            buttonRegister.Location = new Point(232, 298);
+            buttonRegister.BackColor = Color.SteelBlue;
+            buttonRegister.Location = new Point(359, 357);
             buttonRegister.Name = "buttonRegister";
-            buttonRegister.Size = new Size(116, 32);
+            buttonRegister.Size = new Size(167, 32);
             buttonRegister.TabIndex = 12;
             buttonRegister.Text = "Registrar";
-            buttonRegister.UseVisualStyleBackColor = true;
+            buttonRegister.UseVisualStyleBackColor = false;
             buttonRegister.Click += buttonRegister_Click;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(418, 165);
+            label7.Name = "label7";
+            label7.Size = new Size(57, 15);
+            label7.TabIndex = 13;
+            label7.Text = "Dirección";
+            // 
+            // textBoxDireccion
+            // 
+            textBoxDireccion.Location = new Point(504, 162);
+            textBoxDireccion.Name = "textBoxDireccion";
+            textBoxDireccion.Size = new Size(183, 23);
+            textBoxDireccion.TabIndex = 14;
+            // 
+            // labelTelefono
+            // 
+            labelTelefono.AutoSize = true;
+            labelTelefono.Location = new Point(422, 206);
+            labelTelefono.Name = "labelTelefono";
+            labelTelefono.Size = new Size(53, 15);
+            labelTelefono.TabIndex = 15;
+            labelTelefono.Text = "Teléfono";
+            // 
+            // maskedTextBoxTelefono
+            // 
+            maskedTextBoxTelefono.Location = new Point(504, 203);
+            maskedTextBoxTelefono.Mask = "0000000000";
+            maskedTextBoxTelefono.Name = "maskedTextBoxTelefono";
+            maskedTextBoxTelefono.Size = new Size(183, 23);
+            maskedTextBoxTelefono.TabIndex = 16;
+            // 
+            // labelFechaNac
+            // 
+            labelFechaNac.AutoSize = true;
+            labelFechaNac.Location = new Point(356, 250);
+            labelFechaNac.Name = "labelFechaNac";
+            labelFechaNac.Size = new Size(119, 15);
+            labelFechaNac.TabIndex = 17;
+            labelFechaNac.Text = "Fecha de Nacimiento";
+            // 
+            // dateTimePickerFechaNacimiento
+            // 
+            dateTimePickerFechaNacimiento.Format = DateTimePickerFormat.Short;
+            dateTimePickerFechaNacimiento.Location = new Point(504, 244);
+            dateTimePickerFechaNacimiento.Name = "dateTimePickerFechaNacimiento";
+            dateTimePickerFechaNacimiento.Size = new Size(183, 23);
+            dateTimePickerFechaNacimiento.TabIndex = 18;
+            // 
+            // labelPlan
+            // 
+            labelPlan.AutoSize = true;
+            labelPlan.Location = new Point(445, 88);
+            labelPlan.Name = "labelPlan";
+            labelPlan.Size = new Size(30, 15);
+            labelPlan.TabIndex = 19;
+            labelPlan.Text = "Plan";
+            // 
+            // comboBoxPlan
+            // 
+            comboBoxPlan.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxPlan.Location = new Point(504, 85);
+            comboBoxPlan.Name = "comboBoxPlan";
+            comboBoxPlan.Size = new Size(183, 23);
+            comboBoxPlan.TabIndex = 20;
+            // 
+            // comboBoxTipoUsuario
+            // 
+            comboBoxTipoUsuario.FormattingEnabled = true;
+            comboBoxTipoUsuario.Location = new Point(504, 125);
+            comboBoxTipoUsuario.Name = "comboBoxTipoUsuario";
+            comboBoxTipoUsuario.Size = new Size(183, 23);
+            comboBoxTipoUsuario.TabIndex = 21;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(444, 133);
+            label8.Name = "label8";
+            label8.Size = new Size(31, 15);
+            label8.TabIndex = 22;
+            label8.Text = "Tipo";
             // 
             // RegisterForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(408, 350);
+            ClientSize = new Size(710, 415);
+            Controls.Add(label8);
+            Controls.Add(comboBoxTipoUsuario);
+            Controls.Add(comboBoxPlan);
+            Controls.Add(labelPlan);
+            Controls.Add(dateTimePickerFechaNacimiento);
+            Controls.Add(labelFechaNac);
+            Controls.Add(labelTelefono);
+            Controls.Add(textBoxDireccion);
+            Controls.Add(label7);
             Controls.Add(buttonRegister);
             Controls.Add(buttonBack);
             Controls.Add(label6);
@@ -172,6 +277,7 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            Controls.Add(maskedTextBoxTelefono);
             Name = "RegisterForm";
             Text = "RegisterForm";
             ResumeLayout(false);
@@ -193,5 +299,15 @@
         private Label label6;
         private Button buttonBack;
         private Button buttonRegister;
+        private Label label7;
+        private TextBox textBoxDireccion;
+        private Label labelTelefono;
+        private MaskedTextBox maskedTextBoxTelefono;
+        private Label labelFechaNac;
+        private DateTimePicker dateTimePickerFechaNacimiento;
+        private Label labelPlan;
+        private ComboBox comboBoxPlan;
+        private ComboBox comboBoxTipoUsuario;
+        private Label label8;
     }
 }
