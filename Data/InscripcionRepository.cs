@@ -46,5 +46,42 @@ namespace Data
                 _context.SaveChanges();
             }
         }
+
+        // Inscripciones de alumnos a cursos
+
+        public List<Alumno_Curso> GetAllAlumnoInsc(int idAlumno) => _context.Alumno_Cursos.Where(i => i.IdAlumno == idAlumno).ToList();
+
+        public void AddAlumnoInsc(Alumno_Curso alumno_Curso)
+        {
+            _context.Alumno_Cursos.Add(alumno_Curso);
+            _context.SaveChanges();
+        }
+
+        public void DeleteAlumnoInsc(int idInscripcion)
+        {
+            var existing = _context.Alumno_Cursos.FirstOrDefault(ac => ac.IdInscripcion == idInscripcion);
+            if (existing != null)
+            {
+                _context.Alumno_Cursos.Remove(existing);
+                _context.SaveChanges();
+            }
+            else
+            {
+                throw new ArgumentException("La inscripción no existe");
+            }
+        }
+
+        public void UpdateAlumnoInsc(Alumno_Curso alumno_Curso)
+        {
+            var existing = _context.Alumno_Cursos.FirstOrDefault(ac => ac.IdInscripcion == alumno_Curso.IdInscripcion);
+            if (existing != null)
+            {
+                existing.IdAlumno = alumno_Curso.IdAlumno;
+                existing.IdCurso = alumno_Curso.IdCurso;
+                existing.Condicion = alumno_Curso.Condicion;
+                existing.Nota = alumno_Curso.Nota;
+                _context.SaveChanges();
+            }
+        }
     }
 }

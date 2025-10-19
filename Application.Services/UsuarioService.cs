@@ -49,10 +49,46 @@ namespace Application.Services
 
             return dto;
         }
+
+        public ShowUsuarioDTO GetByUsername(string nombreUsuario)
+        {
+            var user = _repository.GetByUsername(nombreUsuario);
+
+            ShowUsuarioDTO dto = new ShowUsuarioDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+                NombreUsuario = user.NombreUsuario
+            };
+
+            return dto;
+        }
         public List<ShowUsuarioDTO> GetAll()
         {
             List<Usuario> usuarios = _repository.GetAll();
 
+            return usuarios.Select(usuario => new ShowUsuarioDTO
+            {
+                Id = usuario.Id,
+                Email = usuario.Email,
+                NombreUsuario = usuario.NombreUsuario
+            }).ToList();
+        }
+
+        public List<ShowUsuarioDTO> GetAllProfesores()
+        {
+            List<Usuario> usuarios = _repository.GetAllProfesores();
+            return usuarios.Select(usuario => new ShowUsuarioDTO
+            {
+                Id = usuario.Id,
+                Email = usuario.Email,
+                NombreUsuario = usuario.NombreUsuario
+            }).ToList();
+        }
+
+        public List<ShowUsuarioDTO> GetAllAlumnos()
+        {
+            List<Usuario> usuarios = _repository.GetAllAlumnos();
             return usuarios.Select(usuario => new ShowUsuarioDTO
             {
                 Id = usuario.Id,
@@ -171,7 +207,7 @@ namespace Application.Services
             {
                 throw new ArgumentException("Curso inexistente");
             }
-            else if (profesor == null)
+            else if (profesor == null || profesor.Tipo != "profesor")
             {
                 throw new ArgumentException("Profesor inexistente");
             }
@@ -199,7 +235,7 @@ namespace Application.Services
             {
                 throw new ArgumentException("Curso inexistente");
             }
-            else if (profesor == null)
+            else if (profesor == null || profesor.Tipo != "profesor")
             {
                 throw new ArgumentException("Profesor inexistente");
             }
@@ -211,6 +247,85 @@ namespace Application.Services
                 Cargo = dto.Cargo
             };
             _inscripcionRepository.UpdateProfesorInsc(profesorInsc);
+        }
+
+        // Inscripciones a cursos como alumno
+
+        public List<ShowAlumno_CursoDTO> GetAllAlumnoInsc(int idAlumno)
+        {
+            var inscripciones = _inscripcionRepository.GetAllAlumnoInsc(idAlumno);
+            return inscripciones.Select(insc => new ShowAlumno_CursoDTO
+            {
+                IdInscripcion = insc.IdInscripcion,
+                Curso = _cursoService.Get(insc.IdCurso),
+                Alumno = this.GetReducedUser(insc.IdAlumno),
+                Condicion = insc.Condicion,
+                Nota = insc.Nota
+            }).ToList();
+        }
+
+        public void AddAlumnoInsc(Alumno_CursoDTO dto)
+        {
+            var curso = _cursoService.Get(dto.IdCurso);
+            var alumno = this.Get(dto.IdAlumno);
+            if (curso == null)
+            {
+                throw new ArgumentException("Curso inexistente");
+            }
+            else if (alumno == null)
+            {
+                throw new ArgumentException("Alumno inexistente");
+            }
+            else if (alumno.Tipo != "alumno")
+            {
+                throw new ArgumentException("El usuario no es un alumno");
+            }
+            else if (!alumno.Habilitado)
+            {
+                throw new ArgumentException("El alumno no está habilitado");
+            }
+
+            var alumnoInsc = new Alumno_Curso
+            {
+                IdInscripcion = 0,
+                IdAlumno = dto.IdAlumno,
+                IdCurso = dto.IdCurso,
+                Condicion = dto.Condicion,
+                Nota = dto.Nota
+            };
+            _inscripcionRepository.AddAlumnoInsc(alumnoInsc);
+        }
+
+        public void DeleteAlumnoInsc(int idInscripcion)
+        {
+            _inscripcionRepository.DeleteAlumnoInsc(idInscripcion);
+        }
+
+        public void UpdateAlumnoInsc(Alumno_CursoDTO dto)
+        {
+            var curso = _cursoService.Get(dto.IdCurso);
+            var alumno = this.Get(dto.IdAlumno);
+            if (curso == null)
+            {
+                throw new ArgumentException("Curso inexistente");
+            }
+            else if (alumno == null)
+            {
+                throw new ArgumentException("Alumno inexistente");
+            }
+            else if (alumno.Tipo != "alumno")
+            {
+                throw new ArgumentException("El usuario no es un alumno");
+            }
+            var alumnoInsc = new Alumno_Curso
+            {
+                IdInscripcion = dto.IdInscripcion,
+                IdAlumno = dto.IdAlumno,
+                IdCurso = dto.IdCurso,
+                Condicion = dto.Condicion,
+                Nota = dto.Nota
+            };
+            _inscripcionRepository.UpdateAlumnoInsc(alumnoInsc);
         }
     }
 }
