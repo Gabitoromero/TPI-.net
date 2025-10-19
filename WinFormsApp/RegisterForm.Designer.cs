@@ -235,6 +235,7 @@
             // 
             // comboBoxTipoUsuario
             // 
+            comboBoxTipoUsuario.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxTipoUsuario.FormattingEnabled = true;
             comboBoxTipoUsuario.Location = new Point(504, 125);
             comboBoxTipoUsuario.Name = "comboBoxTipoUsuario";
