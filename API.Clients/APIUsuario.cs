@@ -17,6 +17,85 @@ namespace API.Clients
         {
             client = CreateHttpClientAsync();
         }
+
+        public static async Task<ShowUsuarioDTO?> GetByUsernameAsync(string username) //para buscar usuario una vez iniciado sesion
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"usuarios/username/{username}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<ShowUsuarioDTO>();
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to retrieve user by username. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while retrieving user by username. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout retrieving user by username. Error: {ex.Message}");
+            }
+        }
+
+        public static async Task<List<ShowProfesor_CursoDTO>> GetProfesorCursosAsync(int idProfesor)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"usuarios/{idProfesor}/profesor_cursos");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<ShowProfesor_CursoDTO>>();
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to retrieve profesor cursos. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while retrieving profesor cursos. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout retrieving profesor cursos. Error: {ex.Message}");
+            }
+        }
+
+        public static async Task<List<ShowAlumno_CursoDTO>> GetAlumnoCursosAsync(int idAlumno)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"usuarios/{idAlumno}/alumno_cursos");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<ShowAlumno_CursoDTO>>();
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to retrieve alumno cursos. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while retrieving alumno cursos. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout retrieving alumno cursos. Error: {ex.Message}");
+            }
+        }
         public static async Task<List<ShowUsuarioDTO>> GetProfesoresAsync()
         {
             try
@@ -41,7 +120,6 @@ namespace API.Clients
                 throw new Exception($"Timeout retrieving profesores. Error: ${ex.Message}");
             }
         }
-
         public static async Task<List<ShowUsuarioDTO>> GetAlumnosAsync()
         {
             try
@@ -76,7 +154,8 @@ namespace API.Clients
                 {
                     var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
                     LoginResponse = loginResponse;
-                    return true; // Login exitoso
+                    CurrentUserTipo = loginResponse?.Tipo;
+                    return true; 
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -216,6 +295,13 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout posting user. Eror:{err}");
             }
+        }
+
+        public static void Logout()
+        {
+            LoginResponse = null;
+            CurrentUserId = null;
+            CurrentUserTipo = null;
         }
     }
 }

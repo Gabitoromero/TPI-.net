@@ -91,11 +91,11 @@
             // btnCerrar
             // 
             btnCerrar.BackColor = Color.IndianRed;
-            btnCerrar.Location = new Point(191, 245);
+            btnCerrar.Location = new Point(172, 243);
             btnCerrar.Name = "btnCerrar";
-            btnCerrar.Size = new Size(67, 22);
+            btnCerrar.Size = new Size(110, 22);
             btnCerrar.TabIndex = 5;
-            btnCerrar.Text = "Cerrar";
+            btnCerrar.Text = "Cerrar sesión";
             btnCerrar.UseVisualStyleBackColor = false;
             btnCerrar.Click += btnCerrar_Click;
             // 

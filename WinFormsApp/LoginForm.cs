@@ -17,6 +17,17 @@ namespace WinFormsApp
         public LoginForm()
         {
             InitializeComponent();
+            this.VisibleChanged += LoginForm_VisibleChanged;
+        }
+        private void LoginForm_VisibleChanged(object? sender, EventArgs e)
+        {
+            if (this.Visible)
+            {
+                // Clear any previously entered credentials when the form becomes visible again
+                textBoxUsername.Text = string.Empty;
+                textBoxClave.Text = string.Empty;
+                textBoxUsername.Focus();
+            }
         }
 
         private async void buttonLogin_Click(object sender, EventArgs e)
@@ -30,9 +41,31 @@ namespace WinFormsApp
 
                 if (loginSuccess)
                 {
-                    var menuForm = new MenuForm();
-                    menuForm.Show();
+                    // After successful login, fetch minimal user info to obtain Id and Tipo
+                    var showUser = await APIUsuario.GetByUsernameAsync(username);
+                    if (showUser == null)
+                    {
+                        MessageBox.Show("No se encontró información del usuario después del login.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Set current user info in API client base
+                    APIClientBase.CurrentUserId = showUser.Id;
+
+                    // tipo comes from the login response stored in APIClientBase.LoginResponse
+                    string? tipo = APIClientBase.CurrentUserTipo;
+
+                    // Open MenuForm passing id and tipo
+                    var menuForm = new MenuForm(APIClientBase.CurrentUserId, tipo);
+                    // Show the menu form and hide the login form; when menu closes, show login again
                     this.Hide();
+                    menuForm.FormClosed += (s, args) =>
+                    {
+                        // Ensure logout and show login again
+                        APIUsuario.Logout();
+                        this.Show();
+                    };
+                    menuForm.Show();
 
                 }
                 else

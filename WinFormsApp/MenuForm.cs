@@ -1,4 +1,5 @@
-﻿using System;
+﻿using API.Clients;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,18 +13,32 @@ namespace WinFormsApp
 {
     public partial class MenuForm : Form
     {
-        public MenuForm()
+        private readonly string? tipoUsuario;
+        private readonly int? currentUserId;
+        private MisMaterias misMateriasControl;
+
+        public MenuForm(int? userId, string? tipo)
         {
             InitializeComponent();
+            currentUserId = userId;
+            tipoUsuario = tipo;
         }
 
         private void Menu_Load(object sender, EventArgs e)
         {
-
+            
         }
-        private void btnCerrar_Click(object sender, EventArgs e)
+        private async void btnCerrar_Click(object sender, EventArgs e)
         {
-            this.Close();
+            try
+            {
+                APIUsuario.Logout();
+                this.Close();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"Error al cerrar sesión: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnModulosCRUD_Click(object sender, EventArgs e)
