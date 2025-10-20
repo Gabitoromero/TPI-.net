@@ -45,7 +45,6 @@ namespace WinFormsApp
                     Hide();
                     menuForm.FormClosed += (s, args) =>
                     {
-                        APIUsuario.Logout();
                         Show();
                     };
                     menuForm.Show();
@@ -67,13 +66,31 @@ namespace WinFormsApp
         {
             try
             {
-                var registerForm = new RegisterForm();
-                registerForm.Show();
-                this.Hide();
+                var registerForm = new RegisterForm(autoRegistro: true); // Indica que es autoregistro
+                Hide();
+                DialogResult result = registerForm.ShowDialog();
+                
+                if(result == DialogResult.OK)
+                {
+                    // Registro exitoso, abrir MenuForm
+                    var menuForm = new MenuForm();
+                    menuForm.FormClosed += (s, args) =>
+                    {
+                        Show(); // Vuelve a mostrar login al cerrar menú
+                    };
+                    menuForm.Show();
+                }
+                else
+                {
+                    // Usuario canceló el registro, volver a mostrar login
+                    Show();
+                }
+                
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al abrir el formulario de registro: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Show();
             }
         }
 

@@ -15,9 +15,12 @@ namespace WinFormsApp
 {
     public partial class RegisterForm : Form
     {
-        public RegisterForm()
+        private readonly bool isAutoRegistro; // true = desde login, false = desde admin (UsuarioList)
+
+        public RegisterForm(bool autoRegistro = true)
         {
             InitializeComponent();
+            isAutoRegistro = autoRegistro;
             this.Load += RegisterForm_Load;
         }
 
@@ -31,9 +34,22 @@ namespace WinFormsApp
                 comboBoxPlan.ValueMember = "IdPlan";
                 comboBoxPlan.SelectedIndex = -1;
 
-                string[] tiposUsuario = { "alumno", "profesor" };
-                comboBoxTipoUsuario.DataSource = tiposUsuario;
-                comboBoxTipoUsuario.SelectedIndex = -1;
+                if(isAutoRegistro) 
+                {
+                    // Si es registro por admin, permitir ambos tipos
+                    string[] tiposUsuario = { "alumno", "profesor" };
+                    comboBoxTipoUsuario.DataSource = tiposUsuario;
+                    comboBoxTipoUsuario.SelectedIndex = -1;
+                    comboBoxTipoUsuario.Enabled = true;
+                }
+                else
+                {
+                    // Si es autoregistro desde login, solo permitir registro de profesores
+                    string[] tiposUsuario = { "profesor" };
+                    comboBoxTipoUsuario.DataSource = tiposUsuario;
+                    comboBoxTipoUsuario.SelectedIndex = 0; // Seleccionar "profesor" por defecto
+                    comboBoxTipoUsuario.Enabled = false; // Deshabilitar para que no se pueda cambiar
+                }
             }
             catch
             {
@@ -77,37 +93,39 @@ namespace WinFormsApp
 
                 MessageBox.Show("Usuario registrado exitosamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                bool loginSuccess = await APIUsuario.LoginAsync(new LoginRequest { NombreUsuario = response.NombreUsuario, Clave = response.Clave });
-
-                if (loginSuccess)
+                if (isAutoRegistro)
                 {
-                    var menuForm = new MenuForm();
-                    this.Hide();
-                    menuForm.FormClosed += (s, args) =>
+                    // Autoregistro desde login: hacer login automático y abrir MenuForm
+                    bool loginSuccess = await APIUsuario.LoginAsync(new LoginRequest { NombreUsuario = response.NombreUsuario, Clave = response.Clave });
+
+                    if (loginSuccess)
                     {
-                        APIUsuario.Logout();
-                        var login = new LoginForm();
-                        login.Show();
-                        this.Close();
-                    };
-                    menuForm.Show();
+                        DialogResult = DialogResult.OK;
+                        Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al loguear automáticamente, intente de nuevo", "Error de servidor", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Error al loguear automáticamente, intente de nuevo", "Error de servidor", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    DialogResult = DialogResult.OK;
+                    Close();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al registrar usuario " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //DialogResult = DialogResult.Cancel;
             }
         }
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            var loginForm = new LoginForm();
-            loginForm.Show();
-            this.Close();
+            this.DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

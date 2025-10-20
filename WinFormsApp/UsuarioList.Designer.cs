@@ -36,6 +36,7 @@
             btnAlumnos = new Button();
             btnProfesores = new Button();
             label1 = new Label();
+            btnNuevoProfesional = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewUsuarios).BeginInit();
             SuspendLayout();
             // 
@@ -45,7 +46,7 @@
             dataGridViewUsuarios.AllowUserToDeleteRows = false;
             dataGridViewUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewUsuarios.Location = new Point(12, 49);
+            dataGridViewUsuarios.Location = new Point(13, 101);
             dataGridViewUsuarios.Name = "dataGridViewUsuarios";
             dataGridViewUsuarios.ReadOnly = true;
             dataGridViewUsuarios.Size = new Size(497, 154);
@@ -55,7 +56,7 @@
             // btnEliminar
             // 
             btnEliminar.BackColor = Color.IndianRed;
-            btnEliminar.Location = new Point(78, 214);
+            btnEliminar.Location = new Point(87, 261);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 1;
@@ -65,7 +66,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(330, 214);
+            btnModificar.Location = new Point(346, 261);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 2;
@@ -93,7 +94,7 @@
             // 
             // btnAlumnos
             // 
-            btnAlumnos.Location = new Point(363, 19);
+            btnAlumnos.Location = new Point(62, 55);
             btnAlumnos.Name = "btnAlumnos";
             btnAlumnos.Size = new Size(69, 24);
             btnAlumnos.TabIndex = 5;
@@ -103,7 +104,7 @@
             // 
             // btnProfesores
             // 
-            btnProfesores.Location = new Point(438, 19);
+            btnProfesores.Location = new Point(137, 55);
             btnProfesores.Name = "btnProfesores";
             btnProfesores.Size = new Size(71, 23);
             btnProfesores.TabIndex = 6;
@@ -114,17 +115,29 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(309, 21);
+            label1.Location = new Point(13, 60);
             label1.Name = "label1";
             label1.Size = new Size(43, 15);
             label1.TabIndex = 7;
             label1.Text = "Filtro : ";
             // 
+            // btnNuevoProfesional
+            // 
+            btnNuevoProfesional.BackColor = Color.MediumSeaGreen;
+            btnNuevoProfesional.Location = new Point(370, 17);
+            btnNuevoProfesional.Name = "btnNuevoProfesional";
+            btnNuevoProfesional.Size = new Size(140, 23);
+            btnNuevoProfesional.TabIndex = 8;
+            btnNuevoProfesional.Text = "Agregar Profesional";
+            btnNuevoProfesional.UseVisualStyleBackColor = false;
+            btnNuevoProfesional.Click += btnNuevoProfesional_Click;
+            // 
             // UsuarioList
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(522, 249);
+            ClientSize = new Size(522, 296);
+            Controls.Add(btnNuevoProfesional);
             Controls.Add(label1);
             Controls.Add(btnProfesores);
             Controls.Add(btnAlumnos);
@@ -151,5 +164,6 @@
         private Button btnAlumnos;
         private Button btnProfesores;
         private Label label1;
+        private Button btnNuevoProfesional;
     }
 }

@@ -294,9 +294,5 @@ namespace API.Clients
             }
         }
 
-        public static void Logout()
-        {
-            LoginResponse = null;
-        }
     }
 }

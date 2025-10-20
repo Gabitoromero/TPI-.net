@@ -240,5 +240,20 @@ namespace WinFormsApp
                 MessageBox.Show($"Error al buscar el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnNuevoProfesional_Click(object sender, EventArgs e)
+        {
+            var registForm = new RegisterForm(autoRegistro: false); // Indica que es registro por admin
+            Hide();
+            DialogResult result = registForm.ShowDialog();
+            
+            if (result == DialogResult.OK)
+            {
+                //MessageBox.Show("Usuario creado con éxito", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                UsuarioList_Load(sender, e); // Recargar la lista de usuarios después de agregar uno nuevo
+            }
+            
+            Show(); // Vuelve a mostrar el formulario UsuarioList
+        }
     }
 }
