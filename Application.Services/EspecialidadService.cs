@@ -1,16 +1,19 @@
 ﻿using Data;
 using Domain.Model;
 using DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services
 {
     public class EspecialidadService
     {
+        private readonly PlanRepository planRepository;
         private readonly EspecialidadRepository _repository;
 
-        public EspecialidadService(EspecialidadRepository especialidadRepository)
+        public EspecialidadService(EspecialidadRepository especialidadRepository, PlanRepository planRepository)
         {
             _repository = especialidadRepository;
+            this.planRepository = planRepository;
         }
         public EspecialidadDTO? Get(int id)
         {
@@ -42,8 +45,25 @@ namespace Application.Services
             return dto;
         }
 
-        public bool Delete(int id) { 
-            return _repository.Delete(id);
+        public bool Delete(int id) 
+        {
+            try
+            {
+                List<Plan> planes = planRepository.GetAll();
+                            bool hasPlans = planes.Any(p => p.IdEspecialidad == id);
+                            if (hasPlans) throw new InvalidOperationException("No se puede eliminar esta especialidad: tiene planes relacionados.");
+
+                            return _repository.Delete(id);
+            }
+            catch (InvalidOperationException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
+            catch (ArgumentException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
+
         }
 
         public bool Update(EspecialidadDTO dto)

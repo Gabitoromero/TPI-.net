@@ -13,10 +13,12 @@ namespace Application.Services
     public class PlanService
     {
         private readonly PlanRepository _repository;
+        private readonly MateriaRepository materiaRepository;
 
-        public PlanService(PlanRepository planRepository)
+        public PlanService(PlanRepository planRepository, MateriaRepository materiaRepository)
         {
             _repository = planRepository;
+            this.materiaRepository = materiaRepository;
         }
         public List<PlanDTO> GetAll()
         {
@@ -52,7 +54,22 @@ namespace Application.Services
 
         public bool Delete(int id)
         {
-            return  _repository.Delete(id);
+            try
+            {
+                List<Materia> materias = materiaRepository.GetAll();
+                            bool hasMaterias = materias.Any(m => m.Id_plan == id);
+                            if(hasMaterias) throw new InvalidOperationException("No se puede eliminar este plan: tiene materias relacionadas.");
+                            return  _repository.Delete(id);
+            }
+            catch (InvalidOperationException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
+            catch (ArgumentException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
+            
         }
 
         public bool Update(PlanDTO dto)

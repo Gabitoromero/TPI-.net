@@ -40,12 +40,18 @@ namespace WebAPI
             });
             app.MapDelete("/planes/{id}", (PlanService service, int id) =>
             {
-                bool planDeleted = service.Delete(id);
-                if (!planDeleted)
+                try
                 {
-                    return Results.NotFound(new { data = "Plan no encontrado" });
+                    bool planDeleted = service.Delete(id);
+                    if (!planDeleted)
+                    {
+                        return Results.NotFound(new { data = "Plan no encontrado" });
+                    }
+                    return Results.NoContent();
+                }catch(ArgumentException err)
+                {
+                    return Results.BadRequest(new { error = err.Message });
                 }
-                return Results.NoContent();
             });
             app.MapPut("/planes/", (PlanService service, PlanDTO dto) =>
             {

@@ -83,6 +83,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving plan with ID:{id}. Eror:{err}");
             }
+            catch(Exception err)
+            {
+                throw err;
+            }
         }
         public static async Task<PlanDTO> AddAsync(PlanDTO dto)
         {

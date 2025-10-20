@@ -52,12 +52,19 @@ namespace WebAPI
 
             app.MapDelete("/especialidades/{id}", (EspecialidadService service, int id) =>
             {
-                bool espDeleted = service.Delete(id);
-                if (!espDeleted)
+                try
                 {
-                    return Results.NotFound(new { data = "Especialidad no encontrada" });
+                    bool espDeleted = service.Delete(id);
+                    if (!espDeleted)
+                    {
+                        return Results.NotFound(new { data = "Especialidad no encontrada" });
+                    }
+                    return Results.NoContent();
                 }
-                return Results.NoContent();
+                catch(ArgumentException err)
+                {
+                    return Results.BadRequest(new { error = err.Message });
+                }
             });
 
             app.MapPut("/especialidades", (EspecialidadService service, EspecialidadDTO dto) =>

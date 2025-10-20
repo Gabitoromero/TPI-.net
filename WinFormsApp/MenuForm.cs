@@ -57,12 +57,12 @@ namespace WinFormsApp
         {
             try
             {
-                EspecialidadForm espForm = new EspecialidadForm();
+                EspecialidadListaForm espForm = new EspecialidadListaForm();
                 espForm.ShowDialog();
             }
             catch (Exception err)
             {
-                MessageBox.Show($"Error al modificar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al abrir especialidades: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }

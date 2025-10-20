@@ -72,7 +72,7 @@ namespace API.Clients
                 throw new Exception($"Timeout retrieving specialities. Error: ${ex.Message}");
             }
         }
-        public static async void DeleteAsync(int id)
+        public static async Task DeleteAsync(int id)
         {
             try
             {
@@ -87,6 +87,10 @@ namespace API.Clients
                     throw new Exception($"OOPS! Something went wrong deleting speciality with ID:{id}. Error: {errmen}");
                 }
             }
+            catch (InvalidOperationException err)
+            {
+                throw new ArgumentException(err.Message);
+            }
             catch (HttpRequestException err)
             {
                 throw new Exception($"OOPS! A connection error ocurred while retrieving speciality with ID:{id}. Error:{err}");
@@ -94,6 +98,10 @@ namespace API.Clients
             catch (TaskCanceledException err)
             {
                 throw new Exception($"Timeout retrieving speciality with ID:{id}. Error:{err}");
+            }
+            catch (Exception err)
+            {
+                throw err;
             }
         }
         public static async Task<EspecialidadDTO> AddAsync(NewEspecialidadDTO dto)
