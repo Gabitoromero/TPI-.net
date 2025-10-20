@@ -46,7 +46,6 @@ namespace API.Clients
                 throw new Exception($"Timeout retrieving user by username. Error: {ex.Message}");
             }
         }
-
         public static async Task<List<ShowProfesor_CursoDTO>> GetProfesorCursosAsync(int idProfesor)
         {
             try
@@ -71,7 +70,6 @@ namespace API.Clients
                 throw new Exception($"Timeout retrieving profesor cursos. Error: {ex.Message}");
             }
         }
-
         public static async Task<List<ShowAlumno_CursoDTO>> GetAlumnoCursosAsync(int idAlumno)
         {
             try
@@ -96,6 +94,7 @@ namespace API.Clients
                 throw new Exception($"Timeout retrieving alumno cursos. Error: {ex.Message}");
             }
         }
+
         public static async Task<List<ShowUsuarioDTO>> GetProfesoresAsync()
         {
             try
@@ -153,8 +152,6 @@ namespace API.Clients
                 if (response.IsSuccessStatusCode)
                 {
                     var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
-                    LoginResponse = loginResponse;
-                    CurrentUserTipo = loginResponse?.Tipo;
                     return true; 
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -300,8 +297,6 @@ namespace API.Clients
         public static void Logout()
         {
             LoginResponse = null;
-            CurrentUserId = null;
-            CurrentUserTipo = null;
         }
     }
 }

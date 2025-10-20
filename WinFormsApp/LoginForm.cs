@@ -41,29 +41,12 @@ namespace WinFormsApp
 
                 if (loginSuccess)
                 {
-                    // After successful login, fetch minimal user info to obtain Id and Tipo
-                    var showUser = await APIUsuario.GetByUsernameAsync(username);
-                    if (showUser == null)
-                    {
-                        MessageBox.Show("No se encontró información del usuario después del login.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    // Set current user info in API client base
-                    APIClientBase.CurrentUserId = showUser.Id;
-
-                    // tipo comes from the login response stored in APIClientBase.LoginResponse
-                    string? tipo = APIClientBase.CurrentUserTipo;
-
-                    // Open MenuForm passing id and tipo
-                    var menuForm = new MenuForm(APIClientBase.CurrentUserId, tipo);
-                    // Show the menu form and hide the login form; when menu closes, show login again
-                    this.Hide();
+                    var menuForm = new MenuForm();
+                    Hide();
                     menuForm.FormClosed += (s, args) =>
                     {
-                        // Ensure logout and show login again
                         APIUsuario.Logout();
-                        this.Show();
+                        Show();
                     };
                     menuForm.Show();
 

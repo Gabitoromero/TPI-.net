@@ -36,7 +36,6 @@
             btnCerrar = new Button();
             btnCursos = new Button();
             btnComisiones = new Button();
-            panelContent = new Panel();
             SuspendLayout();
             // 
             // btnEspecialidadesCRUD
@@ -120,20 +119,11 @@
             btnComisiones.UseVisualStyleBackColor = true;
             btnComisiones.Click += btnComisiones_Click;
             // 
-            // panelContent
-            // 
-            panelContent.Dock = DockStyle.Fill;
-            panelContent.Location = new Point(0, 0);
-            panelContent.Name = "panelContent";
-            panelContent.Size = new Size(613, 562);
-            panelContent.TabIndex = 8;
-            // 
             // MenuForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(613, 562);
-            Controls.Add(panelContent);
+            ClientSize = new Size(462, 291);
             Controls.Add(btnComisiones);
             Controls.Add(btnCursos);
             Controls.Add(btnCerrar);
@@ -159,6 +149,5 @@
         private Button btnCerrar;
         private Button btnCursos;
         private Button btnComisiones;
-        private Panel panelContent;
     }
 }

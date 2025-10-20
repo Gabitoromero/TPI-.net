@@ -81,21 +81,7 @@ namespace WinFormsApp
 
                 if (loginSuccess)
                 {
-                    // After successful automatic login, fetch the created user's id by username
-                    var showUser = await APIUsuario.GetByUsernameAsync(response.NombreUsuario);
-                    if (showUser == null)
-                    {
-                        MessageBox.Show("No se pudo obtener la información del usuario creado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    // Persist current user id
-                    APIClientBase.CurrentUserId = showUser.Id;
-
-                    // tipo comes from the login response stored in APIClientBase
-                    string? tipo = APIClientBase.CurrentUserTipo;
-
-                    var menuForm = new MenuForm(APIClientBase.CurrentUserId, tipo);
+                    var menuForm = new MenuForm();
                     this.Hide();
                     menuForm.FormClosed += (s, args) =>
                     {

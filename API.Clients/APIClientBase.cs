@@ -8,8 +8,6 @@ namespace API.Clients
     public abstract class APIClientBase
     {
         public static LoginResponse? LoginResponse { get; set; }
-        public static int? CurrentUserId { get; set; }
-        public static string? CurrentUserTipo { get; set; }
         protected static HttpClient CreateHttpClientAsync()
         {
             var client = new HttpClient();
