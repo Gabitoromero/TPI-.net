@@ -17,6 +17,55 @@ namespace API.Clients
         {
             client = CreateHttpClientAsync();
         }
+        public static async Task<List<ShowUsuarioDTO>> GetProfesoresAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync("usuarios/profesores/");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<ShowUsuarioDTO>>();
+                }
+                else
+                {
+                    string errorMensage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Something went wrong getting profesores. Eror: ${errorMensage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while retrieving profesores. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout retrieving profesores. Error: ${ex.Message}");
+            }
+        }
+
+        public static async Task<List<ShowUsuarioDTO>> GetAlumnosAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync("usuarios/alumnos/");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<ShowUsuarioDTO>>();
+                }
+                else
+                {
+                    string errorMensage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Something went wrong getting alumnos. Eror: ${errorMensage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while retrieving alumnos. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout retrieving alumnos. Error: ${ex.Message}");
+            }
+        }
 
         public static async Task<bool> LoginAsync(LoginRequest dto)
         {

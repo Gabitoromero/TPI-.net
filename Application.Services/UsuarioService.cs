@@ -72,6 +72,7 @@ namespace Application.Services
                 Id = usuario.Id,
                 Email = usuario.Email,
                 NombreUsuario = usuario.NombreUsuario
+                , Tipo = usuario.Tipo
             }).ToList();
         }
 
@@ -83,6 +84,7 @@ namespace Application.Services
                 Id = usuario.Id,
                 Email = usuario.Email,
                 NombreUsuario = usuario.NombreUsuario
+                , Tipo = usuario.Tipo
             }).ToList();
         }
 
@@ -94,6 +96,7 @@ namespace Application.Services
                 Id = usuario.Id,
                 Email = usuario.Email,
                 NombreUsuario = usuario.NombreUsuario
+                , Tipo = usuario.Tipo
             }).ToList();
         }
         public PostUsuarioDTO Add(FullUsuarioDTO dto)

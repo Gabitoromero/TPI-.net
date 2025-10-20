@@ -33,6 +33,9 @@
             btnModificar = new Button();
             btnBuscar = new Button();
             textBoxBuscador = new TextBox();
+            btnAlumnos = new Button();
+            btnProfesores = new Button();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridViewUsuarios).BeginInit();
             SuspendLayout();
             // 
@@ -42,17 +45,17 @@
             dataGridViewUsuarios.AllowUserToDeleteRows = false;
             dataGridViewUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewUsuarios.Location = new Point(12, 51);
+            dataGridViewUsuarios.Location = new Point(12, 49);
             dataGridViewUsuarios.Name = "dataGridViewUsuarios";
             dataGridViewUsuarios.ReadOnly = true;
-            dataGridViewUsuarios.Size = new Size(356, 152);
+            dataGridViewUsuarios.Size = new Size(497, 154);
             dataGridViewUsuarios.TabIndex = 0;
             dataGridViewUsuarios.CellContentClick += dataGridViewUsuarios_CellContentClick;
             // 
             // btnEliminar
             // 
             btnEliminar.BackColor = Color.IndianRed;
-            btnEliminar.Location = new Point(47, 209);
+            btnEliminar.Location = new Point(78, 214);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 1;
@@ -62,7 +65,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(244, 209);
+            btnModificar.Location = new Point(330, 214);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 2;
@@ -72,7 +75,7 @@
             // 
             // btnBuscar
             // 
-            btnBuscar.Location = new Point(244, 16);
+            btnBuscar.Location = new Point(210, 17);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(75, 23);
             btnBuscar.TabIndex = 3;
@@ -88,11 +91,43 @@
             textBoxBuscador.Size = new Size(192, 23);
             textBoxBuscador.TabIndex = 4;
             // 
+            // btnAlumnos
+            // 
+            btnAlumnos.Location = new Point(363, 19);
+            btnAlumnos.Name = "btnAlumnos";
+            btnAlumnos.Size = new Size(69, 24);
+            btnAlumnos.TabIndex = 5;
+            btnAlumnos.Text = "Alumnos";
+            btnAlumnos.UseVisualStyleBackColor = true;
+            btnAlumnos.Click += btnAlumnos_Click;
+            // 
+            // btnProfesores
+            // 
+            btnProfesores.Location = new Point(438, 19);
+            btnProfesores.Name = "btnProfesores";
+            btnProfesores.Size = new Size(71, 23);
+            btnProfesores.TabIndex = 6;
+            btnProfesores.Text = "Profesores";
+            btnProfesores.UseVisualStyleBackColor = true;
+            btnProfesores.Click += btnProfesores_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(309, 21);
+            label1.Name = "label1";
+            label1.Size = new Size(43, 15);
+            label1.TabIndex = 7;
+            label1.Text = "Filtro : ";
+            // 
             // UsuarioList
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(380, 244);
+            ClientSize = new Size(522, 249);
+            Controls.Add(label1);
+            Controls.Add(btnProfesores);
+            Controls.Add(btnAlumnos);
             Controls.Add(textBoxBuscador);
             Controls.Add(btnBuscar);
             Controls.Add(btnModificar);
@@ -113,5 +148,8 @@
         private Button btnModificar;
         private Button btnBuscar;
         private TextBox textBoxBuscador;
+        private Button btnAlumnos;
+        private Button btnProfesores;
+        private Label label1;
     }
 }

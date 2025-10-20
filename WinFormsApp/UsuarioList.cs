@@ -14,6 +14,7 @@ namespace WinFormsApp
 {
     public partial class UsuarioList : Form
     {
+        private string? activeFilter = null; // null = all, "alumno" or "profesor"
         public UsuarioList()
         {
             InitializeComponent();
@@ -23,13 +24,100 @@ namespace WinFormsApp
         {
             try
             {
-                List<ShowUsuarioDTO> usuarios = await APIUsuario.GetAllAsync();
-                dataGridViewUsuarios.DataSource = usuarios;
+                await ApplyFilterAsync(null); // load all and update UI
             }
             catch (Exception err)
             {
                 MessageBox.Show($"Error al cargar usuarios: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private async Task LoadAllUsersAsync()
+        {
+            List<ShowUsuarioDTO> usuarios = await APIUsuario.GetAllAsync();
+            dataGridViewUsuarios.DataSource = usuarios;
+            EnsureTipoColumnVisible();
+        }
+
+        private async Task LoadProfesoresAsync()
+        {
+            List<ShowUsuarioDTO> usuarios = await APIUsuario.GetProfesoresAsync();
+            dataGridViewUsuarios.DataSource = usuarios;
+            EnsureTipoColumnVisible();
+        }
+
+        private async Task LoadAlumnosAsync()
+        {
+            List<ShowUsuarioDTO> usuarios = await APIUsuario.GetAlumnosAsync();
+            dataGridViewUsuarios.DataSource = usuarios;
+            EnsureTipoColumnVisible();
+        }
+
+        private void EnsureTipoColumnVisible()
+        {
+            if (dataGridViewUsuarios.Columns.Contains("Tipo"))
+            {
+                dataGridViewUsuarios.Columns["Tipo"].Visible = true;
+            }
+            else
+            {
+                // If DTO has Tipo property but column not auto-generated yet, force refresh
+                dataGridViewUsuarios.Refresh();
+            }
+        }
+
+        private void UpdateFilterButtonsAppearance()
+        {
+            // Reset to default
+            btnAlumnos.UseVisualStyleBackColor = false;
+            btnProfesores.UseVisualStyleBackColor = false;
+
+            if (activeFilter == "alumno")
+            {
+                btnAlumnos.BackColor = Color.DimGray;
+                btnAlumnos.ForeColor = Color.White;
+                btnProfesores.BackColor = SystemColors.Control;
+                btnProfesores.ForeColor = SystemColors.ControlText;
+            }
+            else if (activeFilter == "profesor")
+            {
+                btnProfesores.BackColor = Color.DimGray;
+                btnProfesores.ForeColor = Color.White;
+                btnAlumnos.BackColor = SystemColors.Control;
+                btnAlumnos.ForeColor = SystemColors.ControlText;
+            }
+            else
+            {
+                btnAlumnos.BackColor = SystemColors.Control;
+                btnAlumnos.ForeColor = SystemColors.ControlText;
+                btnProfesores.BackColor = SystemColors.Control;
+                btnProfesores.ForeColor = SystemColors.ControlText;
+            }
+        }
+
+        private async Task ApplyFilterAsync(string? tipo)
+        {
+            // Toggle behavior: if tipo equals activeFilter, clear filter (show all)
+            if (tipo != null && activeFilter == tipo)
+            {
+                tipo = null;
+            }
+
+            if (tipo == null)
+            {
+                await LoadAllUsersAsync();
+            }
+            else if (tipo == "alumno")
+            {
+                await LoadAlumnosAsync();
+            }
+            else if (tipo == "profesor")
+            {
+                await LoadProfesoresAsync();
+            }
+
+            activeFilter = tipo;
+            UpdateFilterButtonsAppearance();
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -44,6 +132,30 @@ namespace WinFormsApp
             catch (Exception err)
             {
                 MessageBox.Show($"Error al modificar usuario: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void btnAlumnos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                await ApplyFilterAsync("alumno");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar alumnos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void btnProfesores_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                await ApplyFilterAsync("profesor");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar profesores: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
