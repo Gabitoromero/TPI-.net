@@ -10,6 +10,6 @@ namespace DTOs
 
         public int IdProfesor { get; set; }
 
-        public int Cargo { get; set; }
+        public string Cargo { get; set; }
     }
 }

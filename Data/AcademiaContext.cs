@@ -52,9 +52,8 @@ namespace Data
 
                 entity.HasData(
                     new { Id = 1, Descripcion = "Chef" },
-                    new { Id = 2, Descripcion = "Matematico" },
-                    new { Id = 3, Descripcion = "Programador" },
-                    new { Id = 4, Descripcion = "Diseñador" }
+                    new { Id = 2, Descripcion = "Diseñador de interiores" },
+                    new { Id = 3, Descripcion = "Ingeniería en Sistemas" }
                     );
 
             });
@@ -72,8 +71,8 @@ namespace Data
                       .IsRequired();
 
                 entity.HasData(new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1 },
-                                new { IdPlan = 2, Descripcion = "Plan Premium", IdEspecialidad = 2 },
-                                new { IdPlan = 3, Descripcion = "Plan Familiar", IdEspecialidad = 3 }
+                                new { IdPlan = 2, Descripcion = "Plan Familiar", IdEspecialidad = 2 },
+                                new { IdPlan = 3, Descripcion = "Plan Premium", IdEspecialidad = 3 }
                               );
             });
 
@@ -106,10 +105,19 @@ namespace Data
                 entity.HasIndex(e => e.Email).IsUnique();
 
                 entity.HasData(
-                    new Usuario(1, "Romero", "123456", "gt@email.com", true, "Gabriel Tobías", "gtr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3415605249", "admin", 52937, DateTime.Today, 1),
-                    new Usuario(2, "Lurati", "123456", "i@email.com", true, "Ignacio", "luta", DateTime.Now, "Córdoba 5328", "3415581214", "admin", 52401, DateTime.Today, 1),
+                    //ADMINISTRADORES
+                    new Usuario(1, "Romero", "123456", "gt@email.com", true, "Gabriel Tobías", "gtr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3415605249", "admin", 52937, DateTime.Today, 3),
+                    new Usuario(2, "Lurati", "123456", "i@email.com", true, "Ignacio", "luta", DateTime.Now, "Córdoba 5328", "3415581214", "admin", 52401, DateTime.Today, 3),
+                    //ALUMNOS
                     new Usuario(3, "Romero", "123456", "jm@email.com", true, "Juan Manuel", "jmr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3411234567", "alumno", 51998, DateTime.Today, 2),
-                    new Usuario(4, "Romero", "123456", "mf@email.com", true, "Maria Florencia", "mfr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3411234557", "alumno", 51008, DateTime.Today, 3)
+                    new Usuario(4, "Romero", "123456", "mf@email.com", true, "Maria Florencia", "mfr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3411234557", "alumno", 51008, DateTime.Today, 3),
+                    new Usuario(5, "Gómez", "123456", "ana.gomez@email.com", true, "Ana Lucía", "anag", DateTime.Now.AddMonths(-5), "Av. Libertad 4500", "3412233445", "alumno", 60105, new DateTime(1985, 3, 10), 1),
+                    new Usuario(6, "Pérez", "123456", "carlos.p@email.com", true, "Carlos Javier", "carlosj", DateTime.Now.AddMonths(-1), "Las Heras 120", "3413344556", "alumno", 50106, new DateTime(2000, 7, 20), 2),
+                    new Usuario(7, "López", "123456", "sofia.l@email.com", true, "Sofía Elena", "sofiel", DateTime.Now.AddMonths(-8), "Mendoza 2500", "3414455667", "alumno", 50107, new DateTime(2001, 1, 15), 3),
+                    //PROFESORES
+                    new Usuario(8, "Díaz", "123456", "martin.d@email.com", true, "Martín Alejandro", "martind", DateTime.Now.AddMonths(-12), "San Martín 150", "3415566778", "profesor", 60108, new DateTime(1978, 11, 1), 1),
+                    new Usuario(9, "Sánchez", "123456", "luis.s@email.com", true, "Luis Alberto", "luisal", DateTime.Now.AddMonths(-3), "9 de Julio 800", "3416677889", "profesor", 50109, new DateTime(1999, 9, 25), 2),
+                    new Usuario(10, "Rodríguez", "123456", "eva.r@email.com", true, "Eva María", "evar", DateTime.Now.AddMonths(-6), "Córdoba 900", "3417788990", "profesor", 60110, new DateTime(1982, 4, 30), 3)
                     );
             });
 
@@ -132,7 +140,8 @@ namespace Data
                         new { Id_comision = 2, Desc_comision = "Comision B", Anio_especialidad = 2, Id_plan = 1 },
                         new { Id_comision = 3, Desc_comision = "Comision C", Anio_especialidad = 1, Id_plan = 2 },
                         new { Id_comision = 4, Desc_comision = "Comision D", Anio_especialidad = 3, Id_plan = 2 },
-                        new { Id_comision = 5, Desc_comision = "Comision E", Anio_especialidad = 2, Id_plan = 3 }
+                        new { Id_comision = 5, Desc_comision = "Comision E", Anio_especialidad = 2, Id_plan = 3 },
+                        new { Id_comision = 6, Desc_comision = "Comision F", Anio_especialidad = 1, Id_plan = 3 }
                         );
                 });
 
@@ -151,11 +160,15 @@ namespace Data
                       .IsRequired();
 
                 entity.HasData(
-                    new { Id_materia = 1, Desc_materia = "Matematica", Hs_semanales = 4, Hs_totales = 64, Id_plan = 1 },
-                    new { Id_materia = 2, Desc_materia = "Programacion", Hs_semanales = 6, Hs_totales = 96, Id_plan = 1 },
-                    new { Id_materia = 3, Desc_materia = "Diseño", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2 },
-                    new { Id_materia = 4, Desc_materia = "Quimica", Hs_semanales = 5, Hs_totales = 80, Id_plan = 2 },
-                    new { Id_materia = 5, Desc_materia = "Historia", Hs_semanales = 2, Hs_totales = 32, Id_plan = 3 }
+                    new { Id_materia = 1, Desc_materia = "Análisis Matemático", Hs_semanales = 4, Hs_totales = 64, Id_plan = 3 },
+                    new { Id_materia = 2, Desc_materia = "Desarrollo Web", Hs_semanales = 6, Hs_totales = 96, Id_plan = 3 },
+                    new { Id_materia = 3, Desc_materia = "Diseño de Sistemas", Hs_semanales = 2, Hs_totales = 32, Id_plan = 3 },
+                    new { Id_materia = 4, Desc_materia = "Dibujo Técnico", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2 },
+                    new { Id_materia = 5, Desc_materia = "Colores", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2 },
+                    new { Id_materia = 6, Desc_materia = "Materiales", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2 },
+                    new { Id_materia = 7, Desc_materia = "Mesa Dulce", Hs_semanales = 5, Hs_totales = 80, Id_plan = 1 },
+                    new { Id_materia = 8, Desc_materia = "Comida fría", Hs_semanales = 5, Hs_totales = 80, Id_plan = 1 },
+                    new { Id_materia = 9, Desc_materia = "Parrilla", Hs_semanales = 2, Hs_totales = 32, Id_plan = 1 }
                     );
             });
 
@@ -180,7 +193,13 @@ namespace Data
                 entity.HasData(
                     new Curso { Id_curso = 1, Anio_calendario = 2023, Cupo = 30, Id_comision = 1, Id_materia = 1 },
                     new Curso { Id_curso = 2, Anio_calendario = 2023, Cupo = 25, Id_comision = 2, Id_materia = 2 },
-                    new Curso { Id_curso = 3, Anio_calendario = 2023, Cupo = 20, Id_comision = 3, Id_materia = 3 }
+                    new Curso { Id_curso = 3, Anio_calendario = 2023, Cupo = 20, Id_comision = 3, Id_materia = 3 },
+                    new Curso { Id_curso = 4, Anio_calendario = 2024, Cupo = 35, Id_comision = 4, Id_materia = 4 },
+                    new Curso { Id_curso = 5, Anio_calendario = 2024, Cupo = 28, Id_comision = 5, Id_materia = 5 },
+                    new Curso { Id_curso = 6, Anio_calendario = 2023, Cupo = 18, Id_comision = 6, Id_materia = 6 },
+                    new Curso { Id_curso = 7, Anio_calendario = 2024, Cupo = 22, Id_comision = 1, Id_materia = 7 },
+                    new Curso { Id_curso = 8, Anio_calendario = 2023, Cupo = 30, Id_comision = 2, Id_materia = 8 },
+                    new Curso { Id_curso = 9, Anio_calendario = 2024, Cupo = 25, Id_comision = 3, Id_materia = 9 }
                     );
 
             });
@@ -206,6 +225,15 @@ namespace Data
                 entity.HasIndex(pc => new { pc.IdProfesor, pc.IdCurso }).IsUnique();
 
                 entity.Property(pc => pc.Cargo).IsRequired();
+
+                entity.HasData(
+                    new { IdDictado = 1, IdProfesor = 8, IdCurso = 1, Cargo = "Titular" },
+                    new { IdDictado = 2, IdProfesor = 9, IdCurso = 2, Cargo = "Titular" },
+                    new { IdDictado = 3, IdProfesor = 10, IdCurso = 3, Cargo = "Titular" },
+                    new { IdDictado = 4, IdProfesor = 8, IdCurso = 4, Cargo = "Auxiliar" },
+                    new { IdDictado = 5, IdProfesor = 9, IdCurso = 5, Cargo = "Auxiliar" },
+                    new { IdDictado = 6, IdProfesor = 10, IdCurso = 6, Cargo = "Auxiliar" }
+                    );
             });
 
             modelBuilder.Entity<Alumno_Curso>(entity =>
@@ -228,6 +256,17 @@ namespace Data
                 entity.HasIndex(ac => new { ac.IdAlumno, ac.IdCurso }).IsUnique();
                 entity.Property(ac => ac.Condicion).IsRequired();
                 entity.Property(ac => ac.Nota).IsRequired(false);
+
+                entity.HasData(
+                    new { IdInscripcion = 1, IdAlumno = 3, IdCurso = 1, Condicion = "Regular", Nota = 85 },
+                    new { IdInscripcion = 2, IdAlumno = 4, IdCurso = 2, Condicion = "Aprobado", Nota = 90 },
+                    new { IdInscripcion = 3, IdAlumno = 5, IdCurso = 3, Condicion = "Libre", Nota = (int?)null },
+                    new { IdInscripcion = 4, IdAlumno = 6, IdCurso = 4, Condicion = "Regular", Nota = 75 },
+                    new { IdInscripcion = 5, IdAlumno = 7, IdCurso = 5, Condicion = "Aprobado", Nota = 88 },
+                    new { IdInscripcion = 6, IdAlumno = 3, IdCurso = 6, Condicion = "Libre", Nota = (int?)null },
+                    new { IdInscripcion = 7, IdAlumno = 4, IdCurso = 7, Condicion = "Regular", Nota = 82 },
+                    new { IdInscripcion = 8, IdAlumno = 5, IdCurso = 8, Condicion = "Aprobado", Nota = 91 }
+                    );
             });
         }
     }
