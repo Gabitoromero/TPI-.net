@@ -112,66 +112,29 @@ namespace WinFormsApp
                 }
 
                 int id = (int)dataGridViewCursos.CurrentRow.Cells["Id_curso"].Value;
-                await APICurso.DeleteAsync(id);
-                MessageBox.Show("Curso eliminado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                await LoadCursos();
+                string materiaDesc = dataGridViewCursos.CurrentRow.Cells["Materia"].Value?.ToString() ?? "desconocida";
+                string comisionDesc = dataGridViewCursos.CurrentRow.Cells["Comision"].Value?.ToString() ?? "desconocida";
+                int anio = (int)dataGridViewCursos.CurrentRow.Cells["Anio_calendario"].Value;
+
+                // Mostrar mensaje de confirmación
+                DialogResult confirmResult = MessageBox.Show(
+                    $"¿Está seguro que desea eliminar el curso?\n\nMateria: {materiaDesc}\nComisión: {comisionDesc}\nAño: {anio}\n\nEsta acción no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                // Solo eliminar si el usuario confirma
+                if (confirmResult == DialogResult.Yes)
+                {
+                    await APICurso.DeleteAsync(id);
+                    MessageBox.Show("Curso eliminado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await LoadCursos();
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al eliminar el curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }   
-
-
-        private async void btnBuscar_Click(object sender, EventArgs e)
-        {
-            /*try
-            {
-                string filtroComision = textBoxFiltroComision.Text?.Trim();
-                string filtroMateria = textBoxFiltroMateria.Text?.Trim();
-
-                if (string.IsNullOrEmpty(filtroComision) && string.IsNullOrEmpty(filtroMateria))
-                {
-                    await LoadCursos();
-                    return;
-                }
-
-                
-                List<CursoDTO> cursos = await APICurso.GetAllAsync();
-
-                var filtered = cursos.AsEnumerable();
-
-                if (!string.IsNullOrEmpty(filtroComision))
-                {
-                    // assuming Comision id or name is an int or string present in DTO — since DTO doesn't have it, this will currently do nothing
-                    // keep as placeholder to wire UI; later include Id_comision in DTO and API
-                    filtered = filtered.Where(c => false); // no-op placeholder
-                }
-
-                if (!string.IsNullOrEmpty(filtroMateria))
-                {
-                    // same placeholder for materia
-                    filtered = filtered.Where(c => false);
-                }
-
-                var view = filtered.Select(c => new
-                {
-                    Id_curso = c.Id_curso,
-                    Anio_calendario = c.Anio_calendario,
-                    Cupo = c.Cupo
-                }).ToList();
-
-                dataGridViewCursos.DataSource = view;
-
-                if (view.Count == 0)
-                {
-                    MessageBox.Show("No se encontraron cursos con esos filtros.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al buscar cursos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }*/
-        }
     }
 }

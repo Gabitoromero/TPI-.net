@@ -1,10 +1,11 @@
+using API.Clients;
 using DTOs;
+using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using API.Clients;
 
 namespace WinFormsApp
 {
@@ -71,9 +72,23 @@ namespace WinFormsApp
                     return;
                 }
                 int id = (int)dataGridViewComisiones.CurrentRow.Cells["Id_comision"].Value;
-                await APIComision.DeleteAsync(id);
-                MessageBox.Show("Comisión eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                await LoadComisiones();
+
+                // Mostrar mensaje de confirmación
+                DialogResult confirmResult = MessageBox.Show(
+                    $"¿Está seguro que desea eliminar la comisión'{id}'?\n\nEsta acción no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                // Solo eliminar si el usuario confirma
+                if (confirmResult == DialogResult.Yes)
+                {
+                    await APIComision.DeleteAsync(id);
+                    MessageBox.Show("Comisión eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await LoadComisiones();
+                }
+
+                
             }
             catch (Exception ex)
             {

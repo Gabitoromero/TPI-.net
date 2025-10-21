@@ -70,10 +70,24 @@ namespace WinFormsApp
                     MessageBox.Show("Seleccione una materia para eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+
                 int id = (int)dataGridViewMaterias.CurrentRow.Cells["Id_materia"].Value;
-                await APIMateria.DeleteAsync(id);
-                MessageBox.Show("Materia eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                await LoadMaterias();
+                string descripcionMateria = dataGridViewMaterias.CurrentRow.Cells["Desc_materia"].Value?.ToString() ?? "esta materia";
+
+                // Mostrar mensaje de confirmación
+                DialogResult confirmResult = MessageBox.Show(
+                    $"¿Está seguro que desea eliminar la materia '{descripcionMateria}'?\n\nEsta acción no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                // Solo eliminar si el usuario confirma
+                if (confirmResult == DialogResult.Yes)
+                {
+                    await APIMateria.DeleteAsync(id);
+                    MessageBox.Show("Materia eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await LoadMaterias();
+                }
             }
             catch (Exception ex)
             {

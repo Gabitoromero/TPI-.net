@@ -51,12 +51,13 @@ namespace WinFormsApp
             // 
             // btnEliminar
             // 
+            btnEliminar.BackColor = Color.IndianRed;
             btnEliminar.Location = new Point(20, 250);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 3;
             btnEliminar.Text = "Eliminar";
-            btnEliminar.UseVisualStyleBackColor = true;
+            btnEliminar.UseVisualStyleBackColor = false;
             btnEliminar.Click += btnEliminar_Click;
             // 
             // ComisionListaForm

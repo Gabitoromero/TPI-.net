@@ -23,15 +23,16 @@ namespace WinFormsApp
             // 
             // dataGridViewMaterias
             // 
+            dataGridViewMaterias.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewMaterias.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewMaterias.Location = new Point(20, 20);
             dataGridViewMaterias.Name = "dataGridViewMaterias";
-            dataGridViewMaterias.Size = new Size(540, 220);
+            dataGridViewMaterias.Size = new Size(618, 220);
             dataGridViewMaterias.TabIndex = 0;
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(469, 250);
+            btnAgregar.Location = new Point(563, 250);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 1;
@@ -41,7 +42,7 @@ namespace WinFormsApp
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(256, 250);
+            btnModificar.Location = new Point(292, 250);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 2;
@@ -64,7 +65,7 @@ namespace WinFormsApp
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(581, 291);
+            ClientSize = new Size(659, 291);
             Controls.Add(btnEliminar);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);

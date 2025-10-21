@@ -56,12 +56,24 @@ namespace WinFormsApp
             {
                 if (dataGridViewPlanes.CurrentRow != null)
                 {
-                  int idPlan = (int)dataGridViewPlanes.CurrentRow.Cells["IdPlan"].Value;
-                
+                    int idPlan = (int)dataGridViewPlanes.CurrentRow.Cells["IdPlan"].Value;
+                    string descripcionPlan = dataGridViewPlanes.CurrentRow.Cells["Descripcion"].Value?.ToString() ?? "este plan";
+                    string especialidad = dataGridViewPlanes.CurrentRow.Cells["Especialidad"].Value?.ToString() ?? "desconocida";
+
+                    // Mostrar mensaje de confirmación
+                    DialogResult confirmResult = MessageBox.Show(
+                        $"¿Está seguro que desea eliminar el plan '{descripcionPlan}'?\n\nEspecialidad: {especialidad}\n\nEsta acción no se puede deshacer.",
+                        "Confirmar Eliminación",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
+                    // Solo eliminar si el usuario confirma
+                    if (confirmResult == DialogResult.Yes)
+                    {
                         await APIPlan.DeleteAsync(idPlan);
                         MessageBox.Show("Plan eliminado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         PlanListaForm_Load(sender, e); // Refresh the list
-                
+                    }
                 }
                 else
                 {

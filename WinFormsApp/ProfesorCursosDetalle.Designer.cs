@@ -62,7 +62,7 @@ namespace WinFormsApp
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             label1.Location = new Point(12, 15);
             label1.Name = "label1";
-            label1.Size = new Size(186, 21);
+            label1.Size = new Size(174, 21);
             label1.TabIndex = 2;
             label1.Text = "Mis Cursos Asignados";
             // 
@@ -77,6 +77,7 @@ namespace WinFormsApp
             Name = "ProfesorCursosDetalle";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Cursos del Profesor";
+            Load += ProfesorCursosDetalle_Load_1;
             ((System.ComponentModel.ISupportInitialize)dataGridViewCursos).EndInit();
             ResumeLayout(false);
             PerformLayout();

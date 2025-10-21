@@ -125,13 +125,26 @@ namespace WinFormsApp
             try
             {
                 int idUser = (int)dataGridViewUsuarios.CurrentRow.Cells["Id"].Value;
-                await APIUsuario.DeleteAsync(idUser);
-                MessageBox.Show("Usuario eliminado con éxito", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                UsuarioList_Load(sender, e); // Recargar la lista de usuarios
+                string nombreUsuario = dataGridViewUsuarios.CurrentRow.Cells["NombreUsuario"].Value?.ToString() ?? "este usuario";
+
+                // Mostrar mensaje de confirmación
+                DialogResult confirmResult = MessageBox.Show(
+                    $"¿Está seguro que desea eliminar al usuario '{nombreUsuario}'?\n\nEsta acción no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                // Solo eliminar si el usuario confirma
+                if (confirmResult == DialogResult.Yes)
+                {
+                    await APIUsuario.DeleteAsync(idUser);
+                    MessageBox.Show("Usuario eliminado con éxito", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    UsuarioList_Load(sender, e); // Recargar la lista de usuarios
+                }
             }
             catch (Exception err)
             {
-                MessageBox.Show($"Error al modificar usuario: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al eliminar usuario: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

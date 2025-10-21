@@ -72,9 +72,22 @@ namespace WinFormsApp
                 }
 
                 int id = (int)dataGridViewEspecialidades.CurrentRow.Cells["Id"].Value;
-                await APIEspecialidad.DeleteAsync(id);
-                MessageBox.Show("Especialidad eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                await LoadEspecialidades();
+                string descripcionEspecialidad = dataGridViewEspecialidades.CurrentRow.Cells["Descripcion"].Value?.ToString() ?? "esta especialidad";
+
+                // Mostrar mensaje de confirmación
+                DialogResult confirmResult = MessageBox.Show(
+                    $"¿Está seguro que desea eliminar la especialidad '{descripcionEspecialidad}'?\n\nEsta acción no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                // Solo eliminar si el usuario confirma
+                if (confirmResult == DialogResult.Yes)
+                {
+                    await APIEspecialidad.DeleteAsync(id);
+                    MessageBox.Show("Especialidad eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await LoadEspecialidades();
+                }
             }
             catch (Exception ex)
             {

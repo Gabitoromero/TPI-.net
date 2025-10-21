@@ -33,6 +33,7 @@ namespace WinFormsApp
 
         private async void buttonLogin_Click(object sender, EventArgs e)
         {
+            buttonLogin.Enabled = false;
             try
             {
                 string username = textBoxUsername.Text;
@@ -82,6 +83,8 @@ namespace WinFormsApp
                 {
                     MessageBox.Show("Datos inválidos, pruebe de nuevo.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+                buttonLogin.Enabled = true;
+
             }
             catch (Exception ex)
             {

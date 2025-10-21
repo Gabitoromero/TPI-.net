@@ -48,5 +48,10 @@ namespace WinFormsApp
         {
             this.Close();
         }
+
+        private void ProfesorCursosDetalle_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
