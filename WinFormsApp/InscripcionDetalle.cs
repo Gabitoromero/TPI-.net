@@ -6,7 +6,6 @@ namespace WinFormsApp
 {
     public partial class InscripcionDetalle : Form
     {
-
         public InscripcionDetalle()
         {
             InitializeComponent();
@@ -17,8 +16,18 @@ namespace WinFormsApp
         {
             try
             {
+                // Obtener el alumno actual
+                if (APIUsuario.LoginResponse == null || string.IsNullOrEmpty(APIUsuario.LoginResponse.Username))
+                {
+                    MessageBox.Show("Error: No hay sesión activa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
+                    return;
+                }
+
                 ShowUsuarioDTO alumno = await APIUsuario.GetByUsernameAsync(APIUsuario.LoginResponse.Username);
                 var inscripciones = await APIUsuario.GetAlumnoCursosAsync(alumno.Id);
+
+                // Obtener información de materias y comisiones
                 var materiaTasks = inscripciones.Select(i => APIMateria.GetAsync(i.Curso.Id_materia)).ToList();
                 var comisionTasks = inscripciones.Select(i => APIComision.GetAsync(i.Curso.Id_comision)).ToList();
                 var materias = await Task.WhenAll(materiaTasks);
@@ -33,16 +42,18 @@ namespace WinFormsApp
                 }).ToList();
 
                 dataGridView1.DataSource = data;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error cargando inscripciones: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
             }
         }
 
-        private void InscripcionDetalle_Load_1(object sender, EventArgs e)
+        private void btnCerrar_Click(object sender, EventArgs e)
         {
-
+            Close();
         }
     }
 }

@@ -52,7 +52,6 @@ namespace WinFormsApp
                             Show();
                         };
                         form.Show();
-
                     } 
                     else if (tipoUsuario == "alumno")
                     {
@@ -63,9 +62,21 @@ namespace WinFormsApp
                             Show();
                         };
                         form.Show();
-
                     }
-
+                    else if (tipoUsuario == "profesor")
+                    {
+                        MenuProfesor form = new MenuProfesor();
+                        Hide();
+                        form.FormClosed += (s, args) =>
+                        {
+                            Show();
+                        };
+                        form.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Tipo de usuario no reconocido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
                 else
                 {
@@ -75,7 +86,6 @@ namespace WinFormsApp
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al loguearse: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
             }
         }
 
@@ -123,6 +133,10 @@ namespace WinFormsApp
         }
         private string GetTipoUsuario()
         {
+            if (APIUsuario.LoginResponse == null)
+            {
+                throw new InvalidOperationException("No hay sesión activa");
+            }
             return APIUsuario.LoginResponse.Tipo;
         }
     }

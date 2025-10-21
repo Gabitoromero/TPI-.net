@@ -1,6 +1,6 @@
-﻿namespace WinFormsApp
+namespace WinFormsApp
 {
-    partial class InscripcionDetalle
+    partial class ProfesorCursosDetalle
     {
         /// <summary>
         /// Required designer variable.
@@ -28,23 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dataGridView1 = new DataGridView();
+            dataGridViewCursos = new DataGridView();
             btnCerrar = new Button();
             label1 = new Label();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewCursos).BeginInit();
             SuspendLayout();
             // 
-            // dataGridView1
+            // dataGridViewCursos
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(12, 45);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(560, 300);
-            dataGridView1.TabIndex = 0;
+            dataGridViewCursos.AllowUserToAddRows = false;
+            dataGridViewCursos.AllowUserToDeleteRows = false;
+            dataGridViewCursos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCursos.Location = new Point(12, 45);
+            dataGridViewCursos.Name = "dataGridViewCursos";
+            dataGridViewCursos.ReadOnly = true;
+            dataGridViewCursos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewCursos.Size = new Size(560, 300);
+            dataGridViewCursos.TabIndex = 0;
             // 
             // btnCerrar
             // 
@@ -62,29 +62,29 @@
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             label1.Location = new Point(12, 15);
             label1.Name = "label1";
-            label1.Size = new Size(145, 21);
+            label1.Size = new Size(186, 21);
             label1.TabIndex = 2;
-            label1.Text = "Mis Inscripciones";
+            label1.Text = "Mis Cursos Asignados";
             // 
-            // InscripcionDetalle
+            // ProfesorCursosDetalle
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(584, 411);
             Controls.Add(label1);
             Controls.Add(btnCerrar);
-            Controls.Add(dataGridView1);
-            Name = "InscripcionDetalle";
+            Controls.Add(dataGridViewCursos);
+            Name = "ProfesorCursosDetalle";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Mis Inscripciones";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            Text = "Cursos del Profesor";
+            ((System.ComponentModel.ISupportInitialize)dataGridViewCursos).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private DataGridView dataGridView1;
+        private DataGridView dataGridViewCursos;
         private Button btnCerrar;
         private Label label1;
     }
