@@ -9,10 +9,10 @@ namespace WebAPI
         public static void MapEspecialidadEndpoints(this WebApplication app){
             // CRUD - Especialidad ---------------------------------------------------------------------------------------------------------------------------
 
-            app.MapGet("/especialidades/{id}", (EspecialidadService service, int id, HttpContext context) =>
+            app.MapGet("/especialidades/{id}", async (EspecialidadService service, int id, HttpContext context) =>
             {
 
-                EspecialidadDTO? dto = service.Get(id);
+                EspecialidadDTO? dto = await service.Get(id);
 
                 if (dto == null)
                 {
@@ -22,9 +22,9 @@ namespace WebAPI
                 return Results.Ok(dto);
             }).RequireAuthorization();
 
-            app.MapGet("/especialidades/", (EspecialidadService service) =>
+            app.MapGet("/especialidades/", async (EspecialidadService service) =>
             {
-                List<EspecialidadDTO> espDTO = service.GetAll();
+                List<EspecialidadDTO> espDTO = await service.GetAll();
 
                 if (espDTO.Count == 0)
                 {
@@ -34,11 +34,11 @@ namespace WebAPI
                 return Results.Ok(espDTO);
             });
 
-           app.MapPost("/especialidades/", (EspecialidadService service, EspecialidadDTO dto) =>
+           app.MapPost("/especialidades/", async (EspecialidadService service, EspecialidadDTO dto) =>
             {
                 try
                 {
-                    EspecialidadDTO espDTO = service.Add(dto);
+                    EspecialidadDTO espDTO = await service.Add(dto);
 
                     return Results.Ok(espDTO);
 
@@ -50,11 +50,11 @@ namespace WebAPI
 
             });
 
-            app.MapDelete("/especialidades/{id}", (EspecialidadService service, int id) =>
+            app.MapDelete("/especialidades/{id}", async (EspecialidadService service, int id) =>
             {
                 try
                 {
-                    bool espDeleted = service.Delete(id);
+                    bool espDeleted = await service.Delete(id);
                     if (!espDeleted)
                     {
                         return Results.NotFound(new { data = "Especialidad no encontrada" });
@@ -67,11 +67,11 @@ namespace WebAPI
                 }
             });
 
-            app.MapPut("/especialidades", (EspecialidadService service, EspecialidadDTO dto) =>
+            app.MapPut("/especialidades", async (EspecialidadService service, EspecialidadDTO dto) =>
             {
                 try
                 {
-                    bool espUpdated = service.Update(dto);
+                    bool espUpdated = await service.Update(dto);
                     if (!espUpdated)
                     {
                         return Results.NotFound(new { data = "Especialidad no encontrada" });

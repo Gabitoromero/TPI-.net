@@ -17,21 +17,21 @@ namespace Data
             _context = context;
         }
         
-        public Curso? Get(int id) => _context.Cursos.FirstOrDefault(c => c.Id_curso == id);
-        public List<Curso> GetAll() => _context.Cursos.ToList();
-        public void Add(Curso curso)
+        public async Task<Curso?> Get(int id) => await _context.Cursos.FirstOrDefaultAsync(c => c.Id_curso == id);
+        public async Task<List<Curso>> GetAll() => await _context.Cursos.ToListAsync();
+        public async Task Add(Curso curso)
         {
             try
             {
-                _context.Cursos.Add(curso);
-                _context.SaveChanges();
+                await _context.Cursos.AddAsync(curso);
+                await _context.SaveChangesAsync();
             }
             catch (ArgumentException err)
             {
                 throw new ArgumentException(err.Message);
             }
         }
-        public bool Update(Curso curso)
+        public async Task<bool> Update(Curso curso)
         {
             try
             {
@@ -39,14 +39,14 @@ namespace Data
                 Curso repeated = _context.Cursos.Where(Curso => Curso.Id_curso != curso.Id_curso).FirstOrDefault(c => c.Anio_calendario == curso.Anio_calendario && c.Id_comision == curso.Id_comision && c.Id_materia == curso.Id_materia);
                 if (repeated != null) throw new ArgumentException("Ya existe un curso con la misma materia, comision y año calendario.");
                 
-                Curso? cursoToUpdate = _context.Cursos.Find(curso.Id_curso);
+                Curso? cursoToUpdate = await _context.Cursos.FindAsync(curso.Id_curso);
                 if (cursoToUpdate != null)
                 {
                     cursoToUpdate.Anio_calendario = curso.Anio_calendario;
                     cursoToUpdate.Cupo = curso.Cupo;
                     cursoToUpdate.Id_comision = curso.Id_comision;
                     cursoToUpdate.Id_materia = curso.Id_materia;
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return true;
                 }
                 return false;
@@ -56,22 +56,22 @@ namespace Data
                 throw new ArgumentException(err.Message);
             }
         }
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            Curso? curso = _context.Cursos.Find(id);
+            Curso? curso = await _context.Cursos.FindAsync(id);
             if(curso != null)
             {
                 _context.Cursos.Remove(curso);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
             return false;
         }
 
-        public List<Curso> GetAvailable()
+        public async Task<List<Curso>> GetAvailable()
         {
-            var cursos = _context.Cursos
-                .Where(c => _context.Alumno_Cursos.Count(ac => ac.IdCurso == c.Id_curso) < c.Cupo).ToList();
+            var cursos = await _context.Cursos
+                .Where(c => _context.Alumno_Cursos.Count(ac => ac.IdCurso == c.Id_curso) < c.Cupo).ToListAsync();
 
             return cursos;
         }

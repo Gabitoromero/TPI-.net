@@ -3,6 +3,8 @@ using DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data
 {
@@ -14,33 +16,33 @@ namespace Data
             _context = context;
         }
 
-        public Materia? Get(int id) => _context.Materias.FirstOrDefault(m => m.Id_materia == id);
-        public List<Materia> GetAll() => _context.Materias.ToList();
+        public async Task<Materia?> Get(int id) => await _context.Materias.FirstOrDefaultAsync(m => m.Id_materia == id);
+        public async Task<List<Materia>> GetAll() => await _context.Materias.ToListAsync();
 
-        public void Add(Materia materia)
+        public async Task Add(Materia materia)
         {
-            _context.Materias.Add(materia);
-            _context.SaveChanges();
+            await _context.Materias.AddAsync(materia);
+            await _context.SaveChangesAsync();
         }
 
-        public bool Update(Materia materia)
+        public async Task<bool> Update(Materia materia)
         {
-            Materia? existing = _context.Materias.Find(materia.Id_materia);
+            Materia? existing = await _context.Materias.FindAsync(materia.Id_materia);
             if (existing == null) return false;
             existing.Desc_materia = materia.Desc_materia;
             existing.Hs_semanales = materia.Hs_semanales;
             existing.Hs_totales = materia.Hs_totales;
             existing.Id_plan = materia.Id_plan;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            Materia? existing = _context.Materias.Find(id);
+            Materia? existing = await _context.Materias.FindAsync(id);
             if (existing == null) return false;
             _context.Materias.Remove(existing);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
     }

@@ -1,4 +1,8 @@
 ﻿using Domain.Model;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -10,24 +14,24 @@ namespace Data
             _context = context;
         }
 
-        public Profesor_Curso? GetProfesorInsc(int idDictado) => _context.Profesor_Cursos.Find(idDictado);
-        public List<Profesor_Curso> GetAllProfesorInsc(int idProfesor) => _context.Profesor_Cursos.Where(i => i.IdProfesor == idProfesor).ToList();
+        public async Task<Profesor_Curso?> GetProfesorInsc(int idDictado) => await _context.Profesor_Cursos.FindAsync(idDictado);
+        public async Task<List<Profesor_Curso>> GetAllProfesorInsc(int idProfesor) => await _context.Profesor_Cursos.Where(i => i.IdProfesor == idProfesor).ToListAsync();
 
-        public void AddProfesorInsc(Profesor_Curso profesor_Curso)
+        public async Task AddProfesorInsc(Profesor_Curso profesor_Curso)
         {
 
-            _context.Profesor_Cursos.Add(profesor_Curso);
-            _context.SaveChanges();
+            await _context.Profesor_Cursos.AddAsync(profesor_Curso);
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteProfesorInsc(int idDictado)
+        public async Task DeleteProfesorInsc(int idDictado)
         {
-            var existing = _context.Profesor_Cursos.FirstOrDefault(pc => pc.IdDictado == idDictado);
+            var existing = await _context.Profesor_Cursos.FirstOrDefaultAsync(pc => pc.IdDictado == idDictado);
 
             if (existing != null)
             {
                 _context.Profesor_Cursos.Remove(existing);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             else
             {
@@ -35,35 +39,35 @@ namespace Data
             }
         }
 
-        public void UpdateProfesorInsc(Profesor_Curso profesor_Curso)
+        public async Task UpdateProfesorInsc(Profesor_Curso profesor_Curso)
         {
-            var existing = _context.Profesor_Cursos.FirstOrDefault(pc => pc.IdDictado == profesor_Curso.IdDictado);
+            var existing = await _context.Profesor_Cursos.FirstOrDefaultAsync(pc => pc.IdDictado == profesor_Curso.IdDictado);
             if (existing != null)
             {
                 existing.IdProfesor = profesor_Curso.IdProfesor;
                 existing.IdCurso = profesor_Curso.IdCurso;
                 existing.Cargo = profesor_Curso.Cargo;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
 
         // Inscripciones de alumnos a cursos
 
-        public List<Alumno_Curso> GetAllAlumnoInsc(int idAlumno) => _context.Alumno_Cursos.Where(i => i.IdAlumno == idAlumno).ToList();
+        public async Task<List<Alumno_Curso>> GetAllAlumnoInsc(int idAlumno) => await _context.Alumno_Cursos.Where(i => i.IdAlumno == idAlumno).ToListAsync();
 
-        public void AddAlumnoInsc(Alumno_Curso alumno_Curso)
+        public async Task AddAlumnoInsc(Alumno_Curso alumno_Curso)
         {
-            _context.Alumno_Cursos.Add(alumno_Curso);
-            _context.SaveChanges();
+            await _context.Alumno_Cursos.AddAsync(alumno_Curso);
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteAlumnoInsc(int idInscripcion)
+        public async Task DeleteAlumnoInsc(int idInscripcion)
         {
-            var existing = _context.Alumno_Cursos.FirstOrDefault(ac => ac.IdInscripcion == idInscripcion);
+            var existing = await _context.Alumno_Cursos.FirstOrDefaultAsync(ac => ac.IdInscripcion == idInscripcion);
             if (existing != null)
             {
                 _context.Alumno_Cursos.Remove(existing);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             else
             {
@@ -71,16 +75,16 @@ namespace Data
             }
         }
 
-        public void UpdateAlumnoInsc(Alumno_Curso alumno_Curso)
+        public async Task UpdateAlumnoInsc(Alumno_Curso alumno_Curso)
         {
-            var existing = _context.Alumno_Cursos.FirstOrDefault(ac => ac.IdInscripcion == alumno_Curso.IdInscripcion);
+            var existing = await _context.Alumno_Cursos.FirstOrDefaultAsync(ac => ac.IdInscripcion == alumno_Curso.IdInscripcion);
             if (existing != null)
             {
                 existing.IdAlumno = alumno_Curso.IdAlumno;
                 existing.IdCurso = alumno_Curso.IdCurso;
                 existing.Condicion = alumno_Curso.Condicion;
                 existing.Nota = alumno_Curso.Nota;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
     }

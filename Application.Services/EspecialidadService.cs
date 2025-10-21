@@ -2,6 +2,9 @@
 using Domain.Model;
 using DTOs;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.Services
 {
@@ -15,9 +18,9 @@ namespace Application.Services
             _repository = especialidadRepository;
             this.planRepository = planRepository;
         }
-        public EspecialidadDTO? Get(int id)
+        public async Task<EspecialidadDTO?> Get(int id)
         {
-            Especialidad? esp = _repository.Get(id);
+            var esp = await _repository.Get(id);
 
             if (esp == null) return null;
   
@@ -25,9 +28,9 @@ namespace Application.Services
 
             return dto;
         } 
-        public List<EspecialidadDTO> GetAll()
+        public async Task<List<EspecialidadDTO>> GetAll()
         {
-            List<Especialidad> especialidades = _repository.GetAll();
+            List<Especialidad> especialidades = await _repository.GetAll();
 
             return especialidades.Select(e => new EspecialidadDTO
             {
@@ -37,23 +40,23 @@ namespace Application.Services
 
         }
         
-        public EspecialidadDTO Add(EspecialidadDTO dto)
+        public async Task<EspecialidadDTO> Add(EspecialidadDTO dto)
         {   
             Especialidad esp = new Especialidad(0, dto.Descripcion); // El 0, al ser el default de int, ef lo ignora si la columna es autogenerada, como por ejemplo el id
-            _repository.Add(esp);
+            await _repository.Add(esp);
             dto.Id = esp.Id; // Entity actualiza el objeto con el Id autogenerado solito, el que creo ef se merece un Nobel 
             return dto;
         }
 
-        public bool Delete(int id) 
+        public async Task<bool> Delete(int id) 
         {
             try
             {
-                List<Plan> planes = planRepository.GetAll();
+                List<Plan> planes = await planRepository.GetAll();
                             bool hasPlans = planes.Any(p => p.IdEspecialidad == id);
                             if (hasPlans) throw new InvalidOperationException("No se puede eliminar esta especialidad: tiene planes relacionados.");
 
-                            return _repository.Delete(id);
+                            return await _repository.Delete(id);
             }
             catch (InvalidOperationException err)
             {
@@ -66,10 +69,10 @@ namespace Application.Services
 
         }
 
-        public bool Update(EspecialidadDTO dto)
+        public async Task<bool> Update(EspecialidadDTO dto)
         {
             Especialidad esp = new Especialidad(dto.Id, dto.Descripcion);
-            return _repository.Update(esp);
+            return await _repository.Update(esp);
 
         }
 

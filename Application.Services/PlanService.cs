@@ -20,15 +20,15 @@ namespace Application.Services
             _repository = planRepository;
             this.materiaRepository = materiaRepository;
         }
-        public List<PlanDTO> GetAll()
+        public async Task<List<PlanDTO>> GetAll()
         {
-            List<Plan> planes = _repository.GetAll();
+            List<Plan> planes = await _repository.GetAll();
             return planes.Select(p => new PlanDTO(p.IdPlan, p.Descripcion, p.IdEspecialidad)).ToList();
         }
 
-        public PlanDTO Get(int id)
+        public async Task<PlanDTO> Get(int id)
         {
-            Plan plan = _repository.Get(id);
+            Plan plan = await _repository.Get(id);
             if (plan == null)
             {
                 return null;
@@ -37,12 +37,12 @@ namespace Application.Services
             return new PlanDTO(plan.IdPlan, plan.Descripcion, plan.IdEspecialidad);
         }
 
-        public PlanDTO Add(PlanDTO dto)
+        public async Task<PlanDTO> Add(PlanDTO dto)
         {
             try
             {
                 Plan newplan = new Plan ( 0, dto.Descripcion, dto.IdEspecialidad );
-                _repository.Add(newplan);
+                await _repository.Add(newplan);
                 dto.IdPlan = newplan.IdPlan;
                 return dto;
             }catch(ArgumentException err)
@@ -52,14 +52,14 @@ namespace Application.Services
             
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             try
             {
-                List<Materia> materias = materiaRepository.GetAll();
+                List<Materia> materias = await materiaRepository.GetAll();
                             bool hasMaterias = materias.Any(m => m.Id_plan == id);
                             if(hasMaterias) throw new InvalidOperationException("No se puede eliminar este plan: tiene materias relacionadas.");
-                            return  _repository.Delete(id);
+                            return  await _repository.Delete(id);
             }
             catch (InvalidOperationException err)
             {
@@ -72,11 +72,11 @@ namespace Application.Services
             
         }
 
-        public bool Update(PlanDTO dto)
+        public async Task<bool> Update(PlanDTO dto)
         {
             try
             {
-                return _repository.Update(new Plan ( dto.IdPlan, dto.Descripcion, dto.IdEspecialidad ) );
+                return await _repository.Update(new Plan ( dto.IdPlan, dto.Descripcion, dto.IdEspecialidad ) );
                 
             }
             catch(ArgumentException err)

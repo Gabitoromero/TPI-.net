@@ -7,25 +7,25 @@ namespace WebAPI
     {
         public static void MapMateriaEndpoints(this WebApplication app)
         {
-            app.MapGet("/materias", (MateriaService serv) =>
+            app.MapGet("/materias", async (MateriaService serv) =>
             {
-                List<MateriaDTO> list = serv.GetAll();
+                List<MateriaDTO> list = await serv.GetAll();
                 if (list == null || list.Count == 0) return Results.NotFound(new { message = "Materias no encontradas" });
                 return Results.Ok(list);
             });
 
-            app.MapGet("/materias/{id}", (int id, MateriaService serv) =>
+            app.MapGet("/materias/{id}", async (int id, MateriaService serv) =>
             {
-                MateriaDTO dto = serv.Get(id);
+                MateriaDTO dto = await serv.Get(id);
                 if (dto == null) return Results.NotFound(new { message = "Materia no encontrada" });
                 return Results.Ok(dto);
             });
 
-            app.MapPost("/materias", (MateriaDTO dto, MateriaService serv) =>
+            app.MapPost("/materias", async (MateriaDTO dto, MateriaService serv) =>
             {
                 try
                 {
-                    MateriaDTO created = serv.Add(dto);
+                    MateriaDTO created = await serv.Add(dto);
                     return Results.Ok(created);
                 }
                 catch (ArgumentException err)
@@ -34,11 +34,11 @@ namespace WebAPI
                 }
             });
 
-            app.MapPut("/materias", (MateriaDTO dto, MateriaService serv) =>
+            app.MapPut("/materias", async (MateriaDTO dto, MateriaService serv) =>
             {
                 try
                 {
-                    bool ok = serv.Update(dto);
+                    bool ok = await serv.Update(dto);
                     if (!ok) return Results.NotFound(new { message = "Materia no encontrada" });
                     return Results.Ok(dto);
                 }
@@ -48,9 +48,9 @@ namespace WebAPI
                 }
             });
 
-            app.MapDelete("/materias/{id}", (int id, MateriaService serv) =>
+            app.MapDelete("/materias/{id}", async (int id, MateriaService serv) =>
             {
-                bool ok = serv.Delete(id);
+                bool ok = await serv.Delete(id);
                 if (!ok) return Results.NotFound(new { message = "Materia no encontrada" });
                 return Results.NoContent();
             });

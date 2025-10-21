@@ -8,19 +8,19 @@ namespace WebAPI
     {
         public static void MapCursoEndpoints(this WebApplication app)
         {
-            app.MapGet("/cursos", (CursoService cursoService) =>
+            app.MapGet("/cursos", async (CursoService cursoService) =>
             {
-                List<NewCursoDTO> cursosDTO = cursoService.GetAll();
-                if (cursosDTO.Count == 0)
+                List<NewCursoDTO> cursosDTO = await cursoService.GetAll();
+                if (cursosDTO == null || cursosDTO.Count == 0)
                 {
                     return Results.NotFound(new { message = "Cursos no encontrados" });
                 }
                 return Results.Ok(cursosDTO);
             });
 
-            app.MapGet("/cursos/disponibles", (CursoService cursoService) =>
+            app.MapGet("/cursos/disponibles", async (CursoService cursoService) =>
             {
-                List<NewCursoDTO> cursosDTO = cursoService.GetAvailable();
+                List<NewCursoDTO> cursosDTO = await cursoService.GetAvailable();
                 if (cursosDTO == null || cursosDTO.Count == 0)
                 {
                     return Results.NotFound(new { message = "No hay cursos disponibles" });
@@ -28,9 +28,9 @@ namespace WebAPI
                 return Results.Ok(cursosDTO);
             });
 
-            app.MapGet("/cursos/{id}", (int id, CursoService cursoService) =>
+            app.MapGet("/cursos/{id}", async (int id, CursoService cursoService) =>
             {
-                NewCursoDTO dto = cursoService.Get(id);
+                NewCursoDTO dto = await cursoService.Get(id);
                 if (dto == null)
                 {
                     return Results.NotFound(new { message = "Curso no encontrado" });
@@ -38,11 +38,11 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
-            app.MapPost("/cursos", (NewCursoDTO dto, CursoService cursoService) =>
+            app.MapPost("/cursos", async (NewCursoDTO dto, CursoService cursoService) =>
             {
                 try
                 {
-                    NewCursoDTO newCurso = cursoService.Add(dto);
+                    NewCursoDTO newCurso = await cursoService.Add(dto);
                     return Results.Ok(newCurso);
                 }
                 catch (ArgumentException err)
@@ -51,11 +51,11 @@ namespace WebAPI
                 }
             });
 
-            app.MapPut("/cursos/", (NewCursoDTO updatedCurso, CursoService cursoService) =>
+            app.MapPut("/cursos/", async (NewCursoDTO updatedCurso, CursoService cursoService) =>
             {
                 try
                 {
-                    bool success = cursoService.Update(updatedCurso);
+                    bool success = await cursoService.Update(updatedCurso);
                     if (!success)
                     {
                         return Results.NotFound(new { message = "Curso no encontrado" });
@@ -68,9 +68,9 @@ namespace WebAPI
                 }
             });
 
-            app.MapDelete("/cursos/{id}", (int id, CursoService cursoService) =>
+            app.MapDelete("/cursos/{id}", async (int id, CursoService cursoService) =>
             {
-                bool cursoDeleted = cursoService.Delete(id);
+                bool cursoDeleted = await cursoService.Delete(id);
                 if (!cursoDeleted)
                 {
                     return Results.NotFound(new { data = "Curso no encontrado" });

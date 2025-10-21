@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Data;
 using Domain.Model;
 using DTOs;
@@ -16,9 +17,9 @@ namespace Application.Services
             _repository = cursoRepository;
         }
 
-        public NewCursoDTO? Get(int id)
+        public async Task<NewCursoDTO?> Get(int id)
         {
-           Curso curso = _repository.Get(id);
+           Curso curso = await _repository.Get(id);
             if (curso == null) return null;
             return new NewCursoDTO
             {
@@ -29,10 +30,10 @@ namespace Application.Services
                 Id_comision = curso.Id_comision
             };
         }
-        public List<NewCursoDTO> GetAll()
+        public async Task<List<NewCursoDTO>> GetAll()
         {
             
-            List<Curso> curso = _repository.GetAll();
+            List<Curso> curso = await _repository.GetAll();
             if (curso == null) return null;
             return curso.Select(m=> new NewCursoDTO
             {
@@ -43,9 +44,9 @@ namespace Application.Services
                 Id_comision = m.Id_comision
             }).ToList();
         }
-        public List<NewCursoDTO> GetAvailable()
+        public async Task<List<NewCursoDTO>> GetAvailable()
         {
-            var cursos = _repository.GetAvailable();
+            var cursos = await _repository.GetAvailable();
             if (cursos == null) return new List<NewCursoDTO>();
             return cursos.Select(m => new NewCursoDTO
             {
@@ -56,7 +57,7 @@ namespace Application.Services
                 Id_comision = m.Id_comision
             }).ToList();
         }
-        public NewCursoDTO Add(NewCursoDTO curso)
+        public async Task<NewCursoDTO> Add(NewCursoDTO curso)
         {
             try
             {
@@ -68,7 +69,7 @@ namespace Application.Services
                     Id_materia = curso.Id_materia,
                     Id_comision = curso.Id_comision
                 };
-                _repository.Add(newCurso);
+                await _repository.Add(newCurso);
                 curso.Id_curso = newCurso.Id_curso;
                 return curso;
             }
@@ -77,11 +78,11 @@ namespace Application.Services
                 throw new ArgumentException(err.Message);
             }
         }
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            return _repository.Delete(id);
+            return await _repository.Delete(id);
         }
-        public bool Update(NewCursoDTO dto)
+        public async Task<bool> Update(NewCursoDTO dto)
         {
             try
             {
@@ -93,7 +94,7 @@ namespace Application.Services
                     Id_materia = dto.Id_materia,
                     Id_comision = dto.Id_comision
                 };
-                return _repository.Update(curso);
+                return await _repository.Update(curso);
                 
             }
             catch (ArgumentException err)

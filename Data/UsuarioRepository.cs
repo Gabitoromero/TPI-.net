@@ -1,6 +1,7 @@
 ﻿using Domain.Model;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -13,22 +14,22 @@ namespace Data
             _context = context;
         }
 
-        public Usuario? GetByUsername(string username) => _context.Usuarios.FirstOrDefault(u => u.NombreUsuario == username);
+        public async Task<Usuario?> GetByUsername(string username) => await _context.Usuarios.FirstOrDefaultAsync(u => u.NombreUsuario == username);
 
-        public Usuario? Get(int id) => _context.Usuarios.FirstOrDefault(u => u.Id == id);
+        public async Task<Usuario?> Get(int id) => await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == id);
 
-        public List<Usuario> GetAll() => _context.Usuarios.ToList();
+        public async Task<List<Usuario>> GetAll() => await _context.Usuarios.ToListAsync();
 
-        public List<Usuario> GetAllProfesores() => _context.Usuarios.Where(u => u.Tipo == "profesor").ToList();
+        public async Task<List<Usuario>> GetAllProfesores() => await _context.Usuarios.Where(u => u.Tipo == "profesor").ToListAsync();
 
-        public List<Usuario> GetAllAlumnos() => _context.Usuarios.Where(u => u.Tipo == "alumno").ToList();
+        public async Task<List<Usuario>> GetAllAlumnos() => await _context.Usuarios.Where(u => u.Tipo == "alumno").ToListAsync();
 
-        public void Add(Usuario usuario)
+        public async Task Add(Usuario usuario)
         {
             try
             {
-                _context.Usuarios.Add(usuario);
-                _context.SaveChanges();
+                await _context.Usuarios.AddAsync(usuario);
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException err)
             {
@@ -69,18 +70,18 @@ namespace Data
             }
          }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var usuario = _context.Usuarios.Find(id);
+            var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null) return false;
             _context.Usuarios.Remove(usuario);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public bool Update(Usuario usuario)
+        public async Task<bool> Update(Usuario usuario)
         {
-            var existingUsuario = _context.Usuarios.Find(usuario.Id);
+            var existingUsuario = await _context.Usuarios.FindAsync(usuario.Id);
             if (existingUsuario == null) return false;
 
             existingUsuario.Apellido = usuario.Apellido;
@@ -96,7 +97,7 @@ namespace Data
             existingUsuario.FechaNacimiento = usuario.FechaNacimiento;
             existingUsuario.IdPlan = usuario.IdPlan;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 

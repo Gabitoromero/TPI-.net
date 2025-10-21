@@ -1,5 +1,8 @@
 ﻿using System.Linq;
 using Domain.Model;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Data
 {
@@ -12,19 +15,19 @@ namespace Data
             _context = context;
         }
 
-        public Especialidad? Get(int id) => _context.Especialidades.FirstOrDefault(e => e.Id == id);
-        public List<Especialidad> GetAll() => _context.Especialidades.ToList();
+        public async Task<Especialidad?> Get(int id) => await _context.Especialidades.FirstOrDefaultAsync(e => e.Id == id);
+        public async Task<List<Especialidad>> GetAll() => await _context.Especialidades.ToListAsync();
 
-        public bool Update(Especialidad esp)
+        public async Task<bool> Update(Especialidad esp)
         {
             try
             {
-                Especialidad? existingEsp = _context.Especialidades.Find(esp.Id);
+                Especialidad? existingEsp = await _context.Especialidades.FindAsync(esp.Id);
 
                 if (existingEsp != null)
                 {
                     existingEsp.Descripcion = esp.Descripcion; // Ojo que en realidad deberiamos usar setters especiales que validen los datos
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return true;
                 }
 
@@ -37,12 +40,12 @@ namespace Data
             
         }
 
-        public void Add(Especialidad esp)
+        public async Task Add(Especialidad esp)
         {
             try
             {
-                _context.Especialidades.Add(esp);
-                _context.SaveChanges();
+                await _context.Especialidades.AddAsync(esp);
+                await _context.SaveChangesAsync();
             }
             catch(ArgumentException err)
             {
@@ -51,13 +54,13 @@ namespace Data
             
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            Especialidad? especialidad = _context.Especialidades.Find(id);
+            Especialidad? especialidad = await _context.Especialidades.FindAsync(id);
 
             if (especialidad != null) { 
                 _context.Especialidades.Remove(especialidad);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
 

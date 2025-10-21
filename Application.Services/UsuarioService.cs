@@ -1,6 +1,9 @@
 ﻿using Data;
 using Domain.Model;
 using DTOs;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.Services
 {
@@ -20,10 +23,10 @@ namespace Application.Services
             _inscripcionRepository = inscripcionRepository;
         }
 
-        public FullUsuarioDTO? Get(int id)
+        public async Task<FullUsuarioDTO?> Get(int id)
         {
 
-            Usuario? usuario = _repository.Get(id);
+            Usuario? usuario = await _repository.Get(id);
 
             if (usuario == null) return null;
 
@@ -50,9 +53,9 @@ namespace Application.Services
             return dto;
         }
 
-        public ShowUsuarioDTO GetByUsername(string nombreUsuario)
+        public async Task<ShowUsuarioDTO> GetByUsername(string nombreUsuario)
         {
-            var user = _repository.GetByUsername(nombreUsuario);
+            var user = await _repository.GetByUsername(nombreUsuario);
 
             ShowUsuarioDTO dto = new ShowUsuarioDTO
             {
@@ -63,9 +66,9 @@ namespace Application.Services
 
             return dto;
         }
-        public List<ShowUsuarioDTO> GetAll()
+        public async Task<List<ShowUsuarioDTO>> GetAll()
         {
-            List<Usuario> usuarios = _repository.GetAll();
+            List<Usuario> usuarios = await _repository.GetAll();
 
             return usuarios.Select(usuario => new ShowUsuarioDTO
             {
@@ -76,9 +79,9 @@ namespace Application.Services
             }).ToList();
         }
 
-        public List<ShowUsuarioDTO> GetAllProfesores()
+        public async Task<List<ShowUsuarioDTO>> GetAllProfesores()
         {
-            List<Usuario> usuarios = _repository.GetAllProfesores();
+            List<Usuario> usuarios = await _repository.GetAllProfesores();
             return usuarios.Select(usuario => new ShowUsuarioDTO
             {
                 Id = usuario.Id,
@@ -88,9 +91,9 @@ namespace Application.Services
             }).ToList();
         }
 
-        public List<ShowUsuarioDTO> GetAllAlumnos()
+        public async Task<List<ShowUsuarioDTO>> GetAllAlumnos()
         {
-            List<Usuario> usuarios = _repository.GetAllAlumnos();
+            List<Usuario> usuarios = await _repository.GetAllAlumnos();
             return usuarios.Select(usuario => new ShowUsuarioDTO
             {
                 Id = usuario.Id,
@@ -99,9 +102,9 @@ namespace Application.Services
                 , Tipo = usuario.Tipo
             }).ToList();
         }
-        public PostUsuarioDTO Add(FullUsuarioDTO dto)
+        public async Task<PostUsuarioDTO> Add(FullUsuarioDTO dto)
         {
-            var plan = _planService.Get(dto.IdPlan);
+            var plan = await _planService.Get(dto.IdPlan);
 
             if (plan == null)
             {
@@ -113,7 +116,7 @@ namespace Application.Services
             Usuario usuario = new Usuario(0, dto.Apellido, dto.Clave, dto.Email, true, dto.Nombre, dto.NombreUsuario, fechaCreacion,
                 dto.Direccion, dto.Telefono, dto.Tipo, dto.Legajo, fechaNac, dto.IdPlan);
 
-            _repository.Add(usuario);
+            await _repository.Add(usuario);
 
             return new PostUsuarioDTO
             {
@@ -125,15 +128,15 @@ namespace Application.Services
             };
 
         }
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            return _repository.Delete(id);
+            return await _repository.Delete(id);
         }
 
-        private ShowUsuarioDTO? GetReducedUser(int id)
+        private async Task<ShowUsuarioDTO?> GetReducedUser(int id)
         {
 
-            Usuario? usuario = _repository.Get(id);
+            Usuario? usuario = await _repository.Get(id);
 
             if (usuario == null) return null;
 
@@ -149,11 +152,11 @@ namespace Application.Services
         }
 
 
-        public bool Update(PutUsuarioDTO dto)
+        public async Task<bool> Update(PutUsuarioDTO dto)
         {
             if (dto.IdPlan != null)
             {
-                var plan = _planService.Get(dto.IdPlan);
+                var plan = await _planService.Get(dto.IdPlan);
 
                 if (plan == null)
                 {
@@ -161,7 +164,7 @@ namespace Application.Services
                 }
             }
 
-            Usuario? usuario = _repository.Get(dto.Id);
+            Usuario? usuario = await _repository.Get(dto.Id);
 
             if (usuario == null) return false;
 
@@ -171,41 +174,51 @@ namespace Application.Services
 
             if (!string.IsNullOrWhiteSpace(dto.Clave)) usuario.SetClave(dto.Clave);
 
-            return _repository.Update(usuario);
+            return await _repository.Update(usuario);
         }
 
         // Inscripciones a cursos como profesor
 
-        public List<ShowProfesor_CursoDTO> GetAllProfesorInsc(int idProfesor)
+        public async Task<List<ShowProfesor_CursoDTO>> GetAllProfesorInsc(int idProfesor)
         {
-            var inscripciones = _inscripcionRepository.GetAllProfesorInsc(idProfesor);
-            return inscripciones.Select(insc => new ShowProfesor_CursoDTO
+            var inscripciones = await _inscripcionRepository.GetAllProfesorInsc(idProfesor);
+            var result = new List<ShowProfesor_CursoDTO>();
+            foreach (var insc in inscripciones)
             {
-                IdDictado = insc.IdDictado,
-                Curso = _cursoService.Get(insc.IdDictado),
-                Profesor = this.GetReducedUser(insc.IdProfesor),
-                Cargo = insc.Cargo
-            }).ToList();
+                var curso = await _cursoService.Get(insc.IdCurso);
+                var profesor = await GetReducedUser(insc.IdProfesor);
+                result.Add(new ShowProfesor_CursoDTO
+                {
+                    IdDictado = insc.IdDictado,
+                    Curso = curso,
+                    Profesor = profesor,
+                    Cargo = insc.Cargo
+                });
+            }
+            return result;
         }
 
-        public ShowProfesor_CursoDTO? GetProfesorInsc(int idDictado)
+        public async Task<ShowProfesor_CursoDTO?> GetProfesorInsc(int idDictado)
         {
-            var insc = _inscripcionRepository.GetProfesorInsc(idDictado);
+            var insc = await _inscripcionRepository.GetProfesorInsc(idDictado);
 
             if (insc == null) return null;
+
+            var curso = await _cursoService.Get(insc.IdCurso);
+            var profesor = await GetReducedUser(insc.IdProfesor);
 
             return new ShowProfesor_CursoDTO
             {
                 IdDictado = insc.IdDictado,
-                Curso = _cursoService.Get(insc.IdDictado),
-                Profesor = this.GetReducedUser(insc.IdProfesor),
+                Curso = curso,
+                Profesor = profesor,
                 Cargo = insc.Cargo
             };
         }
-        public void AddProfesorInsc(Profesor_CursoDTO dto)
+        public async Task AddProfesorInsc(Profesor_CursoDTO dto)
         {
-            var curso = _cursoService.Get(dto.IdCurso);
-            var profesor = this.Get(dto.IdProfesor);
+            var curso = await _cursoService.Get(dto.IdCurso);
+            var profesor = await Get(dto.IdProfesor);
 
             if (curso == null)
             {
@@ -223,18 +236,18 @@ namespace Application.Services
                 IdCurso = dto.IdCurso,
                 Cargo = dto.Cargo
             };
-            _inscripcionRepository.AddProfesorInsc(profesorInsc);
+            await _inscripcionRepository.AddProfesorInsc(profesorInsc);
         }
 
-        public void DeleteProfesorInsc(int idDictado)
+        public async Task DeleteProfesorInsc(int idDictado)
         {
-            _inscripcionRepository.DeleteProfesorInsc(idDictado);
+            await _inscripcionRepository.DeleteProfesorInsc(idDictado);
         }
 
-        public void UpdateProfesorInsc(Profesor_CursoDTO dto)
+        public async Task UpdateProfesorInsc(Profesor_CursoDTO dto)
         {
-            var curso = _cursoService.Get(dto.IdDictado);
-            var profesor = this.Get(dto.IdProfesor);
+            var curso = await _cursoService.Get(dto.IdDictado);
+            var profesor = await Get(dto.IdProfesor);
             if (curso == null)
             {
                 throw new ArgumentException("Curso inexistente");
@@ -250,28 +263,35 @@ namespace Application.Services
                 IdCurso = dto.IdCurso,
                 Cargo = dto.Cargo
             };
-            _inscripcionRepository.UpdateProfesorInsc(profesorInsc);
+            await _inscripcionRepository.UpdateProfesorInsc(profesorInsc);
         }
 
         // Inscripciones a cursos como alumno
 
-        public List<ShowAlumno_CursoDTO> GetAllAlumnoInsc(int idAlumno)
+        public async Task<List<ShowAlumno_CursoDTO>> GetAllAlumnoInsc(int idAlumno)
         {
-            var inscripciones = _inscripcionRepository.GetAllAlumnoInsc(idAlumno);
-            return inscripciones.Select(insc => new ShowAlumno_CursoDTO
+            var inscripciones = await _inscripcionRepository.GetAllAlumnoInsc(idAlumno);
+            var result = new List<ShowAlumno_CursoDTO>();
+            foreach (var insc in inscripciones)
             {
-                IdInscripcion = insc.IdInscripcion,
-                Curso = _cursoService.Get(insc.IdCurso),
-                Alumno = this.GetReducedUser(insc.IdAlumno),
-                Condicion = insc.Condicion,
-                Nota = insc.Nota
-            }).ToList();
+                var curso = await _cursoService.Get(insc.IdCurso);
+                var alumno = await GetReducedUser(insc.IdAlumno);
+                result.Add(new ShowAlumno_CursoDTO
+                {
+                    IdInscripcion = insc.IdInscripcion,
+                    Curso = curso,
+                    Alumno = alumno,
+                    Condicion = insc.Condicion,
+                    Nota = insc.Nota
+                });
+            }
+            return result;
         }
 
-        public void AddAlumnoInsc(Alumno_CursoDTO dto)
+        public async Task AddAlumnoInsc(Alumno_CursoDTO dto)
         {
-            var curso = _cursoService.Get(dto.IdCurso);
-            var alumno = this.Get(dto.IdAlumno);
+            var curso = await _cursoService.Get(dto.IdCurso);
+            var alumno = await Get(dto.IdAlumno);
             if (curso == null)
             {
                 throw new ArgumentException("Curso inexistente");
@@ -297,18 +317,18 @@ namespace Application.Services
                 Condicion = dto.Condicion,
                 Nota = dto.Nota
             };
-            _inscripcionRepository.AddAlumnoInsc(alumnoInsc);
+            await _inscripcionRepository.AddAlumnoInsc(alumnoInsc);
         }
 
-        public void DeleteAlumnoInsc(int idInscripcion)
+        public async Task DeleteAlumnoInsc(int idInscripcion)
         {
-            _inscripcionRepository.DeleteAlumnoInsc(idInscripcion);
+            await _inscripcionRepository.DeleteAlumnoInsc(idInscripcion);
         }
 
-        public void UpdateAlumnoInsc(Alumno_CursoDTO dto)
+        public async Task UpdateAlumnoInsc(Alumno_CursoDTO dto)
         {
-            var curso = _cursoService.Get(dto.IdCurso);
-            var alumno = this.Get(dto.IdAlumno);
+            var curso = await _cursoService.Get(dto.IdCurso);
+            var alumno = await Get(dto.IdAlumno);
             if (curso == null)
             {
                 throw new ArgumentException("Curso inexistente");
@@ -329,7 +349,7 @@ namespace Application.Services
                 Condicion = dto.Condicion,
                 Nota = dto.Nota
             };
-            _inscripcionRepository.UpdateAlumnoInsc(alumnoInsc);
+            await _inscripcionRepository.UpdateAlumnoInsc(alumnoInsc);
         }
     }
 }

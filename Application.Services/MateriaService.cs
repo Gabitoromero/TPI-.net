@@ -3,6 +3,7 @@ using DTOs;
 using Domain.Model;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -14,9 +15,9 @@ namespace Application.Services
             _repository = repo;
         }
 
-        public MateriaDTO? Get(int id)
+        public async Task<MateriaDTO?> Get(int id)
         {
-            Materia m = _repository.Get(id);
+            Materia m = await _repository.Get(id);
             if (m == null) return null;
             return new MateriaDTO
             {
@@ -28,9 +29,9 @@ namespace Application.Services
             };
         }
 
-        public List<MateriaDTO> GetAll()
+        public async Task<List<MateriaDTO>> GetAll()
         {
-            return _repository.GetAll().Select(m => new MateriaDTO
+            return (await _repository.GetAll()).Select(m => new MateriaDTO
             {
                 Id_materia = m.Id_materia,
                 Desc_materia = m.Desc_materia,
@@ -40,7 +41,7 @@ namespace Application.Services
             }).ToList();
         }
 
-        public MateriaDTO Add(MateriaDTO dto)
+        public async Task<MateriaDTO> Add(MateriaDTO dto)
         {
             Materia m = new Materia
             {
@@ -50,12 +51,12 @@ namespace Application.Services
                 Hs_totales = dto.Hs_totales,
                 Id_plan = dto.Id_plan
             };
-            _repository.Add(m);
+            await _repository.Add(m);
             dto.Id_materia = m.Id_materia;
             return dto;
         }
 
-        public bool Update(MateriaDTO dto)
+        public async Task<bool> Update(MateriaDTO dto)
         {
             Materia m = new Materia
             {
@@ -65,9 +66,9 @@ namespace Application.Services
                 Hs_totales = dto.Hs_totales,
                 Id_plan = dto.Id_plan
             };
-            return _repository.Update(m);
+            return await _repository.Update(m);
         }
 
-        public bool Delete(int id) => _repository.Delete(id);
+        public async Task<bool> Delete(int id) => await _repository.Delete(id);
     }
 }

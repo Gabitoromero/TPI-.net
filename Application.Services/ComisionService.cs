@@ -3,6 +3,7 @@ using DTOs;
 using Domain.Model;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -14,9 +15,9 @@ namespace Application.Services
             _repository = repo;
         }
 
-        public ComisionDTO? Get(int id)
+        public async Task<ComisionDTO?> Get(int id)
         {
-            Comision c = _repository.Get(id);
+            Comision c = await _repository.Get(id);
             if (c == null) return null;
             return new ComisionDTO
             {
@@ -27,9 +28,9 @@ namespace Application.Services
             };
         }
 
-        public List<ComisionDTO> GetAll()
+        public async Task<List<ComisionDTO>> GetAll()
         {
-            return _repository.GetAll().Select(c => new ComisionDTO
+            return (await _repository.GetAll()).Select(c => new ComisionDTO
             {
                 Id_comision = c.Id_comision,
                 Desc_comision = c.Desc_comision,
@@ -38,7 +39,7 @@ namespace Application.Services
             }).ToList();
         }
 
-        public ComisionDTO Add(ComisionDTO dto)
+        public async Task<ComisionDTO> Add(ComisionDTO dto)
         {
             try
             {
@@ -49,7 +50,7 @@ namespace Application.Services
                     Anio_especialidad = dto.Anio_especialidad,
                     Id_plan = dto.Id_plan
                 };
-                _repository.Add(c);
+                await _repository.Add(c);
                 dto.Id_comision = c.Id_comision;
                 return dto;
             }
@@ -59,7 +60,7 @@ namespace Application.Services
             }
         }
 
-        public bool Update(ComisionDTO dto)
+        public async Task<bool> Update(ComisionDTO dto)
         {
             try
             {
@@ -70,7 +71,7 @@ namespace Application.Services
                     Anio_especialidad = dto.Anio_especialidad,
                     Id_plan = dto.Id_plan
                 };
-                return _repository.Update(c);
+                return await _repository.Update(c);
             }
             catch (ArgumentException err)
             {
@@ -78,6 +79,6 @@ namespace Application.Services
             }
         }
 
-        public bool Delete(int id) => _repository.Delete(id);
+        public async Task<bool> Delete(int id) => await _repository.Delete(id);
     }
 }

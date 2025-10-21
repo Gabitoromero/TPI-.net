@@ -7,7 +7,9 @@ using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
+using System.Threading.Tasks;
+using System;
+using System.Linq;
 
 namespace Application.Services
 {
@@ -27,7 +29,7 @@ namespace Application.Services
             if (string.IsNullOrWhiteSpace(request.NombreUsuario) || string.IsNullOrWhiteSpace(request.Clave))
                 return null;
 
-            var usuario = _usuarioRepository.GetByUsername(request.NombreUsuario);
+            var usuario = await _usuarioRepository.GetByUsername(request.NombreUsuario);
 
             if (usuario == null || !usuario.ValidatePassword(request.Clave))
                 return null;

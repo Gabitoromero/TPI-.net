@@ -7,25 +7,25 @@ namespace WebAPI
     {
         public static void MapComisionEndpoints(this WebApplication app)
         {
-            app.MapGet("/comisiones", (ComisionService serv) =>
+            app.MapGet("/comisiones", async (ComisionService serv) =>
             {
-                List<ComisionDTO> list = serv.GetAll();
+                List<ComisionDTO> list = await serv.GetAll();
                 if (list == null || list.Count == 0) return Results.NotFound(new { message = "Comisiones no encontradas" });
                 return Results.Ok(list);
             });
 
-            app.MapGet("/comisiones/{id}", (int id, ComisionService serv) =>
+            app.MapGet("/comisiones/{id}", async (int id, ComisionService serv) =>
             {
-                ComisionDTO dto = serv.Get(id);
+                ComisionDTO dto = await serv.Get(id);
                 if (dto == null) return Results.NotFound(new { message = "Comision no encontrada" });
                 return Results.Ok(dto);
             });
 
-            app.MapPost("/comisiones", (ComisionDTO dto, ComisionService serv) =>
+            app.MapPost("/comisiones", async (ComisionDTO dto, ComisionService serv) =>
             {
                 try
                 {
-                    ComisionDTO created = serv.Add(dto);
+                    ComisionDTO created = await serv.Add(dto);
                     return Results.Ok(created);
                 }
                 catch (ArgumentException err)
@@ -34,11 +34,11 @@ namespace WebAPI
                 }
             });
 
-            app.MapPut("/comisiones", (ComisionDTO dto, ComisionService serv) =>
+            app.MapPut("/comisiones", async (ComisionDTO dto, ComisionService serv) =>
             {
                 try
                 {
-                    bool ok = serv.Update(dto);
+                    bool ok = await serv.Update(dto);
                     if (!ok) return Results.NotFound(new { message = "Comision no encontrada" });
                     return Results.Ok(dto);
                 }
@@ -48,9 +48,9 @@ namespace WebAPI
                 }
             });
 
-            app.MapDelete("/comisiones/{id}", (int id, ComisionService serv) =>
+            app.MapDelete("/comisiones/{id}", async (int id, ComisionService serv) =>
             {
-                bool ok = serv.Delete(id);
+                bool ok = await serv.Delete(id);
                 if (!ok) return Results.NotFound(new { message = "Comision no encontrada" });
                 return Results.NoContent();
             });
