@@ -18,6 +18,16 @@ namespace WebAPI
                 return Results.Ok(cursosDTO);
             });
 
+            app.MapGet("/cursos/disponibles", (CursoService cursoService) =>
+            {
+                List<NewCursoDTO> cursosDTO = cursoService.GetAvailable();
+                if (cursosDTO == null || cursosDTO.Count == 0)
+                {
+                    return Results.NotFound(new { message = "No hay cursos disponibles" });
+                }
+                return Results.Ok(cursosDTO);
+            });
+
             app.MapGet("/cursos/{id}", (int id, CursoService cursoService) =>
             {
                 NewCursoDTO dto = cursoService.Get(id);

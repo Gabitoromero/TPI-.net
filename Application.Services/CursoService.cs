@@ -43,6 +43,19 @@ namespace Application.Services
                 Id_comision = m.Id_comision
             }).ToList();
         }
+        public List<NewCursoDTO> GetAvailable()
+        {
+            var cursos = _repository.GetAvailable();
+            if (cursos == null) return new List<NewCursoDTO>();
+            return cursos.Select(m => new NewCursoDTO
+            {
+                Id_curso = m.Id_curso,
+                Anio_calendario = m.Anio_calendario,
+                Cupo = m.Cupo,
+                Id_materia = m.Id_materia,
+                Id_comision = m.Id_comision
+            }).ToList();
+        }
         public NewCursoDTO Add(NewCursoDTO curso)
         {
             try

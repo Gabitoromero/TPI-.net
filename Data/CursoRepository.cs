@@ -67,5 +67,13 @@ namespace Data
             }
             return false;
         }
+
+        public List<Curso> GetAvailable()
+        {
+            var cursos = _context.Cursos
+                .Where(c => _context.Alumno_Cursos.Count(ac => ac.IdCurso == c.Id_curso) < c.Cupo).ToList();
+
+            return cursos;
+        }
     }
 }
