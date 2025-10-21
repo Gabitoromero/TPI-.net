@@ -39,5 +39,10 @@ namespace WinFormsApp
                 MessageBox.Show($"Error cargando inscripciones: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void InscripcionDetalle_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

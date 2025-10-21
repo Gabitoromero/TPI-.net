@@ -16,10 +16,9 @@ namespace WinFormsApp
         public MenuAlumno()
         {
             InitializeComponent();
-            btnVerInscripciones.Click += btnVerInscripciones_Click;
         }
 
-        private void btnVerInscripciones_Click(object? sender, EventArgs e)
+        private void btnVerInscripciones_Click_2(object? sender, EventArgs e)
         {
             this.Hide();
             using (var detalle = new InscripcionDetalle())
@@ -27,6 +26,22 @@ namespace WinFormsApp
                 detalle.ShowDialog();
             }
             this.Show();
+        }
+
+        private void btnNuevaInscripcion_Click(object? sender, EventArgs e)
+        {
+            this.Hide();
+            using (var nuevaInscripcion = new InscripcionNueva())
+            {
+                DialogResult result = nuevaInscripcion.ShowDialog();
+                // Si la inscripción fue exitosa, podrías actualizar algo o mostrar un mensaje adicional
+            }
+            this.Show();
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         private void MenuAlumno_Load(object sender, EventArgs e)

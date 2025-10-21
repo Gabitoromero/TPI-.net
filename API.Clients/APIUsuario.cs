@@ -152,7 +152,15 @@ namespace API.Clients
                 if (response.IsSuccessStatusCode)
                 {
                     var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
-                    return true; 
+                    if (loginResponse != null)
+                    {
+                        LoginResponse = loginResponse;
+                        return true;
+                    }
+                    else
+                    {
+                        throw new Exception("OOPS! Login response was null despite successful status code.");
+                    }
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -173,6 +181,31 @@ namespace API.Clients
                 throw new Exception($"Timeout trying to login. Error: {ex.Message}");
             }
         }
+        public static async Task AddAlumnoCursoAsync(Alumno_CursoDTO dto)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PostAsJsonAsync("usuarios/alumno_cursos/", dto);
+                if (response.IsSuccessStatusCode)
+                {
+                    return;
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to add alumno curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while adding alumno curso. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout adding alumno curso. Error: {ex.Message}");
+            }
+        }
+
         public static async Task<List<ShowUsuarioDTO>> GetAllAsync()
         {
             try
@@ -294,5 +327,6 @@ namespace API.Clients
             }
         }
 
+        
     }
 }

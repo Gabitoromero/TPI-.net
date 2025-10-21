@@ -37,17 +37,18 @@
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(12, 12);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(471, 204);
+            dataGridView1.Size = new Size(451, 204);
             dataGridView1.TabIndex = 0;
             // 
             // InscripcionDetalle
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(495, 229);
+            ClientSize = new Size(478, 229);
             Controls.Add(dataGridView1);
             Name = "InscripcionDetalle";
             Text = "Inscripciones";
+            Load += InscripcionDetalle_Load_1;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }

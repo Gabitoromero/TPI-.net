@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DTOs;
 using API.Clients;
+using Microsoft.AspNetCore.Http.Timeouts;
 
 namespace WinFormsApp
 {
@@ -41,13 +42,29 @@ namespace WinFormsApp
 
                 if (loginSuccess)
                 {
-                    var menuForm = new MenuForm();
-                    Hide();
-                    menuForm.FormClosed += (s, args) =>
+                    string tipoUsuario = GetTipoUsuario();
+                    if (tipoUsuario == "admin")
                     {
-                        Show();
-                    };
-                    menuForm.Show();
+                        MenuForm form = new MenuForm();
+                        Hide();
+                        form.FormClosed += (s, args) =>
+                        {
+                            Show();
+                        };
+                        form.Show();
+
+                    } 
+                    else if (tipoUsuario == "alumno")
+                    {
+                        MenuAlumno form = new MenuAlumno();
+                        Hide();
+                        form.FormClosed += (s, args) =>
+                        {
+                            Show();
+                        };
+                        form.Show();
+
+                    }
 
                 }
                 else
@@ -72,6 +89,7 @@ namespace WinFormsApp
                 
                 if(result == DialogResult.OK)
                 {
+                    
                     // Registro exitoso, abrir MenuForm
                     var menuForm = new MenuForm();
                     menuForm.FormClosed += (s, args) =>
@@ -102,6 +120,10 @@ namespace WinFormsApp
         private void LoginForm_Load(object sender, EventArgs e)
         {
 
+        }
+        private string GetTipoUsuario()
+        {
+            return APIUsuario.LoginResponse.Tipo;
         }
     }
 }
