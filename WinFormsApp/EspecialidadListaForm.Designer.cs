@@ -46,10 +46,11 @@ namespace WinFormsApp
             // 
             // dataGridViewEspecialidades
             // 
+            dataGridViewEspecialidades.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewEspecialidades.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewEspecialidades.Location = new Point(30, 66);
             dataGridViewEspecialidades.Name = "dataGridViewEspecialidades";
-            dataGridViewEspecialidades.Size = new Size(267, 190);
+            dataGridViewEspecialidades.Size = new Size(393, 190);
             dataGridViewEspecialidades.TabIndex = 2;
             dataGridViewEspecialidades.CellDoubleClick += dataGridViewEspecialidades_CellDoubleClick;
             // 
@@ -66,7 +67,7 @@ namespace WinFormsApp
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(217, 278);
+            btnAgregar.Location = new Point(348, 278);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 4;
@@ -76,7 +77,7 @@ namespace WinFormsApp
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(130, 278);
+            btnModificar.Location = new Point(196, 278);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 5;
@@ -88,7 +89,7 @@ namespace WinFormsApp
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(329, 319);
+            ClientSize = new Size(452, 319);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);
             Controls.Add(btnEliminar);

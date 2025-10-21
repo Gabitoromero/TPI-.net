@@ -13,11 +13,20 @@ namespace WinFormsApp
         public CursoListaForm()
         {
             InitializeComponent();
+            dataGridViewCursos.SelectionChanged += DataGridViewCursos_SelectionChanged;
         }
 
         public async void CursoListaForm_Load(object sender, EventArgs e)
         {
             await LoadCursos();
+            dataGridViewCursos.ClearSelection();
+            btnAddProfCurso.Visible = false; 
+        }
+
+        private void DataGridViewCursos_SelectionChanged(object? sender, EventArgs e)
+        {
+            // Mostrar el botón solo si hay una fila seleccionada
+            btnAddProfCurso.Visible = dataGridViewCursos.SelectedRows.Count == 1 && dataGridViewCursos.CurrentRow != null;
         }
 
         private async Task LoadCursos()
@@ -61,6 +70,8 @@ namespace WinFormsApp
                     .ToList();
 
                 dataGridViewCursos.DataSource = view;
+                dataGridViewCursos.ClearSelection();
+                btnAddProfCurso.Visible = false; // Ocultar el botón después de cargar
             }
             catch (Exception ex)
             {

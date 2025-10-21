@@ -25,8 +25,30 @@ namespace WinFormsApp
         {
             try
             {
-                List<ComisionDTO> list = await APIComision.GetAllAsync();
-                dataGridViewComisiones.DataSource = list;
+                List<ComisionDTO> comisiones = await APIComision.GetAllAsync();
+                List<PlanDTO> planes = new List<PlanDTO>();
+
+                try
+                {
+                    planes = await APIPlan.GetAllAsync();
+                }
+                catch
+                {
+                    //planes = new List<PlanDTO>();
+                    throw new Exception("No se pudieron cargar los planes. Verifique la conexión con el servidor.");
+                }
+
+                var view = comisiones.Select(c => new
+                    {
+                        Id_comision = c.Id_comision,
+                        Desc_comision = c.Desc_comision,
+                        Anio_especialidad = c.Anio_especialidad,
+                        Plan = planes.FirstOrDefault(p => p.IdPlan == c.Id_plan)?.Descripcion
+                    })
+                    .ToList();
+
+                dataGridViewComisiones.DataSource = view;
+                dataGridViewComisiones.ClearSelection();
             }
             catch (Exception ex)
             {

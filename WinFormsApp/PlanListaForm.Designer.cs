@@ -57,10 +57,11 @@
             // 
             // dataGridViewPlanes
             // 
+            dataGridViewPlanes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewPlanes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewPlanes.Location = new Point(30, 66);
             dataGridViewPlanes.Name = "dataGridViewPlanes";
-            dataGridViewPlanes.Size = new Size(342, 190);
+            dataGridViewPlanes.Size = new Size(458, 190);
             dataGridViewPlanes.TabIndex = 2;
             // 
             // btnEliminar
@@ -76,7 +77,7 @@
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(297, 278);
+            btnAgregar.Location = new Point(413, 278);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 4;
@@ -86,7 +87,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(166, 278);
+            btnModificar.Location = new Point(223, 278);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 5;
@@ -98,7 +99,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(402, 319);
+            ClientSize = new Size(515, 319);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);
             Controls.Add(btnEliminar);

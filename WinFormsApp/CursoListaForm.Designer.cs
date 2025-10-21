@@ -32,15 +32,17 @@
             btnEliminar = new Button();
             btnAgregar = new Button();
             btnModificar = new Button();
+            btnAddProfCurso = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewCursos).BeginInit();
             SuspendLayout();
             // 
             // dataGridViewCursos
             // 
+            dataGridViewCursos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCursos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCursos.Location = new Point(20, 23);
             dataGridViewCursos.Name = "dataGridViewCursos";
-            dataGridViewCursos.Size = new Size(538, 237);
+            dataGridViewCursos.Size = new Size(664, 237);
             dataGridViewCursos.TabIndex = 3;
             // 
             // btnEliminar
@@ -56,7 +58,7 @@
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(483, 275);
+            btnAgregar.Location = new Point(609, 275);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 5;
@@ -66,7 +68,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(244, 275);
+            btnModificar.Location = new Point(211, 275);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 6;
@@ -74,11 +76,23 @@
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += btnModificar_Click;
             // 
+            // btnAddProfCurso
+            // 
+            btnAddProfCurso.BackColor = Color.Khaki;
+            btnAddProfCurso.Location = new Point(401, 275);
+            btnAddProfCurso.Name = "btnAddProfCurso";
+            btnAddProfCurso.Size = new Size(106, 23);
+            btnAddProfCurso.TabIndex = 7;
+            btnAddProfCurso.Text = "Setear Profesor";
+            btnAddProfCurso.UseVisualStyleBackColor = false;
+            btnAddProfCurso.Visible = false;
+            // 
             // CursoListaForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(582, 320);
+            ClientSize = new Size(711, 320);
+            Controls.Add(btnAddProfCurso);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);
             Controls.Add(btnEliminar);
@@ -95,5 +109,6 @@
         private Button btnEliminar;
         private Button btnAgregar;
         private Button btnModificar;
+        private Button btnAddProfCurso;
     }
 }

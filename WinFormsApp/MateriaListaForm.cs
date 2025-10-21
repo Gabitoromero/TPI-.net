@@ -24,8 +24,30 @@ namespace WinFormsApp
         {
             try
             {
-                List<MateriaDTO> list = await APIMateria.GetAllAsync();
-                dataGridViewMaterias.DataSource = list;
+                List<MateriaDTO> materias = await APIMateria.GetAllAsync();
+                List<PlanDTO> planes = new List<PlanDTO>();
+
+                try
+                {
+                    planes = await APIPlan.GetAllAsync();
+                }
+                catch
+                {
+                    throw new Exception("No se pudieron cargar los planes. Verifique la conexión con el servidor.");
+                }
+
+                var view = materias.Select(m => new
+                    {
+                        Id_materia = m.Id_materia,
+                        Desc_materia = m.Desc_materia,
+                        Hs_semanales = m.Hs_semanales,
+                        Hs_totales = m.Hs_totales,
+                        Plan = planes.FirstOrDefault(p => p.IdPlan == m.Id_plan)?.Descripcion
+                    })
+                    .ToList();
+
+                dataGridViewMaterias.DataSource = view;
+                dataGridViewMaterias.ClearSelection();
             }
             catch (Exception ex)
             {
