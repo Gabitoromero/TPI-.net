@@ -246,7 +246,7 @@ namespace Application.Services
 
         public async Task UpdateProfesorInsc(Profesor_CursoDTO dto)
         {
-            var curso = await _cursoService.Get(dto.IdDictado);
+            var curso = await _cursoService.Get(dto.IdCurso);
             var profesor = await Get(dto.IdProfesor);
             if (curso == null)
             {

@@ -62,7 +62,7 @@ namespace Application.Services
                 new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                 new Claim(ClaimTypes.Name, usuario.NombreUsuario),
                 new Claim(ClaimTypes.Email, usuario.Email),
-                new Claim(ClaimTypes.Email, usuario.Tipo),
+                new Claim(ClaimTypes.Role, usuario.Tipo),
                 new Claim("jti", Guid.NewGuid().ToString())
             };
 
