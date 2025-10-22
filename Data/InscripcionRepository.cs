@@ -87,5 +87,10 @@ namespace Data
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<int> GetAlumnoCountInCurso(int idCurso)
+        {
+            return await _context.Alumno_Cursos.CountAsync(ac => ac.IdCurso == idCurso);
+        }
     }
 }

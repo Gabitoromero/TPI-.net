@@ -309,6 +309,12 @@ namespace Application.Services
                 throw new ArgumentException("El alumno no está habilitado");
             }
 
+            int cantInsc = await _inscripcionRepository.GetAlumnoCountInCurso(dto.IdCurso);
+            if (cantInsc >= curso.Cupo)
+            {
+                throw new ArgumentException("El curso está lleno");
+            }
+
             var alumnoInsc = new Alumno_Curso
             {
                 IdInscripcion = 0,
