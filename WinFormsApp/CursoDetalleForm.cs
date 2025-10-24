@@ -11,6 +11,7 @@ namespace WinFormsApp
     {
         private NewCursoDTO curso;
         private bool isEdit = false;
+        private bool isEditingMode = false; // Para controlar el estado de edición
 
         public CursoDetalleForm()
         {
@@ -78,16 +79,83 @@ namespace WinFormsApp
                         comboBoxMateria.SelectedIndex = -1;
                     }
                 }
+
+                // Cargar alumnos del curso
+                await LoadAlumnosCurso(curso.Id_curso);
+
+                // Deshabilitar campos al cargar (modo visualización)
+                SetEditingMode(false);
             }
             else
             {
                 // new course: ensure fields empty
-                //numericId.Value = 0;
                 numericAnio.Value = DateTime.Now.Year;
                 numericCupo.Value = 0;
                 comboBoxComision.SelectedIndex = -1;
                 comboBoxMateria.SelectedIndex = -1;
             }
+        }
+
+        private async Task LoadAlumnosCurso(int idCurso)
+        {
+            try
+            {
+                var alumnos = await APIUsuario.GetAlumnosByCursoAsync(idCurso);
+                
+                dataGridAlumnosCurso.DataSource = null; 
+                dataGridAlumnosCurso.DataSource = alumnos;
+
+                if (dataGridAlumnosCurso.Columns["IdInscripcion"] != null)
+                {
+                    dataGridAlumnosCurso.Columns["IdInscripcion"].Visible = false;
+                }
+                if (dataGridAlumnosCurso.Columns["Legajo"] != null)
+                    dataGridAlumnosCurso.Columns["Legajo"].HeaderText = "Legajo";
+                
+                if (dataGridAlumnosCurso.Columns["NombreCompleto"] != null)
+                    dataGridAlumnosCurso.Columns["NombreCompleto"].HeaderText = "Alumno";
+                
+                if (dataGridAlumnosCurso.Columns["Condicion"] != null)
+                    dataGridAlumnosCurso.Columns["Condicion"].HeaderText = "Condición";
+                
+                if (dataGridAlumnosCurso.Columns["Nota"] != null)
+                    dataGridAlumnosCurso.Columns["Nota"].HeaderText = "Nota";
+
+                dataGridAlumnosCurso.ClearSelection();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar alumnos del curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SetEditingMode(bool enabled)
+        {
+            isEditingMode = enabled;
+            
+            // Habilitar/deshabilitar controles
+            comboBoxMateria.Enabled = enabled;
+            comboBoxComision.Enabled = enabled;
+            numericAnio.Enabled = enabled;
+            numericCupo.Enabled = enabled;
+
+            // Cambiar apariencia del botón
+            if (enabled)
+            {
+                btnModificarCurso.BackColor = System.Drawing.Color.Orange; // Color "presionado"
+                btnModificarCurso.Text = "Cancelar Edición";
+            }
+            else
+            {
+                btnModificarCurso.BackColor = System.Drawing.SystemColors.Control; // Color por defecto
+                btnModificarCurso.Text = "Modificar Curso";
+            }
+        }
+
+        private void btnModificarCurso_Click(object? sender, EventArgs e)
+        {
+            // Toggle entre modo edición y modo visualización
+            SetEditingMode(!isEditingMode);
         }
 
         private async void btnGuardar_Click(object sender, EventArgs e)

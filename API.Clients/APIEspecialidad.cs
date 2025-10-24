@@ -148,12 +148,10 @@ namespace API.Clients
                 HttpResponseMessage resp = await esp.PutAsJsonAsync("especialidades", dto);
                 if (resp.IsSuccessStatusCode)
                 {
-                    // If server responds 204 NoContent or body is empty, avoid parsing JSON empty content.
                     if (resp.StatusCode == HttpStatusCode.NoContent)
                     {
-                        return dto; // update succeeded, return the sent object (or change to null if preferred)
+                        return dto; 
                     }
-                    // If Content-Length is zero or content is whitespace, return dto as well.
                     var contentString = await resp.Content.ReadAsStringAsync();
                     if (string.IsNullOrWhiteSpace(contentString))
                     {

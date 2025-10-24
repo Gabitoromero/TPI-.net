@@ -70,6 +70,7 @@ namespace WebAPI
                      return Results.BadRequest(new { error = ex.Message });
                  }
              });
+
             app.MapDelete("/usuarios/{id}", async (UsuarioService service, int id) =>
             {
                 bool usuarioDeleted = await service.Delete(id);
@@ -171,7 +172,6 @@ namespace WebAPI
                 return Results.Ok(dto);
             });
 
-
             app.MapPost("/usuarios/alumno_cursos/", async (UsuarioService service, Alumno_CursoDTO dto) =>
             {
                 try
@@ -204,6 +204,24 @@ namespace WebAPI
                 {
                     await service.UpdateAlumnoInsc(dto);
                     return Results.Ok();
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
+
+            // Obtener alumnos inscriptos en un curso específico
+            app.MapGet("/usuarios/cursos/{idCurso}/alumnos", async (UsuarioService service, int idCurso) =>
+            {
+                try
+                {
+                    List<AlumnoCursoDetalleDTO> alumnos = await service.GetAlumnosByCursoAsync(idCurso);
+                    if (alumnos.Count == 0)
+                    {
+                        return Results.Ok(new List<AlumnoCursoDetalleDTO>()); // Retornar lista vacía si no hay alumnos
+                    }
+                    return Results.Ok(alumnos);
                 }
                 catch (Exception ex)
                 {

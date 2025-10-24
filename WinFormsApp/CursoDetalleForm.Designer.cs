@@ -38,14 +38,25 @@ namespace WinFormsApp
             comboBoxComision = new ComboBox();
             labelMateria = new Label();
             comboBoxMateria = new ComboBox();
+            dataGridAlumnosCurso = new DataGridView();
+            dataGridProfesoresCurso = new DataGridView();
+            label1 = new Label();
+            label2 = new Label();
+            btnEliminarAlumnoCurso = new Button();
+            btnAgregarAlumnoCurso = new Button();
+            btnAgregarProfesorCurso = new Button();
+            btnEliminarProfesorCurso = new Button();
+            btnModificarCurso = new Button();
             ((System.ComponentModel.ISupportInitialize)numericAnio).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericCupo).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridAlumnosCurso).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridProfesoresCurso).BeginInit();
             SuspendLayout();
             // 
             // labelAnio
             // 
             labelAnio.AutoSize = true;
-            labelAnio.Location = new Point(20, 60);
+            labelAnio.Location = new Point(409, 21);
             labelAnio.Name = "labelAnio";
             labelAnio.Size = new Size(90, 15);
             labelAnio.TabIndex = 2;
@@ -53,16 +64,17 @@ namespace WinFormsApp
             // 
             // numericAnio
             // 
-            numericAnio.Location = new Point(120, 58);
+            numericAnio.Enabled = false;
+            numericAnio.Location = new Point(505, 18);
             numericAnio.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numericAnio.Name = "numericAnio";
-            numericAnio.Size = new Size(120, 23);
+            numericAnio.Size = new Size(64, 23);
             numericAnio.TabIndex = 3;
             // 
             // labelCupo
             // 
             labelCupo.AutoSize = true;
-            labelCupo.Location = new Point(20, 140);
+            labelCupo.Location = new Point(588, 21);
             labelCupo.Name = "labelCupo";
             labelCupo.Size = new Size(39, 15);
             labelCupo.TabIndex = 4;
@@ -70,16 +82,17 @@ namespace WinFormsApp
             // 
             // numericCupo
             // 
-            numericCupo.Location = new Point(120, 138);
+            numericCupo.Enabled = false;
+            numericCupo.Location = new Point(633, 18);
             numericCupo.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numericCupo.Name = "numericCupo";
-            numericCupo.Size = new Size(120, 23);
+            numericCupo.Size = new Size(43, 23);
             numericCupo.TabIndex = 5;
             // 
             // btnGuardar
             // 
             btnGuardar.BackColor = Color.MediumSeaGreen;
-            btnGuardar.Location = new Point(177, 186);
+            btnGuardar.Location = new Point(601, 305);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 23);
             btnGuardar.TabIndex = 6;
@@ -90,7 +103,7 @@ namespace WinFormsApp
             // btnCancelar
             // 
             btnCancelar.BackColor = SystemColors.Control;
-            btnCancelar.Location = new Point(20, 186);
+            btnCancelar.Location = new Point(12, 305);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 23);
             btnCancelar.TabIndex = 7;
@@ -101,7 +114,7 @@ namespace WinFormsApp
             // labelComision
             // 
             labelComision.AutoSize = true;
-            labelComision.Location = new Point(20, 100);
+            labelComision.Location = new Point(204, 21);
             labelComision.Name = "labelComision";
             labelComision.Size = new Size(61, 15);
             labelComision.TabIndex = 8;
@@ -110,7 +123,8 @@ namespace WinFormsApp
             // comboBoxComision
             // 
             comboBoxComision.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxComision.Location = new Point(120, 96);
+            comboBoxComision.Enabled = false;
+            comboBoxComision.Location = new Point(271, 18);
             comboBoxComision.Name = "comboBoxComision";
             comboBoxComision.Size = new Size(120, 23);
             comboBoxComision.TabIndex = 9;
@@ -118,7 +132,7 @@ namespace WinFormsApp
             // labelMateria
             // 
             labelMateria.AutoSize = true;
-            labelMateria.Location = new Point(20, 21);
+            labelMateria.Location = new Point(22, 21);
             labelMateria.Name = "labelMateria";
             labelMateria.Size = new Size(50, 15);
             labelMateria.TabIndex = 10;
@@ -127,16 +141,115 @@ namespace WinFormsApp
             // comboBoxMateria
             // 
             comboBoxMateria.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxMateria.Location = new Point(120, 18);
+            comboBoxMateria.Enabled = false;
+            comboBoxMateria.Location = new Point(78, 18);
             comboBoxMateria.Name = "comboBoxMateria";
             comboBoxMateria.Size = new Size(120, 23);
             comboBoxMateria.TabIndex = 11;
+            // 
+            // dataGridAlumnosCurso
+            // 
+            dataGridAlumnosCurso.AllowUserToAddRows = false;
+            dataGridAlumnosCurso.AllowUserToDeleteRows = false;
+            dataGridAlumnosCurso.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridAlumnosCurso.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridAlumnosCurso.Location = new Point(22, 92);
+            dataGridAlumnosCurso.Name = "dataGridAlumnosCurso";
+            dataGridAlumnosCurso.ReadOnly = true;
+            dataGridAlumnosCurso.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridAlumnosCurso.Size = new Size(323, 150);
+            dataGridAlumnosCurso.TabIndex = 12;
+            // 
+            // dataGridProfesoresCurso
+            // 
+            dataGridProfesoresCurso.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridProfesoresCurso.Location = new Point(389, 92);
+            dataGridProfesoresCurso.Name = "dataGridProfesoresCurso";
+            dataGridProfesoresCurso.Size = new Size(287, 150);
+            dataGridProfesoresCurso.TabIndex = 13;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(22, 64);
+            label1.Name = "label1";
+            label1.Size = new Size(55, 15);
+            label1.TabIndex = 14;
+            label1.Text = "Alumnos";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(387, 64);
+            label2.Name = "label2";
+            label2.Size = new Size(62, 15);
+            label2.TabIndex = 15;
+            label2.Text = "Profesores";
+            // 
+            // btnEliminarAlumnoCurso
+            // 
+            btnEliminarAlumnoCurso.BackColor = Color.IndianRed;
+            btnEliminarAlumnoCurso.Location = new Point(270, 60);
+            btnEliminarAlumnoCurso.Name = "btnEliminarAlumnoCurso";
+            btnEliminarAlumnoCurso.Size = new Size(75, 23);
+            btnEliminarAlumnoCurso.TabIndex = 16;
+            btnEliminarAlumnoCurso.Text = "Eliminar";
+            btnEliminarAlumnoCurso.UseVisualStyleBackColor = false;
+            // 
+            // btnAgregarAlumnoCurso
+            // 
+            btnAgregarAlumnoCurso.BackColor = Color.Khaki;
+            btnAgregarAlumnoCurso.Location = new Point(143, 60);
+            btnAgregarAlumnoCurso.Name = "btnAgregarAlumnoCurso";
+            btnAgregarAlumnoCurso.Size = new Size(121, 23);
+            btnAgregarAlumnoCurso.TabIndex = 17;
+            btnAgregarAlumnoCurso.Text = "Agregar Alumno";
+            btnAgregarAlumnoCurso.UseVisualStyleBackColor = false;
+            // 
+            // btnAgregarProfesorCurso
+            // 
+            btnAgregarProfesorCurso.BackColor = Color.Khaki;
+            btnAgregarProfesorCurso.Location = new Point(468, 60);
+            btnAgregarProfesorCurso.Name = "btnAgregarProfesorCurso";
+            btnAgregarProfesorCurso.Size = new Size(127, 23);
+            btnAgregarProfesorCurso.TabIndex = 18;
+            btnAgregarProfesorCurso.Text = "Agregar Profesor";
+            btnAgregarProfesorCurso.UseVisualStyleBackColor = false;
+            // 
+            // btnEliminarProfesorCurso
+            // 
+            btnEliminarProfesorCurso.BackColor = Color.IndianRed;
+            btnEliminarProfesorCurso.Location = new Point(601, 60);
+            btnEliminarProfesorCurso.Name = "btnEliminarProfesorCurso";
+            btnEliminarProfesorCurso.Size = new Size(75, 23);
+            btnEliminarProfesorCurso.TabIndex = 19;
+            btnEliminarProfesorCurso.Text = "Eliminar";
+            btnEliminarProfesorCurso.UseVisualStyleBackColor = false;
+            // 
+            // btnModificarCurso
+            // 
+            btnModificarCurso.Location = new Point(290, 305);
+            btnModificarCurso.Name = "btnModificarCurso";
+            btnModificarCurso.Size = new Size(114, 23);
+            btnModificarCurso.TabIndex = 20;
+            btnModificarCurso.Text = "Modificar Curso";
+            btnModificarCurso.UseVisualStyleBackColor = true;
+            btnModificarCurso.Click += btnModificarCurso_Click;
             // 
             // CursoDetalleForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(264, 221);
+            ClientSize = new Size(692, 340);
+            Controls.Add(btnModificarCurso);
+            Controls.Add(btnEliminarProfesorCurso);
+            Controls.Add(btnAgregarProfesorCurso);
+            Controls.Add(btnAgregarAlumnoCurso);
+            Controls.Add(btnEliminarAlumnoCurso);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(dataGridProfesoresCurso);
+            Controls.Add(dataGridAlumnosCurso);
             Controls.Add(btnCancelar);
             Controls.Add(btnGuardar);
             Controls.Add(numericCupo);
@@ -152,6 +265,8 @@ namespace WinFormsApp
             Load += CursoDetalleForm_Load;
             ((System.ComponentModel.ISupportInitialize)numericAnio).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericCupo).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridAlumnosCurso).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridProfesoresCurso).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -167,5 +282,14 @@ namespace WinFormsApp
         private ComboBox comboBoxComision;
         private Label labelMateria;
         private ComboBox comboBoxMateria;
+        private DataGridView dataGridAlumnosCurso;
+        private DataGridView dataGridProfesoresCurso;
+        private Label label1;
+        private Label label2;
+        private Button btnEliminarAlumnoCurso;
+        private Button btnAgregarAlumnoCurso;
+        private Button btnAgregarProfesorCurso;
+        private Button btnEliminarProfesorCurso;
+        private Button btnModificarCurso;
     }
 }

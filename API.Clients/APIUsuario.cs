@@ -374,6 +374,33 @@ namespace API.Clients
             }
         }
 
-        
+        public static async Task<List<AlumnoCursoDetalleDTO>> GetAlumnosByCursoAsync(int idCurso)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"usuarios/cursos/{idCurso}/alumnos");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<AlumnoCursoDetalleDTO>>();
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to retrieve alumnos by curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while retrieving alumnos by curso. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout retrieving alumnos by curso. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
     }
 }

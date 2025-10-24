@@ -14,11 +14,19 @@ namespace WinFormsApp
         public ComisionListaForm()
         {
             InitializeComponent();
+            dataGridViewComisiones.SelectionChanged += DataGridViewComisiones_SelectionChanged;
         }
 
         public async void ComisionListaForm_Load(object sender, EventArgs e)
         {
             await LoadComisiones();
+            btnModificar.Enabled = false;
+        }
+
+        private void DataGridViewComisiones_SelectionChanged(object? sender, EventArgs e)
+        {
+            // Habilitar el botón solo si hay una fila seleccionada
+            btnModificar.Enabled = dataGridViewComisiones.SelectedRows.Count > 0 && dataGridViewComisiones.CurrentRow != null;
         }
 
         private async Task LoadComisiones()
@@ -49,6 +57,7 @@ namespace WinFormsApp
 
                 dataGridViewComisiones.DataSource = view;
                 dataGridViewComisiones.ClearSelection();
+                btnModificar.Enabled = false; 
             }
             catch (Exception ex)
             {

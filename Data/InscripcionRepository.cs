@@ -9,6 +9,7 @@ namespace Data
     public class InscripcionRepository
     {
         private readonly AcademiaContext _context;
+
         public InscripcionRepository(AcademiaContext context)
         {
             _context = context;
@@ -91,6 +92,18 @@ namespace Data
         public async Task<int> GetAlumnoCountInCurso(int idCurso)
         {
             return await _context.Alumno_Cursos.CountAsync(ac => ac.IdCurso == idCurso);
+        }
+
+        public async Task<List<(Alumno_Curso inscripcion, Usuario alumno)>> GetAlumnosByCursoAsync(int idCurso)
+        {
+            var query = from ac in _context.Alumno_Cursos
+                        join u in _context.Usuarios on ac.IdAlumno equals u.Id
+                        where ac.IdCurso == idCurso
+                        orderby ac.IdInscripcion
+                        select new { inscripcion = ac, alumno = u };
+
+            var result = await query.ToListAsync();
+            return result.Select(x => (x.inscripcion, x.alumno)).ToList();
         }
     }
 }

@@ -43,7 +43,7 @@ namespace WinFormsApp
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(221, 250);
+            btnModificar.Location = new Point(209, 250);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 2;

@@ -357,5 +357,19 @@ namespace Application.Services
             };
             await _inscripcionRepository.UpdateAlumnoInsc(alumnoInsc);
         }
+
+        public async Task<List<AlumnoCursoDetalleDTO>> GetAlumnosByCursoAsync(int idCurso)
+        {
+            var inscripciones = await _inscripcionRepository.GetAlumnosByCursoAsync(idCurso);
+            
+            return inscripciones.Select(item => new AlumnoCursoDetalleDTO
+            {
+                IdInscripcion = item.inscripcion.IdInscripcion,
+                Legajo = item.alumno.Legajo,
+                Alumno = $"{item.alumno.Nombre} {item.alumno.Apellido}",
+                Condicion = item.inscripcion.Condicion,
+                Nota = item.inscripcion.Nota
+            }).ToList();
+        }
     }
 }

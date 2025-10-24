@@ -14,19 +14,20 @@ namespace WinFormsApp
         {
             InitializeComponent();
             dataGridViewCursos.SelectionChanged += DataGridViewCursos_SelectionChanged;
+            dataGridViewCursos.CellDoubleClick += DataGridViewCursos_CellDoubleClick;
         }
 
         public async void CursoListaForm_Load(object sender, EventArgs e)
         {
             await LoadCursos();
             dataGridViewCursos.ClearSelection();
-            btnAddProfCurso.Visible = false; 
+            btnModificar.Enabled = false;
         }
 
         private void DataGridViewCursos_SelectionChanged(object? sender, EventArgs e)
         {
             // Mostrar el botón solo si hay una fila seleccionada
-            btnAddProfCurso.Visible = dataGridViewCursos.SelectedRows.Count == 1 && dataGridViewCursos.CurrentRow != null;
+            btnModificar.Enabled = dataGridViewCursos.SelectedRows.Count > 0 && dataGridViewCursos.CurrentRow != null;
         }
 
         private async Task LoadCursos()
@@ -71,7 +72,7 @@ namespace WinFormsApp
 
                 dataGridViewCursos.DataSource = view;
                 dataGridViewCursos.ClearSelection();
-                btnAddProfCurso.Visible = false; // Ocultar el botón después de cargar
+                btnModificar.Enabled = false;
             }
             catch (Exception ex)
             {
@@ -146,6 +147,28 @@ namespace WinFormsApp
             {
                 MessageBox.Show($"Error al eliminar el curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }   
+        }
+
+        private async void DataGridViewCursos_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return; // Ignorar clic en el header
+
+            try
+            {
+                int id = (int)dataGridViewCursos.Rows[e.RowIndex].Cells["Id_curso"].Value;
+                NewCursoDTO curso = await APICurso.GetAsync(id);
+                CursoDetalleForm form = new CursoDetalleForm(curso);
+                form.ShowDialog();
+                await LoadCursos();
+            }
+            catch (ArgumentException err)
+            {
+                MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al abrir detalle del curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
