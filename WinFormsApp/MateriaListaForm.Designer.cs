@@ -27,6 +27,7 @@ namespace WinFormsApp
             dataGridViewMaterias.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewMaterias.Location = new Point(20, 20);
             dataGridViewMaterias.Name = "dataGridViewMaterias";
+            dataGridViewMaterias.ReadOnly = true;
             dataGridViewMaterias.Size = new Size(618, 220);
             dataGridViewMaterias.TabIndex = 0;
             // 

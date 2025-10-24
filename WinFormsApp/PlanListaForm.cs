@@ -18,6 +18,13 @@ namespace WinFormsApp
         public PlanListaForm()
         {
             InitializeComponent();
+            dataGridViewPlanes.SelectionChanged += DataGridViewPlanes_SelectionChanged;
+        }
+        private void DataGridViewPlanes_SelectionChanged(object? sender, EventArgs e)
+        {
+            bool haySeleccion = dataGridViewPlanes.SelectedRows.Count > 0 && dataGridViewPlanes.CurrentRow != null;
+            btnModificar.Enabled = haySeleccion;
+            btnEliminar.Enabled = haySeleccion;
         }
         public async void PlanListaForm_Load(object sender, EventArgs e)
         {

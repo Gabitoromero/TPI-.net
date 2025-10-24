@@ -12,11 +12,21 @@ namespace WinFormsApp
         public EspecialidadListaForm()
         {
             InitializeComponent();
+            dataGridViewEspecialidades.SelectionChanged += DataGridViewEspecialidades_SelectionChanged;
         }
 
         public async void EspecialidadListaForm_Load(object sender, EventArgs e)
         {
             await LoadEspecialidades();
+            btnModificar.Enabled = false;
+            btnEliminar.Enabled = false;
+        }
+
+        private void DataGridViewEspecialidades_SelectionChanged(object? sender, EventArgs e)
+        {
+            bool haySeleccion = dataGridViewEspecialidades.SelectedRows.Count > 0 && dataGridViewEspecialidades.CurrentRow != null;
+            btnModificar.Enabled = haySeleccion;
+            btnEliminar.Enabled = haySeleccion;
         }
 
         private async Task LoadEspecialidades()
@@ -25,6 +35,9 @@ namespace WinFormsApp
             {
                 List<EspecialidadDTO> list = await APIEspecialidad.GetAllAsync();
                 dataGridViewEspecialidades.DataSource = list;
+                dataGridViewEspecialidades.ClearSelection();
+                btnModificar.Enabled = false;
+                btnEliminar.Enabled = false;
             }
             catch (Exception ex)
             {

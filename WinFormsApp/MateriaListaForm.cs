@@ -13,6 +13,13 @@ namespace WinFormsApp
         public MateriaListaForm()
         {
             InitializeComponent();
+            dataGridViewMaterias.SelectionChanged += dataGridViewMaterias_SelectionChanged;
+        }
+        private void dataGridViewMaterias_SelectionChanged(object? sender, EventArgs e)
+        {
+            bool haySeleccion = dataGridViewMaterias.SelectedRows.Count > 0 && dataGridViewMaterias.CurrentRow != null;
+            btnModificar.Enabled = haySeleccion;
+            btnEliminar.Enabled = haySeleccion;
         }
 
         public async void MateriaListaForm_Load(object sender, EventArgs e)

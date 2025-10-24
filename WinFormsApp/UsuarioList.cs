@@ -18,6 +18,13 @@ namespace WinFormsApp
         public UsuarioList()
         {
             InitializeComponent();
+            dataGridViewUsuarios.SelectionChanged += DataGridViewUsuarios_SelectionChanged;
+        }
+        private void DataGridViewUsuarios_SelectionChanged(object? sender, EventArgs e)
+        {
+            bool haySeleccion = dataGridViewUsuarios.SelectedRows.Count > 0 && dataGridViewUsuarios.CurrentRow != null;
+            btnModificar.Enabled = haySeleccion;
+            btnEliminar.Enabled = haySeleccion;
         }
 
         public async void UsuarioList_Load(object sender, EventArgs e)

@@ -21,12 +21,12 @@ namespace WinFormsApp
         {
             await LoadComisiones();
             btnModificar.Enabled = false;
-            btnEliminar.Enabled = false; // Inicializar deshabilitado
+            btnEliminar.Enabled = false; 
         }
 
         private void DataGridViewComisiones_SelectionChanged(object? sender, EventArgs e)
         {
-            // Habilitar los botones solo si hay una fila seleccionada
+            
             bool haySeleccion = dataGridViewComisiones.SelectedRows.Count > 0 && dataGridViewComisiones.CurrentRow != null;
             btnModificar.Enabled = haySeleccion;
             btnEliminar.Enabled = haySeleccion;

@@ -41,6 +41,7 @@
             dataGridViewCursos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCursos.Location = new Point(20, 23);
             dataGridViewCursos.Name = "dataGridViewCursos";
+            dataGridViewCursos.ReadOnly = true;
             dataGridViewCursos.Size = new Size(664, 237);
             dataGridViewCursos.TabIndex = 3;
             // 

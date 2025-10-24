@@ -27,6 +27,7 @@ namespace WinFormsApp
             dataGridViewComisiones.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewComisiones.Location = new Point(20, 20);
             dataGridViewComisiones.Name = "dataGridViewComisiones";
+            dataGridViewComisiones.ReadOnly = true;
             dataGridViewComisiones.Size = new Size(462, 220);
             dataGridViewComisiones.TabIndex = 0;
             // 

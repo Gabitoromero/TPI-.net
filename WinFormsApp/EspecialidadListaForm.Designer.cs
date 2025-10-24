@@ -26,10 +26,12 @@ namespace WinFormsApp
             // 
             // dataGridViewEspecialidades
             // 
+            dataGridViewEspecialidades.AllowUserToResizeRows = false;
             dataGridViewEspecialidades.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewEspecialidades.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewEspecialidades.Location = new Point(12, 12);
             dataGridViewEspecialidades.Name = "dataGridViewEspecialidades";
+            dataGridViewEspecialidades.ReadOnly = true;
             dataGridViewEspecialidades.Size = new Size(404, 229);
             dataGridViewEspecialidades.TabIndex = 2;
             dataGridViewEspecialidades.CellDoubleClick += dataGridViewEspecialidades_CellDoubleClick;

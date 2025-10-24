@@ -22,12 +22,13 @@ namespace WinFormsApp
             await LoadCursos();
             dataGridViewCursos.ClearSelection();
             btnModificar.Enabled = false;
+            btnEliminar.Enabled = false;
         }
 
         private void DataGridViewCursos_SelectionChanged(object? sender, EventArgs e)
         {
-            // Mostrar el botón solo si hay una fila seleccionada
             btnModificar.Enabled = dataGridViewCursos.SelectedRows.Count > 0 && dataGridViewCursos.CurrentRow != null;
+            btnEliminar.Enabled = dataGridViewCursos.SelectedRows.Count > 0 && dataGridViewCursos.CurrentRow != null;
         }
 
         private async Task LoadCursos()
