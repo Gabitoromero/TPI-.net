@@ -427,5 +427,88 @@ namespace API.Clients
                 throw new Exception($"Error: {ex.Message}");
             }
         }
+
+        public static async Task<List<ProfesorCursoDetalleDTO>> GetProfesoresByCursoAsync(int idCurso)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"usuarios/cursos/{idCurso}/profesores");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<ProfesorCursoDetalleDTO>>();
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to retrieve profesores by curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while retrieving profesores by curso. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout retrieving profesores by curso. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
+        public static async Task DeleteProfesorCursoAsync(int idDictado)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync($"usuarios/profesor_cursos/{idDictado}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to delete profesor curso with ID:{idDictado}. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException err)
+            {
+                throw new Exception($"OOPS! A connection error ocurred while deleting profesor curso with ID:{idDictado}. Error:{err.Message}");
+            }
+            catch (TaskCanceledException err)
+            {
+                throw new Exception($"Timeout deleting profesor curso with ID:{idDictado}. Error:{err.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
+        public static async Task AddProfesorCursoAsync(Profesor_CursoDTO dto)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PostAsJsonAsync("usuarios/profesor_cursos/", dto);
+                if (response.IsSuccessStatusCode)
+                {
+                    return;
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to add profesor curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while adding profesor curso. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout adding profesor curso. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
     }
 }

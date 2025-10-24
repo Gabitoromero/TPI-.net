@@ -99,11 +99,23 @@ namespace Data
             var query = from ac in _context.Alumno_Cursos
                         join u in _context.Usuarios on ac.IdAlumno equals u.Id
                         where ac.IdCurso == idCurso
-                        orderby ac.IdInscripcion
+                        //orderby ac.IdInscripcion
                         select new { inscripcion = ac, alumno = u };
 
             var result = await query.ToListAsync();
             return result.Select(x => (x.inscripcion, x.alumno)).ToList();
+        }
+
+        public async Task<List<(Profesor_Curso dictado, Usuario profesor)>> GetProfesoresByCursoAsync(int idCurso)
+        {
+            var query = from pc in _context.Profesor_Cursos
+                        join u in _context.Usuarios on pc.IdProfesor equals u.Id
+                        where pc.IdCurso == idCurso
+                        //orderby pc.Cargo descending // Titular primero (T > A alfabéticamente), luego Auxiliar
+                        select new { dictado = pc, profesor = u };
+
+            var result = await query.ToListAsync();
+            return result.Select(x => (x.dictado, x.profesor)).ToList();
         }
     }
 }

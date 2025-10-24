@@ -17,6 +17,7 @@ namespace WinFormsApp
         {
             InitializeComponent();
             dataGridAlumnosCurso.SelectionChanged += dataGridAlumnosCurso_SelectionChanged;
+            dataGridProfesoresCurso.SelectionChanged += dataGridProfesoresCurso_SelectionChanged;
         }
 
         public CursoDetalleForm(NewCursoDTO curso) : this()
@@ -27,9 +28,12 @@ namespace WinFormsApp
 
         private void dataGridAlumnosCurso_SelectionChanged(object? sender, EventArgs e)
         {
-            // No se permite la selección de filas
-            //dataGridAlumnosCurso.ClearSelection();
             btnEliminarAlumnoCurso.Visible = dataGridAlumnosCurso.SelectedRows.Count > 0 && dataGridAlumnosCurso.CurrentRow != null;
+        }
+
+        private void dataGridProfesoresCurso_SelectionChanged(object? sender, EventArgs e)
+        {
+            btnEliminarProfesorCurso.Visible = dataGridProfesoresCurso.SelectedRows.Count > 0 && dataGridProfesoresCurso.CurrentRow != null;
         }
 
         private async void CursoDetalleForm_Load(object sender, EventArgs e)
@@ -87,7 +91,12 @@ namespace WinFormsApp
                         comboBoxMateria.SelectedIndex = -1;
                     }
                 }
+                // Cargar alumnos del curso
                 await LoadAlumnosCurso(curso.Id_curso);
+
+                // Cargar profesores del curso
+                await LoadProfesoresCurso(curso.Id_curso);
+
                 SetEditingMode(false);
             }
             else
@@ -116,8 +125,8 @@ namespace WinFormsApp
                 if (dataGridAlumnosCurso.Columns["Legajo"] != null)
                     dataGridAlumnosCurso.Columns["Legajo"].HeaderText = "Legajo";
 
-                if (dataGridAlumnosCurso.Columns["NombreCompleto"] != null)
-                    dataGridAlumnosCurso.Columns["NombreCompleto"].HeaderText = "Alumno";
+                if (dataGridAlumnosCurso.Columns["Alumno"] != null)
+                    dataGridAlumnosCurso.Columns["Alumno"].HeaderText = "Alumno";
 
                 if (dataGridAlumnosCurso.Columns["Condicion"] != null)
                     dataGridAlumnosCurso.Columns["Condicion"].HeaderText = "Condición";
@@ -133,6 +142,36 @@ namespace WinFormsApp
             }
         }
 
+        private async Task LoadProfesoresCurso(int idCurso)
+        {
+            try
+            {
+                var profesores = await APIUsuario.GetProfesoresByCursoAsync(idCurso);
+
+                dataGridProfesoresCurso.DataSource = null;
+                dataGridProfesoresCurso.DataSource = profesores;
+
+                if (dataGridProfesoresCurso.Columns["IdDictado"] != null)
+                {
+                    dataGridProfesoresCurso.Columns["IdDictado"].Visible = false;
+                }
+                if (dataGridProfesoresCurso.Columns["Legajo"] != null)
+                    dataGridProfesoresCurso.Columns["Legajo"].HeaderText = "Legajo";
+
+                if (dataGridProfesoresCurso.Columns["Nombre"] != null)
+                    dataGridProfesoresCurso.Columns["Nombre"].HeaderText = "Profesor";
+
+                if (dataGridProfesoresCurso.Columns["Cargo"] != null)
+                    dataGridProfesoresCurso.Columns["Cargo"].HeaderText = "Cargo";
+
+                dataGridProfesoresCurso.ClearSelection();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar profesores del curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void SetEditingMode(bool enabled)
         {
             isEditingMode = enabled;
@@ -144,19 +183,18 @@ namespace WinFormsApp
 
             if (enabled)
             {
-                btnModificarCurso.BackColor = Color.Orange; 
-                btnModificarCurso.Text = "Cancelar Edición";
+                btnModificarCurso.BackColor = Color.Orange;
+                btnModificarCurso.Text = "Editando";
             }
             else
             {
-                btnModificarCurso.BackColor = SystemColors.Control; 
+                btnModificarCurso.BackColor = SystemColors.Control;
                 btnModificarCurso.Text = "Modificar Curso";
             }
         }
 
         private void btnModificarCurso_Click(object? sender, EventArgs e)
         {
-            // Toggle entre modo edición y modo visualización
             SetEditingMode(!isEditingMode);
         }
 
@@ -227,7 +265,7 @@ namespace WinFormsApp
                 {
                     await APIUsuario.DeleteAlumnoCursoAsync(idInscripcion);
                     MessageBox.Show("Inscripción eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    
+
                     // Recargar la lista de alumnos
                     await LoadAlumnosCurso(curso.Id_curso);
                 }
@@ -235,6 +273,62 @@ namespace WinFormsApp
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al eliminar inscripción: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void btnEliminarProfesorCurso_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridProfesoresCurso.CurrentRow == null)
+                {
+                    MessageBox.Show("Seleccione un profesor para eliminar su asignación.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int idDictado = (int)dataGridProfesoresCurso.CurrentRow.Cells["IdDictado"].Value;
+                string nombreProfesor = dataGridProfesoresCurso.CurrentRow.Cells["Nombre"].Value?.ToString() ?? "este profesor";
+                string cargo = dataGridProfesoresCurso.CurrentRow.Cells["Cargo"].Value?.ToString() ?? "desconocido";
+
+                // Mostrar mensaje de confirmación
+                DialogResult confirmResult = MessageBox.Show(
+                    $"¿Está seguro que desea eliminar la asignación del profesor '{nombreProfesor}'?\n\nCargo: {cargo}\n\nEsta acción no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                // Solo eliminar si el usuario confirma
+                if (confirmResult == DialogResult.Yes)
+                {
+                    await APIUsuario.DeleteProfesorCursoAsync(idDictado);
+                    MessageBox.Show("Asignación eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    
+                    // Recargar la lista de profesores
+                    await LoadProfesoresCurso(curso.Id_curso);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al eliminar asignación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnAgregarProfesorCurso_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                var formSeleccion = new CursoSeleccionProfesor(curso.Id_curso);
+                formSeleccion.ShowDialog();
+
+                // Si se agregó un profesor, recargar la lista
+                if (formSeleccion.ProfesorAgregado)
+                {
+                    _ = LoadProfesoresCurso(curso.Id_curso);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al abrir selección de profesor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

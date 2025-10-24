@@ -55,7 +55,7 @@ namespace WinFormsApp
             // labelAnio
             // 
             labelAnio.AutoSize = true;
-            labelAnio.Location = new Point(409, 21);
+            labelAnio.Location = new Point(427, 21);
             labelAnio.Name = "labelAnio";
             labelAnio.Size = new Size(90, 15);
             labelAnio.TabIndex = 2;
@@ -64,7 +64,7 @@ namespace WinFormsApp
             // numericAnio
             // 
             numericAnio.Enabled = false;
-            numericAnio.Location = new Point(505, 18);
+            numericAnio.Location = new Point(523, 18);
             numericAnio.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numericAnio.Name = "numericAnio";
             numericAnio.Size = new Size(64, 23);
@@ -73,7 +73,7 @@ namespace WinFormsApp
             // labelCupo
             // 
             labelCupo.AutoSize = true;
-            labelCupo.Location = new Point(588, 21);
+            labelCupo.Location = new Point(621, 21);
             labelCupo.Name = "labelCupo";
             labelCupo.Size = new Size(39, 15);
             labelCupo.TabIndex = 4;
@@ -82,7 +82,7 @@ namespace WinFormsApp
             // numericCupo
             // 
             numericCupo.Enabled = false;
-            numericCupo.Location = new Point(633, 18);
+            numericCupo.Location = new Point(675, 18);
             numericCupo.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numericCupo.Name = "numericCupo";
             numericCupo.Size = new Size(43, 23);
@@ -91,7 +91,7 @@ namespace WinFormsApp
             // btnGuardar
             // 
             btnGuardar.BackColor = Color.MediumSeaGreen;
-            btnGuardar.Location = new Point(601, 305);
+            btnGuardar.Location = new Point(643, 261);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 23);
             btnGuardar.TabIndex = 6;
@@ -102,7 +102,7 @@ namespace WinFormsApp
             // btnCancelar
             // 
             btnCancelar.BackColor = SystemColors.Control;
-            btnCancelar.Location = new Point(12, 305);
+            btnCancelar.Location = new Point(22, 261);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 23);
             btnCancelar.TabIndex = 7;
@@ -161,10 +161,15 @@ namespace WinFormsApp
             // 
             // dataGridProfesoresCurso
             // 
+            dataGridProfesoresCurso.AllowUserToAddRows = false;
+            dataGridProfesoresCurso.AllowUserToDeleteRows = false;
+            dataGridProfesoresCurso.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridProfesoresCurso.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridProfesoresCurso.Location = new Point(389, 92);
             dataGridProfesoresCurso.Name = "dataGridProfesoresCurso";
-            dataGridProfesoresCurso.Size = new Size(287, 150);
+            dataGridProfesoresCurso.ReadOnly = true;
+            dataGridProfesoresCurso.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridProfesoresCurso.Size = new Size(329, 150);
             dataGridProfesoresCurso.TabIndex = 13;
             // 
             // label1
@@ -200,26 +205,29 @@ namespace WinFormsApp
             // btnAgregarProfesorCurso
             // 
             btnAgregarProfesorCurso.BackColor = Color.Khaki;
-            btnAgregarProfesorCurso.Location = new Point(468, 60);
+            btnAgregarProfesorCurso.Location = new Point(500, 60);
             btnAgregarProfesorCurso.Name = "btnAgregarProfesorCurso";
             btnAgregarProfesorCurso.Size = new Size(127, 23);
             btnAgregarProfesorCurso.TabIndex = 18;
             btnAgregarProfesorCurso.Text = "Agregar Profesor";
             btnAgregarProfesorCurso.UseVisualStyleBackColor = false;
+            btnAgregarProfesorCurso.Click += btnAgregarProfesorCurso_Click;
             // 
             // btnEliminarProfesorCurso
             // 
             btnEliminarProfesorCurso.BackColor = Color.IndianRed;
-            btnEliminarProfesorCurso.Location = new Point(601, 60);
+            btnEliminarProfesorCurso.Location = new Point(643, 60);
             btnEliminarProfesorCurso.Name = "btnEliminarProfesorCurso";
             btnEliminarProfesorCurso.Size = new Size(75, 23);
             btnEliminarProfesorCurso.TabIndex = 19;
             btnEliminarProfesorCurso.Text = "Eliminar";
             btnEliminarProfesorCurso.UseVisualStyleBackColor = false;
+            btnEliminarProfesorCurso.Visible = false;
+            btnEliminarProfesorCurso.Click += btnEliminarProfesorCurso_Click;
             // 
             // btnModificarCurso
             // 
-            btnModificarCurso.Location = new Point(290, 305);
+            btnModificarCurso.Location = new Point(314, 261);
             btnModificarCurso.Name = "btnModificarCurso";
             btnModificarCurso.Size = new Size(114, 23);
             btnModificarCurso.TabIndex = 20;
@@ -231,7 +239,7 @@ namespace WinFormsApp
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(692, 340);
+            ClientSize = new Size(746, 296);
             Controls.Add(btnModificarCurso);
             Controls.Add(btnEliminarProfesorCurso);
             Controls.Add(btnAgregarProfesorCurso);

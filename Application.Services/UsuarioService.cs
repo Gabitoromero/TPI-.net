@@ -90,6 +90,32 @@ namespace Application.Services
                 , Tipo = usuario.Tipo
             }).ToList();
         }
+        public async Task<List<AlumnoCursoDetalleDTO>> GetAlumnosByCursoAsync(int idCurso)
+        {
+            var inscripciones = await _inscripcionRepository.GetAlumnosByCursoAsync(idCurso);
+
+            return inscripciones.Select(item => new AlumnoCursoDetalleDTO
+            {
+                IdInscripcion = item.inscripcion.IdInscripcion,
+                Legajo = item.alumno.Legajo,
+                Alumno = $"{item.alumno.Nombre} {item.alumno.Apellido}",
+                Condicion = item.inscripcion.Condicion,
+                Nota = item.inscripcion.Nota
+            }).ToList();
+        }
+
+        public async Task<List<ProfesorCursoDetalleDTO>> GetProfesoresByCursoAsync(int idCurso)
+        {
+            List<(Profesor_Curso dictado, Usuario profesor)> dictados = await _inscripcionRepository.GetProfesoresByCursoAsync(idCurso);
+
+            return dictados.Select(item => new ProfesorCursoDetalleDTO
+            {
+                IdDictado = item.dictado.IdDictado,
+                Legajo = item.profesor.Legajo,
+                Nombre = $"{item.profesor.Nombre} {item.profesor.Apellido}",
+                Cargo = item.dictado.Cargo
+            }).ToList();
+        }
 
         public async Task<List<ShowUsuarioDTO>> GetAllAlumnos()
         {
@@ -217,8 +243,8 @@ namespace Application.Services
         }
         public async Task AddProfesorInsc(Profesor_CursoDTO dto)
         {
-            var curso = await _cursoService.Get(dto.IdCurso);
-            var profesor = await Get(dto.IdProfesor);
+            NewCursoDTO curso = await _cursoService.Get(dto.IdCurso);
+            Usuario profesor = await _repository.Get(dto.IdProfesor);
 
             if (curso == null)
             {
@@ -229,10 +255,31 @@ namespace Application.Services
                 throw new ArgumentException("Profesor inexistente");
             }
 
+            // Validar que el profesor no esté ya asignado al curso
+            var profesoresDelCurso = await _inscripcionRepository.GetAllProfesorInsc(dto.IdProfesor);
+            var yaAsignado = profesoresDelCurso.Any(p => p.IdCurso == dto.IdCurso);
+            
+            if (yaAsignado)
+            {
+                throw new ArgumentException("El profesor ya está asignado a este curso");
+            }
+
+            // Si es Titular, validar que no haya más de 3 Titulares
+            if (dto.Cargo == "Titular")
+            {
+                var profesoresEnCurso = await _inscripcionRepository.GetProfesoresByCursoAsync(dto.IdCurso);
+                int cantTitulares = profesoresEnCurso.Count(p => p.dictado.Cargo == "Titular");
+                
+                if (cantTitulares >= 3)
+                {
+                    throw new ArgumentException("El curso ya tiene el máximo de 3 profesores Titulares");
+                }
+            }
+
             var profesorInsc = new Profesor_Curso
             {
                 IdDictado = 0,
-                IdProfesor = dto.IdProfesor,
+                IdProfesor = profesor.Id,
                 IdCurso = dto.IdCurso,
                 Cargo = dto.Cargo
             };
@@ -358,18 +405,6 @@ namespace Application.Services
             await _inscripcionRepository.UpdateAlumnoInsc(alumnoInsc);
         }
 
-        public async Task<List<AlumnoCursoDetalleDTO>> GetAlumnosByCursoAsync(int idCurso)
-        {
-            var inscripciones = await _inscripcionRepository.GetAlumnosByCursoAsync(idCurso);
-            
-            return inscripciones.Select(item => new AlumnoCursoDetalleDTO
-            {
-                IdInscripcion = item.inscripcion.IdInscripcion,
-                Legajo = item.alumno.Legajo,
-                Alumno = $"{item.alumno.Nombre} {item.alumno.Apellido}",
-                Condicion = item.inscripcion.Condicion,
-                Nota = item.inscripcion.Nota
-            }).ToList();
-        }
+        
     }
 }

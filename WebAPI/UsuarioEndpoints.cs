@@ -228,6 +228,24 @@ namespace WebAPI
                     return Results.BadRequest(new { error = ex.Message });
                 }
             });
+
+            // Obtener profesores asignados a un curso específico
+            app.MapGet("/usuarios/cursos/{idCurso}/profesores", async (UsuarioService service, int idCurso) =>
+            {
+                try
+                {
+                    List<ProfesorCursoDetalleDTO> profesores = await service.GetProfesoresByCursoAsync(idCurso);
+                    if (profesores.Count == 0)
+                    {
+                        return Results.Ok(new List<ProfesorCursoDetalleDTO>()); // Retornar lista vacía si no hay profesores
+                    }
+                    return Results.Ok(profesores);
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
         }
     }
 }
