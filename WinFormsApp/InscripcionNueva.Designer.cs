@@ -36,21 +36,23 @@
             // 
             // btnCancelar
             // 
+            btnCancelar.BackColor = SystemColors.Control;
             btnCancelar.Location = new Point(25, 184);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 23);
             btnCancelar.TabIndex = 6;
             btnCancelar.Text = "Volver";
-            btnCancelar.UseVisualStyleBackColor = true;
+            btnCancelar.UseVisualStyleBackColor = false;
             // 
             // btnGuardar
             // 
+            btnGuardar.BackColor = SystemColors.ActiveCaption;
             btnGuardar.Location = new Point(261, 184);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 23);
             btnGuardar.TabIndex = 7;
             btnGuardar.Text = "Confirmar";
-            btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.UseVisualStyleBackColor = false;
             // 
             // dataGridCursos
             // 

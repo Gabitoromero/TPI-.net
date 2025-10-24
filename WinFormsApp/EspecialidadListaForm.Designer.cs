@@ -47,12 +47,13 @@ namespace WinFormsApp
             // 
             // btnAgregar
             // 
+            btnAgregar.BackColor = SystemColors.ActiveCaption;
             btnAgregar.Location = new Point(341, 262);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 4;
             btnAgregar.Text = "Agregar +";
-            btnAgregar.UseVisualStyleBackColor = true;
+            btnAgregar.UseVisualStyleBackColor = false;
             btnAgregar.Click += btnAgregar_Click;
             // 
             // btnModificar

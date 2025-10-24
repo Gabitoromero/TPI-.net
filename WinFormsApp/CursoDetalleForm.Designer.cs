@@ -78,7 +78,7 @@ namespace WinFormsApp
             // 
             // btnGuardar
             // 
-            btnGuardar.BackColor = SystemColors.ActiveCaption;
+            btnGuardar.BackColor = Color.MediumSeaGreen;
             btnGuardar.Location = new Point(177, 186);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(75, 23);
@@ -89,7 +89,7 @@ namespace WinFormsApp
             // 
             // btnCancelar
             // 
-            btnCancelar.BackColor = Color.IndianRed;
+            btnCancelar.BackColor = SystemColors.Control;
             btnCancelar.Location = new Point(20, 186);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(75, 23);

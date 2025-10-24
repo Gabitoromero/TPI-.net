@@ -48,12 +48,13 @@
             // 
             // btnCerrar
             // 
+            btnCerrar.BackColor = SystemColors.Control;
             btnCerrar.Location = new Point(247, 360);
             btnCerrar.Name = "btnCerrar";
             btnCerrar.Size = new Size(90, 30);
             btnCerrar.TabIndex = 1;
             btnCerrar.Text = "Cerrar";
-            btnCerrar.UseVisualStyleBackColor = true;
+            btnCerrar.UseVisualStyleBackColor = false;
             btnCerrar.Click += btnCerrar_Click;
             // 
             // label1

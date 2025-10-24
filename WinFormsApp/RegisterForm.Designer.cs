@@ -146,7 +146,7 @@
             // 
             // buttonBack
             // 
-            buttonBack.BackColor = Color.IndianRed;
+            buttonBack.BackColor = SystemColors.Control;
             buttonBack.Location = new Point(167, 357);
             buttonBack.Name = "buttonBack";
             buttonBack.Size = new Size(167, 32);
@@ -157,7 +157,7 @@
             // 
             // buttonRegister
             // 
-            buttonRegister.BackColor = Color.SteelBlue;
+            buttonRegister.BackColor = Color.MediumSeaGreen;
             buttonRegister.Location = new Point(359, 357);
             buttonRegister.Name = "buttonRegister";
             buttonRegister.Size = new Size(167, 32);

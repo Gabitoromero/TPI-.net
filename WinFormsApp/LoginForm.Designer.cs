@@ -74,13 +74,14 @@
             // 
             // buttonLogin
             // 
+            buttonLogin.BackColor = SystemColors.ActiveCaption;
             buttonLogin.FlatAppearance.BorderColor = Color.Cyan;
             buttonLogin.Location = new Point(188, 204);
             buttonLogin.Name = "buttonLogin";
             buttonLogin.Size = new Size(129, 23);
             buttonLogin.TabIndex = 4;
             buttonLogin.Text = "Login";
-            buttonLogin.UseVisualStyleBackColor = true;
+            buttonLogin.UseVisualStyleBackColor = false;
             buttonLogin.Click += buttonLogin_Click;
             // 
             // label3
