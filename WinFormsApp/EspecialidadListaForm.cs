@@ -34,8 +34,12 @@ namespace WinFormsApp
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            EspecialidadDetalleForm form = new EspecialidadDetalleForm();
-            form.ShowDialog();
+            this.Hide();
+            using (var form = new EspecialidadDetalleForm())
+            {
+                form.ShowDialog();
+            }
+            this.Show();
             _ = LoadEspecialidades();
         }
 
@@ -51,13 +55,19 @@ namespace WinFormsApp
 
                 int id = (int)dataGridViewEspecialidades.CurrentRow.Cells["Id"].Value;
                 EspecialidadDTO dto = await APIEspecialidad.GetAsync(id);
-                EspecialidadDetalleForm form = new EspecialidadDetalleForm(dto);
-                form.ShowDialog();
+                
+                this.Hide();
+                using (var form = new EspecialidadDetalleForm(dto))
+                {
+                    form.ShowDialog();
+                }
+                this.Show();
                 await LoadEspecialidades();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al modificar especialidad: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show(); // Asegurar que se muestre incluso si hay error
             }
         }
 
@@ -102,13 +112,19 @@ namespace WinFormsApp
             {
                 int id = (int)dataGridViewEspecialidades.Rows[e.RowIndex].Cells["Id"].Value;
                 var dto = await APIEspecialidad.GetAsync(id);
-                var form = new EspecialidadDetalleForm(dto);
-                form.ShowDialog();
+                
+                this.Hide();
+                using (var form = new EspecialidadDetalleForm(dto))
+                {
+                    form.ShowDialog();
+                }
+                this.Show();
                 await LoadEspecialidades();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al abrir detalle: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show(); // Asegurar que se muestre incluso si hay error
             }
         }
     }

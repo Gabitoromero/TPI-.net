@@ -63,14 +63,18 @@ namespace WinFormsApp
         {
             try
             {
-                EspecialidadListaForm espForm = new EspecialidadListaForm();
-                espForm.ShowDialog();
+                this.Hide();
+                using (var espForm = new EspecialidadListaForm())
+                {
+                    espForm.ShowDialog();
+                }
+                this.Show();
             }
             catch (Exception err)
             {
                 MessageBox.Show($"Error al abrir especialidades: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show(); // Asegurar que se muestre incluso si hay error
             }
-
         }
         private void btnUsuariosCRUD_Click(object sender, EventArgs e)
         {
