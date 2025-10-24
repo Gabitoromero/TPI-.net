@@ -19,6 +19,7 @@ namespace API.Clients
         {
             esp = CreateHttpClientAsync();
         }
+
         public static async Task<EspecialidadDTO> GetAsync(int id)
         {
             try
@@ -47,7 +48,12 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving speciality with ID: {id}. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
+
         public static async Task<List<EspecialidadDTO>> GetAllAsync()
         {
             try
@@ -71,7 +77,12 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving specialities. Error: ${ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
+
         public static async Task DeleteAsync(int id)
         {
             try
@@ -87,23 +98,20 @@ namespace API.Clients
                     throw new Exception($"OOPS! Something went wrong deleting speciality with ID:{id}. Error: {errmen}");
                 }
             }
-            catch (InvalidOperationException err)
-            {
-                throw new ArgumentException(err.Message);
-            }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while retrieving speciality with ID:{id}. Error:{err}");
+                throw new Exception($"OOPS! A connection error ocurred while deleting speciality with ID:{id}. Error:{err.Message}");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout retrieving speciality with ID:{id}. Error:{err}");
+                throw new Exception($"Timeout deleting speciality with ID:{id}. Error:{err.Message}");
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                throw err;
+                throw new Exception($"Error: {ex.Message}");
             }
         }
+
         public static async Task<EspecialidadDTO> AddAsync(NewEspecialidadDTO dto)
         {
             try
@@ -121,13 +129,18 @@ namespace API.Clients
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while posting speciality. Error:{err}");
+                throw new Exception($"OOPS! A connection error ocurred while posting speciality. Error:{err.Message}");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout posting speciality. Error:{err}");
+                throw new Exception($"Timeout posting speciality. Error:{err.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
+
         public static async Task<EspecialidadDTO> PutAsync(EspecialidadDTO dto)
         {
             try
@@ -153,16 +166,20 @@ namespace API.Clients
                 else
                 {
                     string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"Error: {errmen}");
+                    throw new Exception($"OOPS! Failed to update speciality. Error: {errmen}");
                 }
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"Error:{err}");
+                throw new Exception($"OOPS! A connection error ocurred while updating speciality. Error:{err.Message}");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Error:{err}");
+                throw new Exception($"Timeout updating speciality. Error:{err.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
     }

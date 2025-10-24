@@ -95,28 +95,7 @@ namespace WinFormsApp
             }
         }
 
-        private void btnBuscar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string filtro = textBoxBuscador.Text?.Trim();
-                if (string.IsNullOrEmpty(filtro))
-                {
-                    _ = LoadEspecialidades();
-                    return;
-                }
-
-                var all = APIEspecialidad.GetAllAsync().Result;
-                var filtered = all.FindAll(e => e.Descripcion != null && e.Descripcion.Contains(filtro, StringComparison.OrdinalIgnoreCase));
-                dataGridViewEspecialidades.DataSource = filtered;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al buscar especialidades: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private async void dataGridViewEspecialidades_CellDoubleClick(object? sender, System.Windows.Forms.DataGridViewCellEventArgs e)
+        private async void dataGridViewEspecialidades_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
             try

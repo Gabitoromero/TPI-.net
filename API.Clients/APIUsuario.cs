@@ -45,6 +45,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving user by username. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
         public static async Task<List<ShowProfesor_CursoDTO>> GetProfesorCursosAsync(int idProfesor)
         {
@@ -69,6 +73,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving profesor cursos. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
         public static async Task<List<ShowAlumno_CursoDTO>> GetAlumnoCursosAsync(int idAlumno)
         {
@@ -92,6 +100,10 @@ namespace API.Clients
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout retrieving alumno cursos. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
 
@@ -118,6 +130,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving profesores. Error: ${ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
         public static async Task<List<ShowUsuarioDTO>> GetAlumnosAsync()
         {
@@ -141,6 +157,10 @@ namespace API.Clients
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout retrieving alumnos. Error: ${ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
 
@@ -180,6 +200,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout trying to login. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
         public static async Task AddAlumnoCursoAsync(Alumno_CursoDTO dto)
         {
@@ -203,6 +227,10 @@ namespace API.Clients
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout adding alumno curso. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
 
@@ -229,6 +257,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving users. Error: ${ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
         public static async Task DeleteAsync(int id) //no tiene que devolver nada
         {
@@ -240,15 +272,18 @@ namespace API.Clients
                     string errmen = await resp.Content.ReadAsStringAsync();
                     throw new Exception($"OOPS! Something went wrong deleting user with ID:{id}. Error: {errmen}");
                 }
-                
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while retrieving user with ID:{id}. Eror:{err}");
+                throw new Exception($"OOPS! A connection error ocurred while deleting user with ID:{id}. Error:{err.Message}");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout retrieving user with ID:{id}. Eror:{err}");
+                throw new Exception($"Timeout deleting user with ID:{id}. Error:{err.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
         
@@ -275,6 +310,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving user with ID: {id}. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
         
         public static async void UpdateAsync(PutUsuarioDTO dto)
@@ -294,11 +333,15 @@ namespace API.Clients
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while updating user with ID:{dto.Id}. Error:{err}");
+                throw new Exception($"OOPS! A connection error ocurred while updating user with ID:{dto.Id}. Error:{err.Message}");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout updating user with ID:{dto.Id}. Error:{err}");
+                throw new Exception($"Timeout updating user with ID:{dto.Id}. Error:{err.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
         
@@ -319,11 +362,15 @@ namespace API.Clients
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while posting user. Error:{err}");
+                throw new Exception($"OOPS! A connection error ocurred while posting user. Error:{err.Message}");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout posting user. Eror:{err}");
+                throw new Exception($"Timeout posting user. Error:{err.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
 

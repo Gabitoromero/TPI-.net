@@ -16,6 +16,7 @@ namespace API.Clients
         {
             client = CreateHttpClientAsync();
         }
+
         public static async Task<PlanDTO> GetAsync(int id)
         {
             try
@@ -39,7 +40,12 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving plan with ID: {id}. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
+
         public static async Task<List<PlanDTO>> GetAllAsync()
         {
             try
@@ -63,7 +69,12 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving plans. Error: ${ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
+
         public static async Task DeleteAsync(int id)
         {
             try
@@ -77,17 +88,18 @@ namespace API.Clients
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while retrieving plan with ID:{id}. Eror:{err}");
+                throw new Exception($"OOPS! A connection error ocurred while deleting plan with ID:{id}. Error:{err.Message}");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout retrieving plan with ID:{id}. Eror:{err}");
+                throw new Exception($"Timeout deleting plan with ID:{id}. Error:{err.Message}");
             }
-            catch(Exception err)
+            catch (Exception ex)
             {
-                throw err;
+                throw new Exception($"Error: {ex.Message}");
             }
         }
+
         public static async Task<PlanDTO> AddAsync(PlanDTO dto)
         {
             try
@@ -103,24 +115,28 @@ namespace API.Clients
                     throw new Exception($"OOPS! Something went wrong posting plan. Error:{errmen} ");
                 }
             }
-            catch (SystemException err)
-            {
-                throw new Exception(err.Message);
-            }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while posting plan. Error:{err}");
+                throw new Exception($"OOPS! A connection error ocurred while posting plan. Error:{err.Message}");
+            }
+            catch (TaskCanceledException err)
+            {
+                throw new Exception($"Timeout posting plan. Error:{err.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
+
         public static async Task UpdateAsync(PlanDTO dto)
         {
             try
             {
                 HttpResponseMessage resp = await client.PutAsJsonAsync("planes/", dto);
-
                 if (resp.IsSuccessStatusCode)
                 {
-                    return ;
+                    return;
                 }
                 else
                 {
@@ -128,15 +144,18 @@ namespace API.Clients
                     throw new Exception($"OOPS! Something went wrong updating plan. Error: {errorContent}");
                 }
             }
-            catch (TaskCanceledException ex)
-            {
-                throw new Exception($"Timeout updating plan. Error: {ex.Message}");
-            }
             catch (HttpRequestException ex)
             {
                 throw new Exception($"OOPS! A connection error occurred while updating plan. Error: {ex.Message}");
             }
-
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout updating plan. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
     }
 }

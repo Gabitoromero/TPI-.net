@@ -17,8 +17,6 @@ namespace WinFormsApp
 
         private void InitializeComponent()
         {
-            textBoxBuscador = new TextBox();
-            btnBuscar = new Button();
             dataGridViewEspecialidades = new DataGridView();
             btnEliminar = new Button();
             btnAgregar = new Button();
@@ -26,38 +24,20 @@ namespace WinFormsApp
             ((System.ComponentModel.ISupportInitialize)dataGridViewEspecialidades).BeginInit();
             SuspendLayout();
             // 
-            // textBoxBuscador
-            // 
-            textBoxBuscador.Location = new Point(30, 26);
-            textBoxBuscador.Name = "textBoxBuscador";
-            textBoxBuscador.PlaceholderText = "Buscar por descripción";
-            textBoxBuscador.Size = new Size(175, 23);
-            textBoxBuscador.TabIndex = 0;
-            // 
-            // btnBuscar
-            // 
-            btnBuscar.Location = new Point(223, 25);
-            btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(69, 23);
-            btnBuscar.TabIndex = 1;
-            btnBuscar.Text = "Buscar";
-            btnBuscar.UseVisualStyleBackColor = true;
-            btnBuscar.Click += btnBuscar_Click;
-            // 
             // dataGridViewEspecialidades
             // 
             dataGridViewEspecialidades.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewEspecialidades.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewEspecialidades.Location = new Point(30, 66);
+            dataGridViewEspecialidades.Location = new Point(12, 12);
             dataGridViewEspecialidades.Name = "dataGridViewEspecialidades";
-            dataGridViewEspecialidades.Size = new Size(393, 190);
+            dataGridViewEspecialidades.Size = new Size(404, 229);
             dataGridViewEspecialidades.TabIndex = 2;
             dataGridViewEspecialidades.CellDoubleClick += dataGridViewEspecialidades_CellDoubleClick;
             // 
             // btnEliminar
             // 
             btnEliminar.BackColor = Color.IndianRed;
-            btnEliminar.Location = new Point(30, 278);
+            btnEliminar.Location = new Point(12, 262);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 3;
@@ -67,7 +47,7 @@ namespace WinFormsApp
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(348, 278);
+            btnAgregar.Location = new Point(341, 262);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
             btnAgregar.TabIndex = 4;
@@ -77,7 +57,7 @@ namespace WinFormsApp
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(196, 278);
+            btnModificar.Location = new Point(174, 262);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 5;
@@ -89,25 +69,19 @@ namespace WinFormsApp
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(452, 319);
+            ClientSize = new Size(428, 300);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);
             Controls.Add(btnEliminar);
             Controls.Add(dataGridViewEspecialidades);
-            Controls.Add(btnBuscar);
-            Controls.Add(textBoxBuscador);
             Name = "EspecialidadListaForm";
             Text = "Especialidades";
             Load += EspecialidadListaForm_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridViewEspecialidades).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private TextBox textBoxBuscador;
-        private Button btnBuscar;
         private DataGridView dataGridViewEspecialidades;
         private Button btnEliminar;
         private Button btnAgregar;

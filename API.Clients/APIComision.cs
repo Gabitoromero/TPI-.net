@@ -38,6 +38,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving comisiones. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
 
         public static async Task<ComisionDTO> GetAsync(int id)
@@ -62,6 +66,10 @@ namespace API.Clients
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout retrieving comision with ID: {id}. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
 
@@ -88,6 +96,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout adding curso. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
 
         public static async Task UpdateAsync(ComisionDTO comision)
@@ -113,6 +125,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout updating comision with ID: {comision.Id_comision}. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
 
         public static async Task DeleteAsync(int id)
@@ -133,6 +149,10 @@ namespace API.Clients
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout deleting comision with ID: {id}. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
     }

@@ -39,6 +39,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving materias. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
 
         public static async Task<MateriaDTO> GetAsync(int id)
@@ -63,6 +67,10 @@ namespace API.Clients
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout retrieving materia with ID: {id}. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
 
@@ -89,6 +97,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout adding materia. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
 
         public static async Task UpdateAsync(MateriaDTO materia)
@@ -114,6 +126,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout updating materia with ID: {materia.Id_materia}. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
 
         public static async Task DeleteAsync(int id)
@@ -134,6 +150,10 @@ namespace API.Clients
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout deleting materia with ID: {id}. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
     }

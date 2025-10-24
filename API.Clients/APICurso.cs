@@ -40,6 +40,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving cursos. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
 
         public static async Task<NewCursoDTO> GetAsync(int id)
@@ -64,6 +68,10 @@ namespace API.Clients
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout retrieving curso with ID: {id}. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
 
@@ -90,6 +98,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout adding curso. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
 
         public static async Task UpdateAsync(NewCursoDTO curso)
@@ -115,6 +127,10 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout updating curso with ID: {curso.Id_curso}. Error: {ex.Message}");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
 
         public static async Task DeleteAsync(int id)
@@ -135,6 +151,10 @@ namespace API.Clients
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout deleting curso with ID: {id}. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
             }
         }
     }
