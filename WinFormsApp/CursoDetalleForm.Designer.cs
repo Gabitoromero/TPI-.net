@@ -43,7 +43,6 @@ namespace WinFormsApp
             label1 = new Label();
             label2 = new Label();
             btnEliminarAlumnoCurso = new Button();
-            btnAgregarAlumnoCurso = new Button();
             btnAgregarProfesorCurso = new Button();
             btnEliminarProfesorCurso = new Button();
             btnModificarCurso = new Button();
@@ -195,16 +194,8 @@ namespace WinFormsApp
             btnEliminarAlumnoCurso.TabIndex = 16;
             btnEliminarAlumnoCurso.Text = "Eliminar";
             btnEliminarAlumnoCurso.UseVisualStyleBackColor = false;
-            // 
-            // btnAgregarAlumnoCurso
-            // 
-            btnAgregarAlumnoCurso.BackColor = Color.Khaki;
-            btnAgregarAlumnoCurso.Location = new Point(143, 60);
-            btnAgregarAlumnoCurso.Name = "btnAgregarAlumnoCurso";
-            btnAgregarAlumnoCurso.Size = new Size(121, 23);
-            btnAgregarAlumnoCurso.TabIndex = 17;
-            btnAgregarAlumnoCurso.Text = "Agregar Alumno";
-            btnAgregarAlumnoCurso.UseVisualStyleBackColor = false;
+            btnEliminarAlumnoCurso.Visible = false;
+            btnEliminarAlumnoCurso.Click += btnEliminarAlumnoCurso_Click;
             // 
             // btnAgregarProfesorCurso
             // 
@@ -244,7 +235,6 @@ namespace WinFormsApp
             Controls.Add(btnModificarCurso);
             Controls.Add(btnEliminarProfesorCurso);
             Controls.Add(btnAgregarProfesorCurso);
-            Controls.Add(btnAgregarAlumnoCurso);
             Controls.Add(btnEliminarAlumnoCurso);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -287,7 +277,6 @@ namespace WinFormsApp
         private Label label1;
         private Label label2;
         private Button btnEliminarAlumnoCurso;
-        private Button btnAgregarAlumnoCurso;
         private Button btnAgregarProfesorCurso;
         private Button btnEliminarProfesorCurso;
         private Button btnModificarCurso;

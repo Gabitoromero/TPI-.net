@@ -285,6 +285,31 @@ namespace API.Clients
             {
                 throw new Exception($"Error: {ex.Message}");
             }
+            
+        }
+        public static async Task DeleteAlumnoCursoAsync(int idInscripcion)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync($"usuarios/alumno_cursos/{idInscripcion}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to delete inscripcion with ID:{idInscripcion}. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException err)
+            {
+                throw new Exception($"OOPS! A connection error ocurred while deleting inscripcion with ID:{idInscripcion}. Error:{err.Message}");
+            }
+            catch (TaskCanceledException err)
+            {
+                throw new Exception($"Timeout deleting inscripcion with ID:{idInscripcion}. Error:{err.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
         }
         
         public static async Task<FullUsuarioDTO> GetAsync(int id)

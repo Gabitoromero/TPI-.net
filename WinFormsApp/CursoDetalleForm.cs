@@ -16,12 +16,20 @@ namespace WinFormsApp
         public CursoDetalleForm()
         {
             InitializeComponent();
+            dataGridAlumnosCurso.SelectionChanged += dataGridAlumnosCurso_SelectionChanged;
         }
 
         public CursoDetalleForm(NewCursoDTO curso) : this()
         {
             this.curso = curso;
             isEdit = true;
+        }
+
+        private void dataGridAlumnosCurso_SelectionChanged(object? sender, EventArgs e)
+        {
+            // No se permite la selección de filas
+            //dataGridAlumnosCurso.ClearSelection();
+            btnEliminarAlumnoCurso.Visible = dataGridAlumnosCurso.SelectedRows.Count > 0 && dataGridAlumnosCurso.CurrentRow != null;
         }
 
         private async void CursoDetalleForm_Load(object sender, EventArgs e)
@@ -79,11 +87,7 @@ namespace WinFormsApp
                         comboBoxMateria.SelectedIndex = -1;
                     }
                 }
-
-                // Cargar alumnos del curso
                 await LoadAlumnosCurso(curso.Id_curso);
-
-                // Deshabilitar campos al cargar (modo visualización)
                 SetEditingMode(false);
             }
             else
@@ -101,8 +105,8 @@ namespace WinFormsApp
             try
             {
                 var alumnos = await APIUsuario.GetAlumnosByCursoAsync(idCurso);
-                
-                dataGridAlumnosCurso.DataSource = null; 
+
+                dataGridAlumnosCurso.DataSource = null;
                 dataGridAlumnosCurso.DataSource = alumnos;
 
                 if (dataGridAlumnosCurso.Columns["IdInscripcion"] != null)
@@ -111,13 +115,13 @@ namespace WinFormsApp
                 }
                 if (dataGridAlumnosCurso.Columns["Legajo"] != null)
                     dataGridAlumnosCurso.Columns["Legajo"].HeaderText = "Legajo";
-                
+
                 if (dataGridAlumnosCurso.Columns["NombreCompleto"] != null)
                     dataGridAlumnosCurso.Columns["NombreCompleto"].HeaderText = "Alumno";
-                
+
                 if (dataGridAlumnosCurso.Columns["Condicion"] != null)
                     dataGridAlumnosCurso.Columns["Condicion"].HeaderText = "Condición";
-                
+
                 if (dataGridAlumnosCurso.Columns["Nota"] != null)
                     dataGridAlumnosCurso.Columns["Nota"].HeaderText = "Nota";
 
@@ -132,22 +136,20 @@ namespace WinFormsApp
         private void SetEditingMode(bool enabled)
         {
             isEditingMode = enabled;
-            
-            // Habilitar/deshabilitar controles
+
             comboBoxMateria.Enabled = enabled;
             comboBoxComision.Enabled = enabled;
             numericAnio.Enabled = enabled;
             numericCupo.Enabled = enabled;
 
-            // Cambiar apariencia del botón
             if (enabled)
             {
-                btnModificarCurso.BackColor = System.Drawing.Color.Orange; // Color "presionado"
+                btnModificarCurso.BackColor = Color.Orange; 
                 btnModificarCurso.Text = "Cancelar Edición";
             }
             else
             {
-                btnModificarCurso.BackColor = System.Drawing.SystemColors.Control; // Color por defecto
+                btnModificarCurso.BackColor = SystemColors.Control; 
                 btnModificarCurso.Text = "Modificar Curso";
             }
         }
@@ -197,6 +199,43 @@ namespace WinFormsApp
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private async void btnEliminarAlumnoCurso_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridAlumnosCurso.CurrentRow == null)
+                {
+                    MessageBox.Show("Seleccione un alumno para eliminar su inscripción.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int idInscripcion = (int)dataGridAlumnosCurso.CurrentRow.Cells["IdInscripcion"].Value;
+                string nombreAlumno = dataGridAlumnosCurso.CurrentRow.Cells["Alumno"].Value?.ToString() ?? "este alumno";
+                string condicion = dataGridAlumnosCurso.CurrentRow.Cells["Condicion"].Value?.ToString() ?? "desconocida";
+
+                // Mostrar mensaje de confirmación
+                DialogResult confirmResult = MessageBox.Show(
+                    $"¿Está seguro que desea eliminar la inscripción del alumno '{nombreAlumno}'?\n\nCondición: {condicion}\n\nEsta acción no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                // Solo eliminar si el usuario confirma
+                if (confirmResult == DialogResult.Yes)
+                {
+                    await APIUsuario.DeleteAlumnoCursoAsync(idInscripcion);
+                    MessageBox.Show("Inscripción eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    
+                    // Recargar la lista de alumnos
+                    await LoadAlumnosCurso(curso.Id_curso);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al eliminar inscripción: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
