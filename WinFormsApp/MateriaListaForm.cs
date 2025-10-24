@@ -57,8 +57,12 @@ namespace WinFormsApp
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            MateriaDetalleForm form = new MateriaDetalleForm();
-            form.ShowDialog();
+            this.Hide();
+            using (var form = new MateriaDetalleForm())
+            {
+                form.ShowDialog();
+            }
+            this.Show();
             _ = LoadMaterias();
         }
 
@@ -73,13 +77,19 @@ namespace WinFormsApp
                 }
                 int id = (int)dataGridViewMaterias.CurrentRow.Cells["Id_materia"].Value;
                 MateriaDTO dto = await APIMateria.GetAsync(id);
-                MateriaDetalleForm form = new MateriaDetalleForm(dto);
-                form.ShowDialog();
+                
+                this.Hide();
+                using (var form = new MateriaDetalleForm(dto))
+                {
+                    form.ShowDialog();
+                }
+                this.Show();
                 await LoadMaterias();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al modificar materia: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
         }
 

@@ -37,26 +37,34 @@ namespace WinFormsApp
         {
             try
             {
-                MateriaListaForm matForm = new MateriaListaForm();
-                matForm.ShowDialog();
+                this.Hide();
+                using (var matForm = new MateriaListaForm())
+                {
+                    matForm.ShowDialog();
+                }
+                this.Show();
             }
             catch (Exception err)
             {
                 MessageBox.Show($"Error al modificar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
-
         }
         private void btnPlanesCRUD_Click(object sender, EventArgs e)
         {
             try
             {
-                PlanListaForm planListaForm = new PlanListaForm();
-                planListaForm.ShowDialog();
+                this.Hide();
+                using (var planListaForm = new PlanListaForm())
+                {
+                    planListaForm.ShowDialog();
+                }
+                this.Show();
             }
             catch (Exception err)
             {
                 MessageBox.Show($"Error al modificar plan: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                this.Show();
             }
         }
         private void btnEspecialidadesCRUD_Click(object sender, EventArgs e)
@@ -80,38 +88,51 @@ namespace WinFormsApp
         {
             try
             {
-                UsuarioList formuser = new UsuarioList();
-                formuser.ShowDialog();
-
+                this.Hide();
+                using (var formuser = new UsuarioList())
+                {
+                    formuser.ShowDialog();
+                }
+                this.Show();
             }
-            catch (ArgumentException err)
+            catch (Exception err)
             {
-                throw new ArgumentException(err.Message);
+                MessageBox.Show($"Error al abrir usuarios: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
-
         }
         private void btnCursos_Click(object sender, EventArgs e)
         {
             try
             {
-                CursoListaForm curForm = new CursoListaForm();
-                curForm.ShowDialog();
+                this.Hide();
+                using (var curForm = new CursoListaForm())
+                {
+                    curForm.ShowDialog();
+                }
+                this.Show();
             }
             catch (Exception err)
             {
-                throw new ArgumentException(err.Message);
+                MessageBox.Show($"Error al abrir cursos: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
         }
         private void btnComisiones_Click(object sender, EventArgs e)
         {
             try
             {
-                ComisionListaForm comForm = new ComisionListaForm();
-                comForm.ShowDialog();
+                this.Hide();
+                using (var comForm = new ComisionListaForm())
+                {
+                    comForm.ShowDialog();
+                }
+                this.Show();
             }
-            catch (ArgumentException err)
+            catch (Exception err)
             {
-                throw new ArgumentException(err.Message);
+                MessageBox.Show($"Error al abrir comisiones: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
         }
     }

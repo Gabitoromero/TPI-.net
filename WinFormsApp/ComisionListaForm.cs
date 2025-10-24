@@ -21,12 +21,15 @@ namespace WinFormsApp
         {
             await LoadComisiones();
             btnModificar.Enabled = false;
+            btnEliminar.Enabled = false; // Inicializar deshabilitado
         }
 
         private void DataGridViewComisiones_SelectionChanged(object? sender, EventArgs e)
         {
-            // Habilitar el botón solo si hay una fila seleccionada
-            btnModificar.Enabled = dataGridViewComisiones.SelectedRows.Count > 0 && dataGridViewComisiones.CurrentRow != null;
+            // Habilitar los botones solo si hay una fila seleccionada
+            bool haySeleccion = dataGridViewComisiones.SelectedRows.Count > 0 && dataGridViewComisiones.CurrentRow != null;
+            btnModificar.Enabled = haySeleccion;
+            btnEliminar.Enabled = haySeleccion;
         }
 
         private async Task LoadComisiones()
@@ -57,7 +60,8 @@ namespace WinFormsApp
 
                 dataGridViewComisiones.DataSource = view;
                 dataGridViewComisiones.ClearSelection();
-                btnModificar.Enabled = false; 
+                btnModificar.Enabled = false;
+                btnEliminar.Enabled = false; // Deshabilitar después de limpiar selección
             }
             catch (Exception ex)
             {
@@ -67,8 +71,12 @@ namespace WinFormsApp
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            ComisionDetalleForm form = new ComisionDetalleForm();
-            form.ShowDialog();
+            this.Hide();
+            using (var form = new ComisionDetalleForm())
+            {
+                form.ShowDialog();
+            }
+            this.Show();
             _ = LoadComisiones();
         }
 
@@ -83,13 +91,19 @@ namespace WinFormsApp
                 }
                 int id = (int)dataGridViewComisiones.CurrentRow.Cells["Id_comision"].Value;
                 ComisionDTO dto = await APIComision.GetAsync(id);
-                ComisionDetalleForm form = new ComisionDetalleForm(dto);
-                form.ShowDialog();
+                
+                this.Hide();
+                using (var form = new ComisionDetalleForm(dto))
+                {
+                    form.ShowDialog();
+                }
+                this.Show();
                 await LoadComisiones();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al modificar comisión: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
         }
 

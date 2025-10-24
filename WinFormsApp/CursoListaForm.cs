@@ -82,8 +82,12 @@ namespace WinFormsApp
 
         private async void btnAgregar_Click(object sender, EventArgs e)
         {
-            CursoDetalleForm form = new CursoDetalleForm();
-            form.ShowDialog();
+            this.Hide();
+            using (var form = new CursoDetalleForm())
+            {
+                form.ShowDialog();
+            }
+            this.Show();
             await LoadCursos();
         }
 
@@ -99,17 +103,24 @@ namespace WinFormsApp
 
                 int id = (int)dataGridViewCursos.CurrentRow.Cells["Id_curso"].Value;
                 NewCursoDTO curso = await APICurso.GetAsync(id);
-                CursoDetalleForm form = new CursoDetalleForm(curso);
-                form.ShowDialog();
+                
+                this.Hide();
+                using (var form = new CursoDetalleForm(curso))
+                {
+                    form.ShowDialog();
+                }
+                this.Show();
                 await LoadCursos();
             }
             catch (ArgumentException err)
             {
                 MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al modificar el curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
         }
 
@@ -157,17 +168,24 @@ namespace WinFormsApp
             {
                 int id = (int)dataGridViewCursos.Rows[e.RowIndex].Cells["Id_curso"].Value;
                 NewCursoDTO curso = await APICurso.GetAsync(id);
-                CursoDetalleForm form = new CursoDetalleForm(curso);
-                form.ShowDialog();
+                
+                this.Hide();
+                using (var form = new CursoDetalleForm(curso))
+                {
+                    form.ShowDialog();
+                }
+                this.Show();
                 await LoadCursos();
             }
             catch (ArgumentException err)
             {
                 MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al abrir detalle del curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
         }
     }

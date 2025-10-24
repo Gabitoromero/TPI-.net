@@ -317,18 +317,23 @@ namespace WinFormsApp
         {
             try
             {
-                var formSeleccion = new CursoSeleccionProfesor(curso.Id_curso);
-                formSeleccion.ShowDialog();
-
-                // Si se agregó un profesor, recargar la lista
-                if (formSeleccion.ProfesorAgregado)
+                this.Hide();
+                using (var formSeleccion = new CursoSeleccionProfesor(curso.Id_curso))
                 {
-                    _ = LoadProfesoresCurso(curso.Id_curso);
+                    formSeleccion.ShowDialog();
+
+                    // Si se agregó un profesor, recargar la lista
+                    if (formSeleccion.ProfesorAgregado)
+                    {
+                        _ = LoadProfesoresCurso(curso.Id_curso);
+                    }
                 }
+                this.Show();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al abrir selección de profesor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
         }
     }

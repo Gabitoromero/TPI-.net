@@ -183,14 +183,19 @@ namespace WinFormsApp
             {
                 int idUser = (int)dataGridViewUsuarios.CurrentRow.Cells["Id"].Value;
                 FullUsuarioDTO userToModify = await APIUsuario.GetAsync(idUser);
-                UsuarioDetalle userDetailForm = new UsuarioDetalle(userToModify);
-                userDetailForm.ShowDialog();
+                
+                this.Hide();
+                using (var userDetailForm = new UsuarioDetalle(userToModify))
+                {
+                    userDetailForm.ShowDialog();
+                }
+                this.Show();
                 UsuarioList_Load(sender, e); // Recargar la lista de usuarios después de modificar
-
             }
-            catch (ArgumentException err)
+            catch (Exception err)
             {
-                throw new ArgumentException(err.Message);
+                MessageBox.Show($"Error al modificar usuario: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
         }
 
@@ -256,17 +261,17 @@ namespace WinFormsApp
 
         private void btnNuevoProfesional_Click(object sender, EventArgs e)
         {
-            var registForm = new RegisterForm(autoRegistro: false); // Indica que es registro por admin
-            Hide();
-            DialogResult result = registForm.ShowDialog();
-            
-            if (result == DialogResult.OK)
+            this.Hide();
+            using (var registForm = new RegisterForm(autoRegistro: false))
             {
-                //MessageBox.Show("Usuario creado con éxito", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                UsuarioList_Load(sender, e); // Recargar la lista de usuarios después de agregar uno nuevo
+                DialogResult result = registForm.ShowDialog();
+                
+                if (result == DialogResult.OK)
+                {
+                    UsuarioList_Load(sender, new EventArgs()); // Recargar la lista de usuarios después de agregar uno nuevo
+                }
             }
-            
-            Show(); // Vuelve a mostrar el formulario UsuarioList
+            this.Show();
         }
     }
 }

@@ -97,22 +97,30 @@ namespace WinFormsApp
                 }
                 int idPlan = (int)dataGridViewPlanes.CurrentRow.Cells["IdPlan"].Value;
                 PlanDTO plan = await APIPlan.GetAsync(idPlan);
-                PlanDetalleForm planform = new PlanDetalleForm(plan);
-                planform.ShowDialog();
+                
+                this.Hide();
+                using (var planform = new PlanDetalleForm(plan))
+                {
+                    planform.ShowDialog();
+                }
+                this.Show();
                 PlanListaForm_Load(sender, e); // Refresh the list after modification
-
             }
-            catch (ArgumentException err)
+            catch (Exception err)
             {
-                throw new ArgumentException(err.Message);
+                MessageBox.Show($"Error al modificar plan: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
-
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            PlanDetalleForm planform = new PlanDetalleForm();
-            planform.ShowDialog();
+            this.Hide();
+            using (var planform = new PlanDetalleForm())
+            {
+                planform.ShowDialog();
+            }
+            this.Show();
             PlanListaForm_Load(sender, e);
         }
 
