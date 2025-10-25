@@ -10,8 +10,13 @@ namespace WinFormsApp
         {
             InitializeComponent();
             this.Load += ProfesorCursosDetalle_Load;
+            dataGridViewCursos.SelectionChanged += dataGridViewCursos_SelectionChanged;
+            btnDetalle.Visible = false;
         }
-
+        private void dataGridViewCursos_SelectionChanged(object? sender, EventArgs e)
+        {
+            btnDetalle.Visible = dataGridViewCursos.SelectedRows.Count > 0 && dataGridViewCursos.SelectedRows != null;
+        }
         private async void ProfesorCursosDetalle_Load(object? sender, EventArgs e)
         {
             try
@@ -46,12 +51,38 @@ namespace WinFormsApp
 
         private void btnCerrar_Click(object? sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void ProfesorCursosDetalle_Load_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnDetalle_Click(object sender, EventArgs e)
+        {
+           // if (dataGridViewCursos.SelectedRows < 0) return;
+
+            try
+            {
+                /*var cursoSeleccionado = cursosDisponibles[e.RowIndex];
+
+                // Mostrar mensaje de confirmación
+                var confirmResult = MessageBox.Show(
+                    $"¿Desea inscribirse al curso {cursoSeleccionado.DisplayText}?",
+                    "Confirmar Inscripción",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (confirmResult == DialogResult.Yes)
+                {
+                    await InscribirAlumno(cursoSeleccionado);
+                }*/
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

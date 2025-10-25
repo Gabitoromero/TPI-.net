@@ -31,6 +31,7 @@ namespace WinFormsApp
             dataGridViewCursos = new DataGridView();
             btnCerrar = new Button();
             label1 = new Label();
+            btnDetalle = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewCursos).BeginInit();
             SuspendLayout();
             // 
@@ -49,7 +50,7 @@ namespace WinFormsApp
             // btnCerrar
             // 
             btnCerrar.BackColor = SystemColors.Control;
-            btnCerrar.Location = new Point(247, 360);
+            btnCerrar.Location = new Point(12, 369);
             btnCerrar.Name = "btnCerrar";
             btnCerrar.Size = new Size(90, 30);
             btnCerrar.TabIndex = 1;
@@ -67,11 +68,22 @@ namespace WinFormsApp
             label1.TabIndex = 2;
             label1.Text = "Mis Cursos Asignados";
             // 
+            // btnDetalle
+            // 
+            btnDetalle.Location = new Point(482, 369);
+            btnDetalle.Name = "btnDetalle";
+            btnDetalle.Size = new Size(90, 30);
+            btnDetalle.TabIndex = 3;
+            btnDetalle.Text = "Detalle";
+            btnDetalle.UseVisualStyleBackColor = true;
+            btnDetalle.Click += btnDetalle_Click;
+            // 
             // ProfesorCursosDetalle
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(584, 411);
+            Controls.Add(btnDetalle);
             Controls.Add(label1);
             Controls.Add(btnCerrar);
             Controls.Add(dataGridViewCursos);
@@ -89,5 +101,6 @@ namespace WinFormsApp
         private DataGridView dataGridViewCursos;
         private Button btnCerrar;
         private Label label1;
+        private Button btnDetalle;
     }
 }

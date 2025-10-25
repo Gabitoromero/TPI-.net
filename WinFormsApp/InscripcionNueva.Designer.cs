@@ -61,6 +61,7 @@
             dataGridCursos.Name = "dataGridCursos";
             dataGridCursos.Size = new Size(311, 150);
             dataGridCursos.TabIndex = 8;
+            dataGridCursos.CellContentClick += dataGridCursos_CellContentClick;
             // 
             // InscripcionNueva
             // 

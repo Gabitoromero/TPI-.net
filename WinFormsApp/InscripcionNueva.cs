@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using API.Clients;
+﻿using API.Clients;
 using DTOs;
 
 namespace WinFormsApp
@@ -38,7 +29,7 @@ namespace WinFormsApp
 
                 // Cargar todos los cursos disponibles
                 var cursos = await APICurso.GetAllAsync();
-                
+
                 // Crear lista para mostrar con información completa
                 cursosDisponibles = new List<CursoDisplayDTO>();
 
@@ -61,7 +52,7 @@ namespace WinFormsApp
                 dataGridCursos.AutoGenerateColumns = true;
                 dataGridCursos.DataSource = null; // Limpiar datasource anterior
                 dataGridCursos.DataSource = cursosDisponibles;
-                
+
                 // Configurar columnas después de establecer el DataSource
                 if (dataGridCursos.Columns["IdCurso"] != null)
                     dataGridCursos.Columns["IdCurso"].Visible = false;
@@ -73,7 +64,7 @@ namespace WinFormsApp
                     dataGridCursos.Columns["Anio"].HeaderText = "Año";
                 if (dataGridCursos.Columns["DisplayText"] != null)
                     dataGridCursos.Columns["DisplayText"].Visible = false;
-                
+
                 dataGridCursos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dataGridCursos.MultiSelect = false;
                 dataGridCursos.ReadOnly = true;
@@ -97,7 +88,7 @@ namespace WinFormsApp
             try
             {
                 var cursoSeleccionado = cursosDisponibles[e.RowIndex];
-                
+
                 // Mostrar mensaje de confirmación
                 var confirmResult = MessageBox.Show(
                     $"¿Desea inscribirse al curso {cursoSeleccionado.DisplayText}?",
@@ -163,14 +154,12 @@ namespace WinFormsApp
             this.Close();
         }
 
-        // Clase interna para mostrar los cursos en el DataGridView
-        private class CursoDisplayDTO
+
+        
+
+        private void dataGridCursos_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            public int IdCurso { get; set; }
-            public string Materia { get; set; }
-            public string Comision { get; set; }
-            public int Anio { get; set; }
-            public string DisplayText { get; set; }
+
         }
     }
 }
