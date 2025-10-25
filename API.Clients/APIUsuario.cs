@@ -415,7 +415,7 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve alumno cursos. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException();
                 }
             }
             catch (HttpRequestException ex)
@@ -426,9 +426,9 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving alumno cursos. Error: {ex.Message}");
             }
-            catch (Exception ex)
+            catch(ArgumentException err)
             {
-                throw new Exception($"Error: {ex.Message}");
+                return new List<ShowAlumno_CursoDTO>();
             }
         }
 

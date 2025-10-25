@@ -103,21 +103,22 @@ namespace Data
 
                 entity.HasIndex(e => e.NombreUsuario).IsUnique();
                 entity.HasIndex(e => e.Email).IsUnique();
+                entity.HasIndex(e => e.Legajo).IsUnique();
 
                 entity.HasData(
                     //ADMINISTRADORES
-                    new Usuario(1, "Romero", "123456", "gt@email.com", true, "Gabriel Tobías", "gtr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3415605249", "admin", 52937, DateTime.Today, 3),
-                    new Usuario(2, "Lurati", "123456", "i@email.com", true, "Ignacio", "luta", DateTime.Now, "Córdoba 5328", "3415581214", "admin", 52401, DateTime.Today, 3),
+                    new Usuario(1, "Romero", "123456", "gt@email.com", true, "Gabriel Tobías", "gtr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3415605249", "admin", 00000, DateTime.Today, 3),
+                    new Usuario(2, "Lurati", "123456", "i@email.com", true, "Ignacio", "luta", DateTime.Now, "Córdoba 5328", "3415581214", "admin", 00001, DateTime.Today, 3),
                     //ALUMNOS
-                    new Usuario(3, "Romero", "123456", "jm@email.com", true, "Juan Manuel", "jmr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3411234567", "alumno", 51998, DateTime.Today, 2),
-                    new Usuario(4, "Romero", "123456", "mf@email.com", true, "Maria Florencia", "mfr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3411234557", "alumno", 51008, DateTime.Today, 3),
-                    new Usuario(5, "Gómez", "123456", "ana.gomez@email.com", true, "Ana Lucía", "anag", DateTime.Now.AddMonths(-5), "Av. Libertad 4500", "3412233445", "alumno", 60105, new DateTime(1985, 3, 10), 1),
-                    new Usuario(6, "Pérez", "123456", "carlos.p@email.com", true, "Carlos Javier", "carlosj", DateTime.Now.AddMonths(-1), "Las Heras 120", "3413344556", "alumno", 50106, new DateTime(2000, 7, 20), 2),
-                    new Usuario(7, "López", "123456", "sofia.l@email.com", true, "Sofía Elena", "sofiel", DateTime.Now.AddMonths(-8), "Mendoza 2500", "3414455667", "alumno", 50107, new DateTime(2001, 1, 15), 3),
+                    new Usuario(3, "Romero", "123456", "jm@email.com", true, "Juan Manuel", "jmr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3411234567", "alumno", 10001 , DateTime.Today, 2),
+                    new Usuario(4, "Romero", "123456", "mf@email.com", true, "Maria Florencia", "mfr", DateTime.Now, "Pasaje Lucia Miranda 3368", "3411234557", "alumno", 10002, DateTime.Today, 3),
+                    new Usuario(5, "Gómez", "123456", "ana.gomez@email.com", true, "Ana Lucía", "anag", DateTime.Now.AddMonths(-5), "Av. Libertad 4500", "3412233445", "alumno", 10003, new DateTime(1985, 3, 10), 1),
+                    new Usuario(6, "Pérez", "123456", "carlos.p@email.com", true, "Carlos Javier", "carlosj", DateTime.Now.AddMonths(-1), "Las Heras 120", "3413344556", "alumno", 10004, new DateTime(2000, 7, 20), 2),
+                    new Usuario(7, "López", "123456", "sofia.l@email.com", true, "Sofía Elena", "sofiel", DateTime.Now.AddMonths(-8), "Mendoza 2500", "3414455667", "alumno", 10005, new DateTime(2001, 1, 15), 3),
                     //PROFESORES
-                    new Usuario(8, "Díaz", "123456", "martin.d@email.com", true, "Martín Alejandro", "martind", DateTime.Now.AddMonths(-12), "San Martín 150", "3415566778", "profesor", 60108, new DateTime(1978, 11, 1), 1),
-                    new Usuario(9, "Sánchez", "123456", "luis.s@email.com", true, "Luis Alberto", "luisal", DateTime.Now.AddMonths(-3), "9 de Julio 800", "3416677889", "profesor", 50109, new DateTime(1999, 9, 25), 2),
-                    new Usuario(10, "Rodríguez", "123456", "eva.r@email.com", true, "Eva María", "evar", DateTime.Now.AddMonths(-6), "Córdoba 900", "3417788990", "profesor", 60110, new DateTime(1982, 4, 30), 3)
+                    new Usuario(8, "Díaz", "123456", "martin.d@email.com", true, "Martín Alejandro", "martind", DateTime.Now.AddMonths(-12), "San Martín 150", "3415566778", "profesor", 20007, new DateTime(1978, 11, 1), 1),
+                    new Usuario(9, "Sánchez", "123456", "luis.s@email.com", true, "Luis Alberto", "luisal", DateTime.Now.AddMonths(-3), "9 de Julio 800", "3416677889", "profesor", 20008, new DateTime(1999, 9, 25), 2),
+                    new Usuario(10, "Rodríguez", "123456", "eva.r@email.com", true, "Eva María", "evar", DateTime.Now.AddMonths(-6), "Córdoba 900", "3417788990", "profesor", 20009, new DateTime(1982, 4, 30), 3)
                     );
             });
 

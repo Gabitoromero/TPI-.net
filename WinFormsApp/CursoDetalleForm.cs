@@ -298,7 +298,7 @@ namespace WinFormsApp
                 {
                     await APIUsuario.DeleteProfesorCursoAsync(idDictado);
                     MessageBox.Show("Asignación eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    
+
                     // Recargar la lista de profesores
                     await LoadProfesoresCurso(curso.Id_curso);
                 }
@@ -331,6 +331,11 @@ namespace WinFormsApp
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Show();
             }
+        }
+
+        private void dataGridProfesoresCurso_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

@@ -171,6 +171,7 @@ namespace WinFormsApp
             dataGridProfesoresCurso.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridProfesoresCurso.Size = new Size(329, 150);
             dataGridProfesoresCurso.TabIndex = 13;
+            dataGridProfesoresCurso.CellContentClick += dataGridProfesoresCurso_CellContentClick;
             // 
             // label1
             // 

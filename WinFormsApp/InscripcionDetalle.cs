@@ -49,13 +49,18 @@ namespace WinFormsApp
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Close();
+                Close();
             }
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void InscripcionDetalle_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

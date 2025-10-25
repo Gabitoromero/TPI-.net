@@ -58,7 +58,6 @@
             // numericNota
             // 
             numericNota.Location = new Point(116, 61);
-            numericNota.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
             numericNota.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericNota.Name = "numericNota";
             numericNota.Size = new Size(120, 23);

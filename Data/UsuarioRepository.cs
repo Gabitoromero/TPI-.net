@@ -28,8 +28,31 @@ namespace Data
         {
             try
             {
-                await _context.Usuarios.AddAsync(usuario);
-                await _context.SaveChangesAsync();
+                if(usuario.Tipo == "profesor")
+                {
+                    List<Usuario> profesores = await _context.Usuarios.Where(u => u.Tipo == "profesor").ToListAsync();
+                    int proxLegajo = profesores.Max(u => u.Legajo) + 1;
+                    usuario.Legajo = proxLegajo;
+                    await _context.Usuarios.AddAsync(usuario);
+                    await _context.SaveChangesAsync();
+                }
+                if(usuario.Tipo == "alumno")
+                {
+                    List<Usuario> alumnos = await _context.Usuarios.Where(u => u.Tipo == "alumno").ToListAsync();
+                    int proxLegajo = alumnos.Max(u => u.Legajo) + 1;
+                    usuario.Legajo = proxLegajo;
+                    await _context.Usuarios.AddAsync(usuario);
+                    await _context.SaveChangesAsync();
+                }
+                if(usuario.Tipo == "admin")
+                {
+                    List<Usuario> admins = await _context.Usuarios.Where(u => u.Tipo == "admin").ToListAsync();
+                    int proxLegajo = admins.Max(u => u.Legajo) + 1;
+                    usuario.Legajo = proxLegajo;
+                    await _context.Usuarios.AddAsync(usuario);
+                    await _context.SaveChangesAsync();
+                }
+                
             }
             catch (DbUpdateException err)
             {
@@ -60,13 +83,9 @@ namespace Data
                 // Not a unique constraint violation -> rethrow original (preserve stack)
                 throw;
             }
-            catch (ArgumentException err)
-            {
-                throw new Exception(err.Message);
-            }
             catch (Exception err)
             {
-                throw new Exception(err.Message);
+                throw new ArgumentException(err.Message);
             }
          }
 

@@ -63,7 +63,7 @@
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             label1.Location = new Point(12, 15);
             label1.Name = "label1";
-            label1.Size = new Size(145, 21);
+            label1.Size = new Size(141, 21);
             label1.TabIndex = 2;
             label1.Text = "Mis Inscripciones";
             // 
@@ -78,6 +78,7 @@
             Name = "InscripcionDetalle";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Mis Inscripciones";
+            Load += InscripcionDetalle_Load_1;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();

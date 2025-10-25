@@ -113,8 +113,7 @@ namespace WinFormsApp
                     return;
                 }
 
-                // Abrir el formulario de edición
-                this.Hide();
+                // Abrir el formulario de edición (sin Hide/Show)
                 using (var formEditar = new AlumnoCursoPutForm(alumnoSeleccionado))
                 {
                     DialogResult result = formEditar.ShowDialog();
@@ -125,12 +124,10 @@ namespace WinFormsApp
                         _ = LoadAlumnosCurso();
                     }
                 }
-                this.Show();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Show();
             }
         }
     }
