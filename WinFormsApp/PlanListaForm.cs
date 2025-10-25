@@ -28,10 +28,26 @@ namespace WinFormsApp
         }
         public async void PlanListaForm_Load(object sender, EventArgs e)
         {
+            await LoadPlanes();
+            btnModificar.Enabled = false;
+            btnEliminar.Enabled = false;
+        }
+
+        private async Task LoadPlanes()
+        {
             try
             {
-                List<PlanDTO> planes = await APIPlan.GetAllAsync();
                 List<EspecialidadDTO> especialidades = await APIEspecialidad.GetAllAsync();
+                if (especialidades.Count == 0)
+                {
+                    MessageBox.Show("No se pudieron cargar las especialidades.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                List<PlanDTO> planes = await APIPlan.GetAllAsync();
+                if (planes.Count == 0)
+                {
+                    MessageBox.Show("No se pudieron cargar los planes.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
 
                 // Build dictionary for fast lookup (handle nulls)
                 var espDict = (especialidades ?? new List<EspecialidadDTO>())
@@ -46,8 +62,11 @@ namespace WinFormsApp
                 }).ToList();
 
                 dataGridViewPlanes.DataSource = view;
+                dataGridViewPlanes.ClearSelection();
+                btnModificar.Enabled = false;
+                btnEliminar.Enabled = false;
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -57,37 +76,37 @@ namespace WinFormsApp
         {
             this.Close();
         }
-        public async void btnEliminar_Click(object sender, EventArgs e)
+        
+        private async void btnEliminar_Click(object sender, EventArgs e)
         {
             try
             {
-                if (dataGridViewPlanes.CurrentRow != null)
-                {
-                    int idPlan = (int)dataGridViewPlanes.CurrentRow.Cells["IdPlan"].Value;
-                    string descripcionPlan = dataGridViewPlanes.CurrentRow.Cells["Descripcion"].Value?.ToString() ?? "este plan";
-                    string especialidad = dataGridViewPlanes.CurrentRow.Cells["Especialidad"].Value?.ToString() ?? "desconocida";
-
-                    // Mostrar mensaje de confirmación
-                    DialogResult confirmResult = MessageBox.Show(
-                        $"¿Está seguro que desea eliminar el plan '{descripcionPlan}'?\n\nEspecialidad: {especialidad}\n\nEsta acción no se puede deshacer.",
-                        "Confirmar Eliminación",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Warning);
-
-                    // Solo eliminar si el usuario confirma
-                    if (confirmResult == DialogResult.Yes)
-                    {
-                        await APIPlan.DeleteAsync(idPlan);
-                        MessageBox.Show("Plan eliminado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        PlanListaForm_Load(sender, e); // Refresh the list
-                    }
-                }
-                else
+                if (dataGridViewPlanes.CurrentRow == null)
                 {
                     MessageBox.Show("Seleccione un plan para eliminar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                
+                int idPlan = (int)dataGridViewPlanes.CurrentRow.Cells["IdPlan"].Value;
+                string descripcionPlan = dataGridViewPlanes.CurrentRow.Cells["Descripcion"].Value?.ToString() ?? "este plan";
+                string especialidad = dataGridViewPlanes.CurrentRow.Cells["Especialidad"].Value?.ToString() ?? "desconocida";
+
+                // Mostrar mensaje de confirmación
+                DialogResult confirmResult = MessageBox.Show(
+                    $"¿Está seguro que desea eliminar el plan '{descripcionPlan}'?\n\nEspecialidad: {especialidad}\n\nEsta acción no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                // Solo eliminar si el usuario confirma
+                if (confirmResult == DialogResult.Yes)
+                {
+                    await APIPlan.DeleteAsync(idPlan);
+                    MessageBox.Show("Plan eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await LoadPlanes();
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -102,8 +121,15 @@ namespace WinFormsApp
                     MessageBox.Show("Seleccione un plan para modificar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+                
                 int idPlan = (int)dataGridViewPlanes.CurrentRow.Cells["IdPlan"].Value;
                 PlanDTO plan = await APIPlan.GetAsync(idPlan);
+                
+                if (plan == null)
+                {
+                    MessageBox.Show("No se pudo obtener el plan seleccionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 
                 this.Hide();
                 using (var planform = new PlanDetalleForm(plan))
@@ -111,9 +137,9 @@ namespace WinFormsApp
                     planform.ShowDialog();
                 }
                 this.Show();
-                PlanListaForm_Load(sender, e); // Refresh the list after modification
+                await LoadPlanes();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
@@ -128,7 +154,7 @@ namespace WinFormsApp
                 planform.ShowDialog();
             }
             this.Show();
-            PlanListaForm_Load(sender, e);
+            _ = LoadPlanes();
         }
 
         private async void btnBuscar_Click(object sender, EventArgs e)
@@ -185,7 +211,7 @@ namespace WinFormsApp
                     MessageBox.Show("No se encontró ningún plan con esa descripción.", "Resultado", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

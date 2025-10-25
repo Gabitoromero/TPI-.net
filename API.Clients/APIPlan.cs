@@ -17,6 +17,35 @@ namespace API.Clients
             client = CreateHttpClientAsync();
         }
 
+        public static async Task<List<PlanDTO>> GetAllAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync("planes");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<PlanDTO>>();
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    return new List<PlanDTO>();
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new ArgumentException("OOPS! Error al obtener los planes");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new ArgumentException("OOPS! Error al obtener los planes. Timeout superado");
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("OOPS! Error al obtener los planes");
+            }
+        }
+
         public static async Task<PlanDTO> GetAsync(int id)
         {
             try
@@ -29,74 +58,20 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve plan with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    return null;
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving plan with ID:{id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener el plan {id}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving plan with ID: {id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener el plan {id}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
-            }
-        }
-
-        public static async Task<List<PlanDTO>> GetAllAsync()
-        {
-            try
-            {
-                HttpResponseMessage response = await client.GetAsync("planes");
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadFromJsonAsync<List<PlanDTO>>();
-                }
-                else
-                {
-                    string errorMensage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong getting plans. Eror: ${errorMensage}");
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                throw new Exception($"OOPS! A connection error occurred while retrieving plans. Error: {ex.Message}");
-            }
-            catch (TaskCanceledException ex)
-            {
-                throw new Exception($"Timeout retrieving plans. Error: ${ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error: {ex.Message}");
-            }
-        }
-
-        public static async Task DeleteAsync(int id)
-        {
-            try
-            {
-                HttpResponseMessage resp = await client.DeleteAsync("planes/" + id);
-                if (!resp.IsSuccessStatusCode)
-                {
-                    string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong deleting plan with ID:{id}. Error: {errmen}");
-                }
-            }
-            catch (HttpRequestException err)
-            {
-                throw new Exception($"OOPS! A connection error ocurred while deleting plan with ID:{id}. Error:{err.Message}");
-            }
-            catch (TaskCanceledException err)
-            {
-                throw new Exception($"Timeout deleting plan with ID:{id}. Error:{err.Message}");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener el plan {id}");
             }
         }
 
@@ -104,28 +79,28 @@ namespace API.Clients
         {
             try
             {
-                HttpResponseMessage resp = await client.PostAsJsonAsync("planes/", dto);
-                if (resp.IsSuccessStatusCode)
+                HttpResponseMessage response = await client.PostAsJsonAsync("planes/", dto);
+                if (response.IsSuccessStatusCode)
                 {
-                    return await resp.Content.ReadFromJsonAsync<PlanDTO>();
+                    return await response.Content.ReadFromJsonAsync<PlanDTO>();
                 }
                 else
                 {
-                    string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong posting plan. Error:{errmen} ");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException($"OOPS! Error al añadir el plan {dto.Descripcion}");
                 }
             }
-            catch (HttpRequestException err)
+            catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error ocurred while posting plan. Error:{err.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir el plan {dto.Descripcion}");
             }
-            catch (TaskCanceledException err)
+            catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout posting plan. Error:{err.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir el plan {dto.Descripcion}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir el plan {dto.Descripcion}");
             }
         }
 
@@ -133,28 +108,53 @@ namespace API.Clients
         {
             try
             {
-                HttpResponseMessage resp = await client.PutAsJsonAsync("planes/", dto);
-                if (resp.IsSuccessStatusCode)
+                HttpResponseMessage response = await client.PutAsJsonAsync("planes/", dto);
+                if (response.IsSuccessStatusCode)
                 {
                     return;
                 }
                 else
                 {
-                    string errorContent = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong updating plan. Error: {errorContent}");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException($"OOPS! Error al editar el plan {dto.Descripcion}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while updating plan. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar el plan {dto.Descripcion}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout updating plan. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar el plan {dto.Descripcion}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar el plan {dto.Descripcion}");
+            }
+        }
+
+        public static async Task DeleteAsync(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync("planes/" + id);
+                if (!response.IsSuccessStatusCode)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException($"OOPS! Error al eliminar el plan {id}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new ArgumentException($"OOPS! Error al eliminar el plan {id}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new ArgumentException($"OOPS! Error al eliminar el plan {id}");
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException($"OOPS! Error al eliminar el plan {id}");
             }
         }
     }

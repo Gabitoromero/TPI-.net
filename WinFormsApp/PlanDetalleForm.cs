@@ -26,21 +26,31 @@ namespace WinFormsApp
             this.plan = plan;
             this.isEdit = true;
         }
+        
         public async void PlanDetalleForm_Load_1(object sender, EventArgs e)
         {
-            await LoadEspecialidades();
-            if (isEdit && plan != null)
+            try
             {
-                txtBoxDescripcion.Text = plan.Descripcion;
+                await LoadEspecialidades();
+                
+                if (isEdit && plan != null)
+                {
+                    txtBoxDescripcion.Text = plan.Descripcion;
+                }
             }
-
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+        
         private async Task LoadEspecialidades()
         {
             var especialidades = await APIEspecialidad.GetAllAsync();
             comboBoxEspecialidades.DataSource = especialidades;
             comboBoxEspecialidades.DisplayMember = "Descripcion";
             comboBoxEspecialidades.ValueMember = "Id";
+            
             if (isEdit && plan != null)
             {
                 if (especialidades.Any(e => e.Id == plan.IdEspecialidad))
@@ -49,7 +59,7 @@ namespace WinFormsApp
                 }
                 else
                 {
-                    comboBoxEspecialidades.SelectedIndex = -1; // No selection by default
+                    comboBoxEspecialidades.SelectedIndex = -1;
                 }
             }
             else
@@ -62,6 +72,7 @@ namespace WinFormsApp
         {
             this.Close();
         }
+        
         public void btnGuardar_Click(object sender, EventArgs e)
         {
             btnGuardar_Click_1(sender, e);
@@ -73,7 +84,7 @@ namespace WinFormsApp
             {
                 int idEspecialidad = comboBoxEspecialidades.SelectedValue != null ? (int)comboBoxEspecialidades.SelectedValue : 0;
 
-                if (isEdit && plan != null) //UPDATE
+                if (isEdit && plan != null)
                 {
                     PlanDTO toSend = new PlanDTO
                     {
@@ -85,18 +96,16 @@ namespace WinFormsApp
                     await APIPlan.UpdateAsync(toSend);
                     MessageBox.Show("Plan guardado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
-
                 }
-                else //CREATE
+                else
                 {
                     PlanDTO nuevoPlan = new PlanDTO(0, txtBoxDescripcion.Text, idEspecialidad);
                     PlanDTO planAdded = await APIPlan.AddAsync(nuevoPlan);
                     MessageBox.Show("Plan agregado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
-
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
