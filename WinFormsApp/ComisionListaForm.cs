@@ -36,17 +36,15 @@ namespace WinFormsApp
         {
             try
             {
-                List<ComisionDTO> comisiones = await APIComision.GetAllAsync();
-                List<PlanDTO> planes = new List<PlanDTO>();
-
-                try
+                List<PlanDTO>  planes = await APIPlan.GetAllAsync();
+                if (planes.Count == 0)
                 {
-                    planes = await APIPlan.GetAllAsync();
+                    MessageBox.Show("No se pudieron cargar los planes.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                catch
+                List<ComisionDTO> comisiones = await APIComision.GetAllAsync();
+                if (comisiones.Count == 0)
                 {
-                    //planes = new List<PlanDTO>();
-                    throw new Exception("No se pudieron cargar los planes. Verifique la conexión con el servidor.");
+                    MessageBox.Show("No se pudieron cargar las comisiones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
                 var view = comisiones.Select(c => new
@@ -63,7 +61,7 @@ namespace WinFormsApp
                 btnModificar.Enabled = false;
                 btnEliminar.Enabled = false; // Deshabilitar después de limpiar selección
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -91,7 +89,12 @@ namespace WinFormsApp
                 }
                 int id = (int)dataGridViewComisiones.CurrentRow.Cells["Id_comision"].Value;
                 ComisionDTO dto = await APIComision.GetAsync(id);
-                
+                if (dto == null)
+                {
+                    MessageBox.Show("No se pudo obtener la comisión seleccionada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 this.Hide();
                 using (var form = new ComisionDetalleForm(dto))
                 {
@@ -100,7 +103,7 @@ namespace WinFormsApp
                 this.Show();
                 await LoadComisiones();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
@@ -135,7 +138,7 @@ namespace WinFormsApp
 
                 
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

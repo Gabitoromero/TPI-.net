@@ -414,8 +414,7 @@ namespace API.Clients
                 }
                 else
                 {
-                    string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new ArgumentException();
+                    return new List<ShowAlumno_CursoDTO>();
                 }
             }
             catch (HttpRequestException ex)
@@ -426,10 +425,7 @@ namespace API.Clients
             {
                 throw new Exception($"Timeout retrieving alumno cursos. Error: {ex.Message}");
             }
-            catch(ArgumentException err)
-            {
-                return new List<ShowAlumno_CursoDTO>();
-            }
+            
         }
 
         // Gestión de Inscripciones

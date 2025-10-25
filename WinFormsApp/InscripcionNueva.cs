@@ -37,6 +37,7 @@ namespace WinFormsApp
                 {
                     var materia = await APIMateria.GetAsync(curso.Id_materia);
                     var comision = await APIComision.GetAsync(curso.Id_comision);
+                    if (materia == null || comision == null) continue;
 
                     cursosDisponibles.Add(new CursoDisplayDTO
                     {
@@ -74,7 +75,7 @@ namespace WinFormsApp
                 // Ocultar el botón confirmar inicialmente
                 btnGuardar.Visible = false;
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();

@@ -26,21 +26,21 @@ namespace API.Clients
                 }
                 else
                 {
-                    string errorMensage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong getting comisiones. Eror: ${errorMensage}");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    return new List<ComisionDTO>();
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving comisiones. Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener las comisiones");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving comisiones. Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener las comisiones. Timeout superado");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener las comisiones");
             }
         }
 
@@ -56,20 +56,20 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve comision with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    return null;
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving comision with ID:{id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener la comision {id}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving comision with ID: {id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener la comision {id}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener la comision {id}");
             }
         }
 
@@ -85,20 +85,20 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to add comision. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"OOPS! Error al añadir la comision {dto.Desc_comision}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while adding curso. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir la comision {dto.Desc_comision}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout adding curso. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir la comision {dto.Desc_comision}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir la comision {dto.Desc_comision}");
             }
         }
 
@@ -114,20 +114,20 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to update comision with ID:{comision.Id_comision}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"OOPS! Error al editar la comision {comision.Desc_comision}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while updating comision with ID:{comision.Id_comision}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar la comision {comision.Desc_comision}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout updating comision with ID: {comision.Id_comision}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar la comision {comision.Desc_comision}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar la comision {comision.Desc_comision}");
             }
         }
 
@@ -139,20 +139,20 @@ namespace API.Clients
                 if (!response.IsSuccessStatusCode)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to delete comision with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"OOPS! Error al eliminar la comision {id}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while deleting comision with ID:{id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al eliminar la comision {id}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout deleting comision with ID: {id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al eliminar la comision {id}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al eliminar la comision {id}");
             }
         }
     }

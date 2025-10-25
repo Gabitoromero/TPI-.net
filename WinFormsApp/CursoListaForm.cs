@@ -37,28 +37,23 @@ namespace WinFormsApp
             {
                 
                 List<NewCursoDTO> cursos = await APICurso.GetAllAsync();
-                List<ComisionDTO> comisiones = new List<ComisionDTO>();
-                List<MateriaDTO> materias = new List<MateriaDTO>();
-
-                try
+                if(cursos.Count == 0)
                 {
-                    comisiones = await APIComision.GetAllAsync();
-                }
-                catch
-                {
-                    
-                    comisiones = new List<ComisionDTO>();
+                    MessageBox.Show("No se pudieron cargar los cursos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
-                try
+                List<ComisionDTO> comisiones = await APIComision.GetAllAsync();
+                if(comisiones.Count == 0)
                 {
-                    materias = await APIMateria.GetAllAsync();
+                    MessageBox.Show("No se pudieron cargar las comisiones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                catch
+
+                List<MateriaDTO> materias = await APIMateria.GetAllAsync();
+                if(materias.Count == 0)
                 {
-                    
-                    materias = new List<MateriaDTO>();
+                    MessageBox.Show("No se pudieron cargar las materias.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+                
 
                 var view = (cursos ?? new List<NewCursoDTO>())
                     .Select(c => new
@@ -75,7 +70,7 @@ namespace WinFormsApp
                 dataGridViewCursos.ClearSelection();
                 btnModificar.Enabled = false;
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

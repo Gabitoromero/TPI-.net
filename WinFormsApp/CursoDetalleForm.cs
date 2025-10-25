@@ -38,6 +38,10 @@ namespace WinFormsApp
             try
             {
                 List<ComisionDTO> comisiones = await APIComision.GetAllAsync();
+                if (comisiones.Count == 0)
+                {
+                    MessageBox.Show("No se pudieron cargar las comisiones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
                 comboBoxComision.DataSource = comisiones;
                 comboBoxComision.DisplayMember = "Desc_comision";
                 comboBoxComision.ValueMember = "Id_comision";
