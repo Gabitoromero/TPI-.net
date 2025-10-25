@@ -1,4 +1,6 @@
-﻿using System;
+﻿using API.Clients;
+using DTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,25 +20,53 @@ namespace WinFormsApp
             InitializeComponent();
         }
 
-        private void btnVerInscripciones_Click_2(object? sender, EventArgs e)
+        private async void btnVerInscripciones_Click_2(object? sender, EventArgs e)
         {
-            this.Hide();
-            using (var detalle = new InscripcionDetalle())
+
+            string username = APIClientBase.LoginResponse.Username;
+            ShowUsuarioDTO current = await APIUsuario.GetByUsernameAsync(username);
+
+            if (!current.Habilitado ?? false)
             {
-                detalle.ShowDialog();
+                MessageBox.Show("Su cuenta no está habilitada. No puede realizar nuevas inscripciones.", "Cuenta no habilitada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //Close();
             }
-            this.Show();
+            else
+            {
+                Hide();
+                using (var detalle = new InscripcionDetalle())
+                {
+                    detalle.ShowDialog();
+                }
+                Show();
+            }
+
+           
         }
 
-        private void btnNuevaInscripcion_Click(object? sender, EventArgs e)
+        private async void btnNuevaInscripcion_Click(object? sender, EventArgs e)
         {
-            this.Hide();
-            using (var nuevaInscripcion = new InscripcionNueva())
+            string username = APIClientBase.LoginResponse.Username;
+            ShowUsuarioDTO current = await APIUsuario.GetByUsernameAsync(username);
+
+            if (!current.Habilitado ?? false)
             {
-                DialogResult result = nuevaInscripcion.ShowDialog();
-                // Si la inscripción fue exitosa, podrías actualizar algo o mostrar un mensaje adicional
+                MessageBox.Show("Su cuenta no está habilitada. No puede realizar nuevas inscripciones.", "Cuenta no habilitada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //Close();
             }
-            this.Show();
+            else
+            {
+                Hide();
+                using (var nuevaInscripcion = new InscripcionNueva())
+                {
+                    DialogResult result = nuevaInscripcion.ShowDialog();
+                }
+                Show();
+            }
+
+
+
+           
         }
 
         private void btnVolver_Click(object sender, EventArgs e)

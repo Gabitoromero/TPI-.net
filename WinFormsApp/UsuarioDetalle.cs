@@ -69,11 +69,12 @@ namespace WinFormsApp
                     NombreUsuario = _user.NombreUsuario,
                     Email = _user.Email,
                     Clave = _user.Clave,
-                    Habilitado = _user.Habilitado
+                    Habilitado = _user.Habilitado,
+                    IdPlan = _user.IdPlan
                 };
                 APIUsuario.UpdateAsync(putUsuarioDTO);
                 MessageBox.Show("Usuario modificado con éxito", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                Close();
             }
             catch (Exception err)
             {

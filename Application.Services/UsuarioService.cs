@@ -61,7 +61,8 @@ namespace Application.Services
             {
                 Id = user.Id,
                 Email = user.Email,
-                NombreUsuario = user.NombreUsuario
+                NombreUsuario = user.NombreUsuario,
+                Habilitado = user.Habilitado
             };
 
             return dto;
@@ -74,8 +75,9 @@ namespace Application.Services
             {
                 Id = usuario.Id,
                 Email = usuario.Email,
-                NombreUsuario = usuario.NombreUsuario
-                , Tipo = usuario.Tipo
+                NombreUsuario = usuario.NombreUsuario,
+                Tipo = usuario.Tipo,
+                Habilitado = usuario.Habilitado
             }).ToList();
         }
 
@@ -87,7 +89,8 @@ namespace Application.Services
                 Id = usuario.Id,
                 Email = usuario.Email,
                 NombreUsuario = usuario.NombreUsuario
-                , Tipo = usuario.Tipo
+                , Tipo = usuario.Tipo,
+                Habilitado = usuario.Habilitado
             }).ToList();
         }
         public async Task<List<AlumnoCursoDetalleDTO>> GetAlumnosByCursoAsync(int idCurso)
@@ -125,7 +128,8 @@ namespace Application.Services
                 Id = usuario.Id,
                 Email = usuario.Email,
                 NombreUsuario = usuario.NombreUsuario
-                , Tipo = usuario.Tipo
+                , Tipo = usuario.Tipo,
+                Habilitado = usuario.Habilitado
             }).ToList();
         }
         public async Task<PostUsuarioDTO> Add(FullUsuarioDTO dto)
@@ -172,6 +176,7 @@ namespace Application.Services
                 Id = usuario.Id,
                 Email = usuario.Email,
                 NombreUsuario = usuario.NombreUsuario,
+                Habilitado = usuario.Habilitado
             };
 
             return dto;
