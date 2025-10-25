@@ -11,17 +11,19 @@ namespace WinFormsApp
             InitializeComponent();
             this.Load += ProfesorCursosDetalle_Load;
             dataGridViewCursos.SelectionChanged += dataGridViewCursos_SelectionChanged;
-            btnDetalle.Visible = false;
+            btnDetalle.Click += btnDetalle_Click;
+            btnDetalle.Enabled = false;
         }
+        
         private void dataGridViewCursos_SelectionChanged(object? sender, EventArgs e)
         {
-            btnDetalle.Visible = dataGridViewCursos.SelectedRows.Count > 0 && dataGridViewCursos.SelectedRows != null;
+            btnDetalle.Enabled = dataGridViewCursos.SelectedRows.Count > 0 && dataGridViewCursos.CurrentRow != null;
         }
+        
         private async void ProfesorCursosDetalle_Load(object? sender, EventArgs e)
         {
             try
             {
-
                 ShowUsuarioDTO profesor = await APIUsuario.GetByUsernameAsync(APIUsuario.LoginResponse.Username);
                 var cursosProfesor = await APIUsuario.GetProfesorCursosAsync(profesor.Id);
 
@@ -33,6 +35,7 @@ namespace WinFormsApp
 
                 var data = cursosProfesor.Select((c, idx) => new
                 {
+                    IdCurso = c.Curso.Id_curso,
                     Materia = materias[idx].Desc_materia,
                     Comision = comisiones[idx].Desc_comision,
                     Año = c.Curso.Anio_calendario,
@@ -40,6 +43,13 @@ namespace WinFormsApp
                 }).ToList();
 
                 dataGridViewCursos.DataSource = data;
+
+                // Ocultar la columna IdCurso
+                if (dataGridViewCursos.Columns["IdCurso"] != null)
+                {
+                    dataGridViewCursos.Columns["IdCurso"].Visible = false;
+                }
+
                 dataGridViewCursos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
             catch (Exception ex)
@@ -59,29 +69,29 @@ namespace WinFormsApp
 
         }
 
-        private void btnDetalle_Click(object sender, EventArgs e)
+        private void btnDetalle_Click(object? sender, EventArgs e)
         {
-           // if (dataGridViewCursos.SelectedRows < 0) return;
-
             try
             {
-                /*var cursoSeleccionado = cursosDisponibles[e.RowIndex];
-
-                // Mostrar mensaje de confirmación
-                var confirmResult = MessageBox.Show(
-                    $"¿Desea inscribirse al curso {cursoSeleccionado.DisplayText}?",
-                    "Confirmar Inscripción",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
-
-                if (confirmResult == DialogResult.Yes)
+                if (dataGridViewCursos.CurrentRow == null)
                 {
-                    await InscribirAlumno(cursoSeleccionado);
-                }*/
+                    MessageBox.Show("Seleccione un curso para ver sus alumnos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int idCurso = (int)dataGridViewCursos.CurrentRow.Cells["IdCurso"].Value;
+               
+                Hide();
+                using (var formAlumnos = new AlumnosCursoForm(idCurso))
+                {
+                    formAlumnos.ShowDialog();
+                }
+                Show();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Show();
             }
         }
     }

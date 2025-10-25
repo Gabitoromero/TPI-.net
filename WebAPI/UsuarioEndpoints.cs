@@ -198,12 +198,40 @@ namespace WebAPI
                 }
             });
 
-            app.MapPut("/usuarios/alumno_cursos/", async (UsuarioService service, Alumno_CursoDTO dto) =>
+            app.MapPut("/usuarios/alumno_cursos/{idInscripcion}", async (UsuarioService service, int idInscripcion, Alumno_CursoDTO dto) =>
             {
                 try
                 {
+                    if (dto.IdInscripcion != idInscripcion)
+                    {
+                        return Results.BadRequest(new { error = "El ID de inscripción no coincide" });
+                    }
+
+                    // Validar que si la condición no es "Aprobado", la nota sea null
+                    if (dto.Condicion != "Aprobado" && dto.Nota != null)
+                    {
+                        return Results.BadRequest(new { error = "Solo se puede asignar nota cuando la condición es 'Aprobado'" });
+                    }
+
                     await service.UpdateAlumnoInsc(dto);
                     return Results.Ok();
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest(new { error = ex.Message });
+                }
+            });
+
+            app.MapGet("/usuarios/cursos/{idCurso}/alumnos/completo", async (UsuarioService service, int idCurso) =>
+            {
+                try
+                {
+                    List<ShowAlumno_CursoDTO> alumnos = await service.GetAlumnosCompletoByCursoAsync(idCurso);
+                    if (alumnos.Count == 0)
+                    {
+                        return Results.Ok(new List<ShowAlumno_CursoDTO>()); // Retornar lista vacía si no hay alumnos
+                    }
+                    return Results.Ok(alumnos);
                 }
                 catch (Exception ex)
                 {

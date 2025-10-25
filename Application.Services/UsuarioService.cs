@@ -60,6 +60,7 @@ namespace Application.Services
             ShowUsuarioDTO dto = new ShowUsuarioDTO
             {
                 Id = user.Id,
+                Legajo = user.Legajo,
                 Email = user.Email,
                 NombreUsuario = user.NombreUsuario,
                 Habilitado = user.Habilitado
@@ -74,6 +75,7 @@ namespace Application.Services
             return usuarios.Select(usuario => new ShowUsuarioDTO
             {
                 Id = usuario.Id,
+                Legajo = usuario.Legajo,
                 Email = usuario.Email,
                 NombreUsuario = usuario.NombreUsuario,
                 Tipo = usuario.Tipo,
@@ -87,6 +89,7 @@ namespace Application.Services
             return usuarios.Select(usuario => new ShowUsuarioDTO
             {
                 Id = usuario.Id,
+                Legajo = usuario.Legajo,
                 Email = usuario.Email,
                 NombreUsuario = usuario.NombreUsuario
                 , Tipo = usuario.Tipo,
@@ -102,6 +105,29 @@ namespace Application.Services
                 IdInscripcion = item.inscripcion.IdInscripcion,
                 Legajo = item.alumno.Legajo,
                 Alumno = $"{item.alumno.Nombre} {item.alumno.Apellido}",
+                Condicion = item.inscripcion.Condicion,
+                Nota = item.inscripcion.Nota
+            }).ToList();
+        }
+
+        public async Task<List<ShowAlumno_CursoDTO>> GetAlumnosCompletoByCursoAsync(int idCurso)
+        {
+            var inscripciones = await _inscripcionRepository.GetAlumnosByCursoAsync(idCurso);
+            var curso = await _cursoService.Get(idCurso);
+
+            return inscripciones.Select(item => new ShowAlumno_CursoDTO
+            {
+                IdInscripcion = item.inscripcion.IdInscripcion,
+                Alumno = new ShowUsuarioDTO
+                {
+                    Id = item.alumno.Id,
+                    Legajo = item.alumno.Legajo,
+                    Email = item.alumno.Email,
+                    NombreUsuario = item.alumno.NombreUsuario,
+                    Tipo = item.alumno.Tipo,
+                    Habilitado = item.alumno.Habilitado
+                },
+                Curso = curso,
                 Condicion = item.inscripcion.Condicion,
                 Nota = item.inscripcion.Nota
             }).ToList();
@@ -126,6 +152,7 @@ namespace Application.Services
             return usuarios.Select(usuario => new ShowUsuarioDTO
             {
                 Id = usuario.Id,
+                Legajo = usuario.Legajo,
                 Email = usuario.Email,
                 NombreUsuario = usuario.NombreUsuario
                 , Tipo = usuario.Tipo,
@@ -174,6 +201,7 @@ namespace Application.Services
             ShowUsuarioDTO dto = new ShowUsuarioDTO
             {
                 Id = usuario.Id,
+                Legajo = usuario.Legajo,
                 Email = usuario.Email,
                 NombreUsuario = usuario.NombreUsuario,
                 Habilitado = usuario.Habilitado

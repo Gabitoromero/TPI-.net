@@ -14,6 +14,7 @@ namespace DTOs
         public string Tipo { get; set; }
 
         public bool? Habilitado{ get; set; }
+        public int Legajo { get; set; }
 
     }
 }

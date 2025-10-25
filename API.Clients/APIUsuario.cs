@@ -317,6 +317,34 @@ namespace API.Clients
                 throw new Exception($"Error: {ex.Message}");
             }
         }
+        public static async Task<List<ShowAlumno_CursoDTO>> GetAlumnosCompletoByCursoAsync(int idCurso)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"usuarios/cursos/{idCurso}/alumnos/completo");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<ShowAlumno_CursoDTO>>();
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to retrieve alumnos completo by curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while retrieving alumnos completo by curso. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout retrieving alumnos completo by curso. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
         public static async Task<List<ProfesorCursoDetalleDTO>> GetProfesoresByCursoAsync(int idCurso)
         {
             try
@@ -427,6 +455,34 @@ namespace API.Clients
             catch (TaskCanceledException ex)
             {
                 throw new Exception($"Timeout adding alumno curso. Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+        public static async Task PutAlumnoCursoAsync(Alumno_CursoDTO dto)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.PutAsJsonAsync($"usuarios/alumno_cursos/{dto.IdInscripcion}", dto);
+                if (response.IsSuccessStatusCode)
+                {
+                    return;
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"OOPS! Failed to update alumno curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"OOPS! A connection error occurred while updating alumno curso. Error: {ex.Message}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new Exception($"Timeout updating alumno curso. Error: {ex.Message}");
             }
             catch (Exception ex)
             {
