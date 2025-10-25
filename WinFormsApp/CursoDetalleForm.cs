@@ -1,9 +1,6 @@
 using DTOs;
 using API.Clients;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
 
 namespace WinFormsApp
 {
@@ -101,7 +98,6 @@ namespace WinFormsApp
             }
             else
             {
-                // new course: ensure fields empty
                 numericAnio.Value = DateTime.Now.Year;
                 numericCupo.Value = 0;
                 comboBoxComision.SelectedIndex = -1;

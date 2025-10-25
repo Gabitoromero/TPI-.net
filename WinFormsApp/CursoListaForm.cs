@@ -84,7 +84,7 @@ namespace WinFormsApp
         private async void btnAgregar_Click(object sender, EventArgs e)
         {
             this.Hide();
-            using (var form = new CursoDetalleForm())
+            using (var form = new CursoNuevoForm())
             {
                 form.ShowDialog();
             }
