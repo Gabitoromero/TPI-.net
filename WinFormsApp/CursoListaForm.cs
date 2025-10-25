@@ -100,6 +100,12 @@ namespace WinFormsApp
                 int id = (int)dataGridViewCursos.CurrentRow.Cells["Id_curso"].Value;
                 NewCursoDTO curso = await APICurso.GetAsync(id);
                 
+                if (curso == null)
+                {
+                    MessageBox.Show("No se pudo obtener el curso seleccionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 this.Hide();
                 using (var form = new CursoDetalleForm(curso))
                 {
@@ -108,7 +114,7 @@ namespace WinFormsApp
                 this.Show();
                 await LoadCursos();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
@@ -141,11 +147,11 @@ namespace WinFormsApp
                 if (confirmResult == DialogResult.Yes)
                 {
                     await APICurso.DeleteAsync(id);
-                    MessageBox.Show("Curso eliminado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Curso eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     await LoadCursos();
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -160,6 +166,12 @@ namespace WinFormsApp
                 int id = (int)dataGridViewCursos.Rows[e.RowIndex].Cells["Id_curso"].Value;
                 NewCursoDTO curso = await APICurso.GetAsync(id);
                 
+                if (curso == null)
+                {
+                    MessageBox.Show("No se pudo obtener el curso seleccionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 this.Hide();
                 using (var form = new CursoDetalleForm(curso))
                 {
@@ -168,7 +180,7 @@ namespace WinFormsApp
                 this.Show();
                 await LoadCursos();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();

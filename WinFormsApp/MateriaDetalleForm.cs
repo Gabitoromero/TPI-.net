@@ -50,7 +50,7 @@ namespace WinFormsApp
                 }
             }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -60,6 +60,10 @@ namespace WinFormsApp
         {
             try
             {
+                if((int)numericHsTot.Value < (int)numericHsSem.Value)
+                {
+                    throw new ArgumentException("Las horas totales son menores a las horas semanales");
+                }
                 MateriaDTO toSend = new MateriaDTO
                 {
                     Id_materia = (dto != null) ? dto.Id_materia : 0,
@@ -79,7 +83,7 @@ namespace WinFormsApp
                 }
                 this.Close();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

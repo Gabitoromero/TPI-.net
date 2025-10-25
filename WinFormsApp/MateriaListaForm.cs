@@ -31,16 +31,16 @@ namespace WinFormsApp
         {
             try
             {
-                List<MateriaDTO> materias = await APIMateria.GetAllAsync();
-                List<PlanDTO> planes = new List<PlanDTO>();
-
-                try
+                List<PlanDTO> planes = await APIPlan.GetAllAsync();
+                if (planes.Count == 0)
                 {
-                    planes = await APIPlan.GetAllAsync();
+                    MessageBox.Show("No se pudieron cargar los planes.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                catch
+
+                List<MateriaDTO> materias = await APIMateria.GetAllAsync();
+                if (materias.Count == 0)
                 {
-                    planes = new List<PlanDTO>();
+                    MessageBox.Show("No se pudieron cargar las materias.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
                 var view = materias.Select(m => new
@@ -56,7 +56,7 @@ namespace WinFormsApp
                 dataGridViewMaterias.DataSource = view;
                 dataGridViewMaterias.ClearSelection();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -82,8 +82,15 @@ namespace WinFormsApp
                     MessageBox.Show("Seleccione una materia para modificar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+                
                 int id = (int)dataGridViewMaterias.CurrentRow.Cells["Id_materia"].Value;
                 MateriaDTO dto = await APIMateria.GetAsync(id);
+                
+                if (dto == null)
+                {
+                    MessageBox.Show("No se pudo obtener la materia seleccionada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 
                 this.Hide();
                 using (var form = new MateriaDetalleForm(dto))
@@ -93,7 +100,7 @@ namespace WinFormsApp
                 this.Show();
                 await LoadMaterias();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
@@ -128,7 +135,7 @@ namespace WinFormsApp
                     await LoadMaterias();
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

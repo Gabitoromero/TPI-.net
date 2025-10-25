@@ -49,7 +49,7 @@ namespace WinFormsApp
                 if (isEdit && especialidad != null)
                 {
                     EspecialidadDTO toSend = new EspecialidadDTO { Id = especialidad.Id, Descripcion = descripcion };
-                    EspecialidadDTO updated = await APIEspecialidad.PutAsync(toSend);
+                    await APIEspecialidad.UpdateAsync(toSend);
                     MessageBox.Show("Especialidad actualizada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Close();
                 }
@@ -61,7 +61,7 @@ namespace WinFormsApp
                     Close();
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

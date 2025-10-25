@@ -20,40 +20,6 @@ namespace API.Clients
             esp = CreateHttpClientAsync();
         }
 
-        public static async Task<EspecialidadDTO> GetAsync(int id)
-        {
-            try
-            {
-                Debug.WriteLine($"🌐 Authorization Header: {esp.DefaultRequestHeaders.Authorization}");
-                Debug.WriteLine($"🌐 Scheme: {esp.DefaultRequestHeaders.Authorization?.Scheme}");
-                Debug.WriteLine($"🌐 Parameter: {esp.DefaultRequestHeaders.Authorization?.Parameter}");
-
-                HttpResponseMessage response = await esp.GetAsync("especialidades/" + id);
-                
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadFromJsonAsync<EspecialidadDTO>(); 
-                }
-                else
-                {
-                    string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve speciality with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                throw new Exception($"OOPS! A connection error occurred while retrieving speciality with ID:{id}. Error: {ex.Message}");
-            }
-            catch (TaskCanceledException ex)
-            {
-                throw new Exception($"Timeout retrieving speciality with ID: {id}. Error: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error: {ex.Message}");
-            }
-        }
-
         public static async Task<List<EspecialidadDTO>> GetAllAsync()
         {
             try
@@ -65,50 +31,50 @@ namespace API.Clients
                 }
                 else
                 {
-                    string errorMensage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong getting specialities. Error: ${errorMensage}");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    return new List<EspecialidadDTO>();
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving specialities. Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener las especialidades");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving specialities. Error: ${ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener las especialidades. Timeout superado");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener las especialidades");
             }
         }
 
-        public static async Task DeleteAsync(int id)
+        public static async Task<EspecialidadDTO> GetAsync(int id)
         {
             try
             {
-                HttpResponseMessage resp = await esp.DeleteAsync("especialidades/" + id);
-                if (resp.IsSuccessStatusCode)
+                HttpResponseMessage response = await esp.GetAsync("especialidades/" + id);
+                if (response.IsSuccessStatusCode)
                 {
-                    return;
+                    return await response.Content.ReadFromJsonAsync<EspecialidadDTO>(); 
                 }
                 else
                 {
-                    string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong deleting speciality with ID:{id}. Error: {errmen}");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    return null;
                 }
             }
-            catch (HttpRequestException err)
+            catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error ocurred while deleting speciality with ID:{id}. Error:{err.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener la especialidad {id}");
             }
-            catch (TaskCanceledException err)
+            catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout deleting speciality with ID:{id}. Error:{err.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener la especialidad {id}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener la especialidad {id}");
             }
         }
 
@@ -116,68 +82,82 @@ namespace API.Clients
         {
             try
             {
-                HttpResponseMessage resp = await esp.PostAsJsonAsync("especialidades", dto);
-                if (resp.IsSuccessStatusCode)
+                HttpResponseMessage response = await esp.PostAsJsonAsync("especialidades", dto);
+                if (response.IsSuccessStatusCode)
                 {
-                    return await resp.Content.ReadFromJsonAsync<EspecialidadDTO>();
+                    return await response.Content.ReadFromJsonAsync<EspecialidadDTO>();
                 }
                 else
                 {
-                    string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong posting speciality. Error:{errmen} ");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException($"OOPS! Error al añadir la especialidad {dto.Descripcion}");
                 }
             }
-            catch (HttpRequestException err)
+            catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error ocurred while posting speciality. Error:{err.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir la especialidad {dto.Descripcion}");
             }
-            catch (TaskCanceledException err)
+            catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout posting speciality. Error:{err.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir la especialidad {dto.Descripcion}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir la especialidad {dto.Descripcion}");
             }
         }
 
-        public static async Task<EspecialidadDTO> PutAsync(EspecialidadDTO dto)
+        public static async Task UpdateAsync(EspecialidadDTO dto)
         {
             try
             {
-                HttpResponseMessage resp = await esp.PutAsJsonAsync("especialidades", dto);
-                if (resp.IsSuccessStatusCode)
+                HttpResponseMessage response = await esp.PutAsJsonAsync("especialidades", dto);
+                if (response.IsSuccessStatusCode)
                 {
-                    if (resp.StatusCode == HttpStatusCode.NoContent)
-                    {
-                        return dto; 
-                    }
-                    var contentString = await resp.Content.ReadAsStringAsync();
-                    if (string.IsNullOrWhiteSpace(contentString))
-                    {
-                        return dto;
-                    }
-
-                    // Otherwise parse the returned JSON into DTO.
-                    return JsonSerializer.Deserialize<EspecialidadDTO>(contentString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    return;
                 }
                 else
                 {
-                    string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to update speciality. Error: {errmen}");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException($"OOPS! Error al editar la especialidad {dto.Descripcion}");
                 }
             }
-            catch (HttpRequestException err)
+            catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error ocurred while updating speciality. Error:{err.Message}");
+                throw new ArgumentException($"OOPS! Error al editar la especialidad {dto.Descripcion}");
             }
-            catch (TaskCanceledException err)
+            catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout updating speciality. Error:{err.Message}");
+                throw new ArgumentException($"OOPS! Error al editar la especialidad {dto.Descripcion}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar la especialidad {dto.Descripcion}");
+            }
+        }
+
+        public static async Task DeleteAsync(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await esp.DeleteAsync("especialidades/" + id);
+                if (!response.IsSuccessStatusCode)
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException($"OOPS! Error al eliminar la especialidad {id}");
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new ArgumentException($"OOPS! Error al eliminar la especialidad {id}");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new ArgumentException($"OOPS! Error al eliminar la especialidad {id}");
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException($"OOPS! Error al eliminar la especialidad {id}");
             }
         }
     }

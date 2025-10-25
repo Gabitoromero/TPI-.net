@@ -1,14 +1,6 @@
 ﻿using DTOs;
 using API.Clients;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
 
 namespace WinFormsApp
 {
@@ -30,7 +22,7 @@ namespace WinFormsApp
             checkBoxHabilitado.Checked = _user.Habilitado;
             textBoxFechaAlta.Text = _user.FechaAlta.ToString();
         }
-        public void btnGuardar_Click(object sender, EventArgs e)
+        public async void  btnGuardar_Click(object sender, EventArgs e)
         {
             try
             {
@@ -72,7 +64,7 @@ namespace WinFormsApp
                     Habilitado = _user.Habilitado,
                     IdPlan = _user.IdPlan
                 };
-                APIUsuario.UpdateAsync(putUsuarioDTO);
+                await APIUsuario.UpdateAsync(putUsuarioDTO);
                 MessageBox.Show("Usuario modificado con éxito", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();
             }

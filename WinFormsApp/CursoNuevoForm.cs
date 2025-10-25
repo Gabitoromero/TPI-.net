@@ -42,29 +42,27 @@ namespace WinFormsApp
                 comboBoxComision.DataSource = comisiones;
                 comboBoxComision.DisplayMember = "Desc_comision";
                 comboBoxComision.ValueMember = "Id_comision";
-            }
-            catch
-            {
-                comboBoxComision.DataSource = null;
-            }
 
-            try
-            {
                 List<MateriaDTO> materias = await APIMateria.GetAllAsync();
+                if (materias.Count == 0)
+                {
+                    MessageBox.Show("No se pudieron cargar las materias.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
                 comboBoxMaterias.DataSource = materias;
                 comboBoxMaterias.DisplayMember = "Desc_materia";
                 comboBoxMaterias.ValueMember = "Id_materia";
+                
+                numericAnio.Maximum = 2100;
+                int anioActual = DateTime.Now.Year;
+                numericAnio.Value = anioActual;
+                numericCupo.Value = 0;
+                comboBoxComision.SelectedIndex = -1;
+                comboBoxMaterias.SelectedIndex = -1;
             }
-            catch
+            catch (ArgumentException ex)
             {
-                comboBoxMaterias.DataSource = null;
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            numericAnio.Maximum = 2100;
-            int anioActual = DateTime.Now.Year;
-            numericAnio.Value = anioActual;
-            numericCupo.Value = 0;
-            comboBoxComision.SelectedIndex = -1;
-            comboBoxMaterias.SelectedIndex = -1;
         }
 
         private async void btnGuardar_Click(object sender, EventArgs e)
@@ -73,21 +71,18 @@ namespace WinFormsApp
             {
                 NewCursoDTO dto = new NewCursoDTO
                 {
-                    Id_curso =  0,
+                    Id_curso = 0,
                     Anio_calendario = (int)numericAnio.Value,
                     Cupo = (int)numericCupo.Value,
                     Id_comision = comboBoxComision.SelectedValue != null ? (int)comboBoxComision.SelectedValue : 0,
                     Id_materia = comboBoxMaterias.SelectedValue != null ? (int)comboBoxMaterias.SelectedValue : 0
                 };
 
-                
-                 await APICurso.AddAsync(dto);
-                 MessageBox.Show("Curso agregado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
-
+                await APICurso.AddAsync(dto);
+                MessageBox.Show("Curso agregado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

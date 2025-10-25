@@ -63,6 +63,10 @@ namespace WinFormsApp
         {
             try
             {
+                if((int)numericAnio.Value == 0)
+                {
+                    throw new ArgumentException("El año debe ser distinto de 0");
+                }
                 ComisionDTO toSend = new ComisionDTO
                 {
                     Id_comision = (dto != null) ? dto.Id_comision : 0,

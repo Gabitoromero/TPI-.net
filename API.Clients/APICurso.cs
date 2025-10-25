@@ -28,21 +28,21 @@ namespace API.Clients
                 }
                 else
                 {
-                    string errorMensage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong getting cursos. Eror: ${errorMensage}");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    return new List<NewCursoDTO>();
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving cursos. Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener los cursos");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving cursos. Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener los cursos. Timeout superado");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener los cursos");
             }
         }
 
@@ -58,28 +58,28 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve curso with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    return null;
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving curso with ID:{id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener el curso {id}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving curso with ID: {id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener el curso {id}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener el curso {id}");
             }
         }
 
-        public static async Task<NewCursoDTO> AddAsync(NewCursoDTO curso)
+        public static async Task<NewCursoDTO> AddAsync(NewCursoDTO dto)
         {
             try
             {
-                HttpResponseMessage response = await client.PostAsJsonAsync("cursos", curso);
+                HttpResponseMessage response = await client.PostAsJsonAsync("cursos", dto);
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadFromJsonAsync<NewCursoDTO>();
@@ -87,28 +87,28 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to add curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"OOPS! Error al añadir el curso {dto.Id_curso}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while adding curso. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir el curso {dto.Id_curso}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout adding curso. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir el curso {dto.Id_curso}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir el curso {dto.Id_curso}");
             }
         }
 
-        public static async Task UpdateAsync(NewCursoDTO curso)
+        public static async Task UpdateAsync(NewCursoDTO dto)
         {
             try
             {
-                HttpResponseMessage response = await client.PutAsJsonAsync("cursos/", curso);
+                HttpResponseMessage response = await client.PutAsJsonAsync("cursos/", dto);
                 if (response.IsSuccessStatusCode)
                 {
                     return;
@@ -116,20 +116,20 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to update curso with ID:{curso.Id_curso}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"OOPS! Error al editar el curso {dto.Id_curso}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while updating curso with ID:{curso.Id_curso}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar el curso {dto.Id_curso}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout updating curso with ID: {curso.Id_curso}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar el curso {dto.Id_curso}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar el curso {dto.Id_curso}");
             }
         }
 
@@ -141,20 +141,20 @@ namespace API.Clients
                 if (!response.IsSuccessStatusCode)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to delete curso with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"OOPS! Error al eliminar el curso {id}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while deleting curso with ID:{id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al eliminar el curso {id}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout deleting curso with ID: {id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al eliminar el curso {id}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al eliminar el curso {id}");
             }
         }
     }

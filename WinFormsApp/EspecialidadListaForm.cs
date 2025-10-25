@@ -33,13 +33,18 @@ namespace WinFormsApp
         {
             try
             {
-                List<EspecialidadDTO> list = await APIEspecialidad.GetAllAsync();
-                dataGridViewEspecialidades.DataSource = list;
+                List<EspecialidadDTO> especialidades = await APIEspecialidad.GetAllAsync();
+                if (especialidades.Count == 0)
+                {
+                    MessageBox.Show("No se pudieron cargar las especialidades.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                dataGridViewEspecialidades.DataSource = especialidades;
                 dataGridViewEspecialidades.ClearSelection();
                 btnModificar.Enabled = false;
                 btnEliminar.Enabled = false;
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -69,6 +74,12 @@ namespace WinFormsApp
                 int id = (int)dataGridViewEspecialidades.CurrentRow.Cells["Id"].Value;
                 EspecialidadDTO dto = await APIEspecialidad.GetAsync(id);
                 
+                if (dto == null)
+                {
+                    MessageBox.Show("No se pudo obtener la especialidad seleccionada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 this.Hide();
                 using (var form = new EspecialidadDetalleForm(dto))
                 {
@@ -77,7 +88,7 @@ namespace WinFormsApp
                 this.Show();
                 await LoadEspecialidades();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
@@ -112,7 +123,7 @@ namespace WinFormsApp
                     await LoadEspecialidades();
                 }
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -124,8 +135,14 @@ namespace WinFormsApp
             try
             {
                 int id = (int)dataGridViewEspecialidades.Rows[e.RowIndex].Cells["Id"].Value;
-                var dto = await APIEspecialidad.GetAsync(id);
+                EspecialidadDTO dto = await APIEspecialidad.GetAsync(id);
                 
+                if (dto == null)
+                {
+                    MessageBox.Show("No se pudo obtener la especialidad seleccionada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 this.Hide();
                 using (var form = new EspecialidadDetalleForm(dto))
                 {
@@ -134,7 +151,7 @@ namespace WinFormsApp
                 this.Show();
                 await LoadEspecialidades();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();

@@ -27,21 +27,21 @@ namespace API.Clients
                 }
                 else
                 {
-                    string errorMensage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong getting materias. Error: ${errorMensage}");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    return new List<MateriaDTO>();
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving materias. Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener las materias");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving materias. Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener las materias. Timeout superado");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException("OOPS! Error al obtener las materias");
             }
         }
 
@@ -57,20 +57,20 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve materia with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    return null;
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving materia with ID:{id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener la materia {id}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving materia with ID: {id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener la materia {id}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al obtener la materia {id}");
             }
         }
 
@@ -86,28 +86,28 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to add materia. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"OOPS! Error al añadir la materia {dto.Desc_materia}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while adding materia. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir la materia {dto.Desc_materia}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout adding materia. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir la materia {dto.Desc_materia}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al añadir la materia {dto.Desc_materia}");
             }
         }
 
-        public static async Task UpdateAsync(MateriaDTO materia)
+        public static async Task UpdateAsync(MateriaDTO dto)
         {
             try
             {
-                HttpResponseMessage response = await client.PutAsJsonAsync("materias/", materia);
+                HttpResponseMessage response = await client.PutAsJsonAsync("materias/", dto);
                 if (response.IsSuccessStatusCode)
                 {
                     return;
@@ -115,20 +115,20 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to update materia with ID:{materia.Id_materia}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"OOPS! Error al editar la materia {dto.Desc_materia}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while updating materia with ID:{materia.Id_materia}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar la materia {dto.Desc_materia}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout updating materia with ID: {materia.Id_materia}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar la materia {dto.Desc_materia}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al editar la materia {dto.Desc_materia}");
             }
         }
 
@@ -140,20 +140,20 @@ namespace API.Clients
                 if (!response.IsSuccessStatusCode)
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to delete materia with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"OOPS! Error al eliminar la materia {id}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while deleting materia with ID:{id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al eliminar la materia {id}");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout deleting materia with ID: {id}. Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al eliminar la materia {id}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"OOPS! Error al eliminar la materia {id}");
             }
         }
     }

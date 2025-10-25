@@ -176,14 +176,14 @@ namespace API.Clients
                 throw new Exception($"Error: {ex.Message}");
             }
         }
-        public static async void UpdateAsync(PutUsuarioDTO dto)
+        public static async Task UpdateAsync(PutUsuarioDTO dto)
         {
             try
             {
-                HttpResponseMessage resp = await client.PutAsJsonAsync("usuarios/", dto); //client realiza una peticion PUT
+                HttpResponseMessage resp = await client.PutAsJsonAsync("usuarios/", dto); 
                 if (resp.IsSuccessStatusCode)
                 {
-                    return;// await resp.Content.ReadFromJsonAsync();
+                    return;
                 }
                 else
                 {
