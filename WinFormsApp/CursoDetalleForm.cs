@@ -134,7 +134,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar alumnos del curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -164,7 +164,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar profesores del curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -218,7 +218,7 @@ namespace WinFormsApp
                     MessageBox.Show("Curso agregado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                this.Close();
+                Close();
             }
             catch (ArgumentException ex)
             {
@@ -232,7 +232,7 @@ namespace WinFormsApp
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private async void btnEliminarAlumnoCurso_Click(object sender, EventArgs e)
@@ -268,7 +268,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al eliminar inscripción: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -305,7 +305,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al eliminar asignación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -313,7 +313,7 @@ namespace WinFormsApp
         {
             try
             {
-                this.Hide();
+                Hide();
                 using (var formSeleccion = new CursoSeleccionProfesor(curso.Id_curso))
                 {
                     formSeleccion.ShowDialog();
@@ -324,12 +324,12 @@ namespace WinFormsApp
                         _ = LoadProfesoresCurso(curso.Id_curso);
                     }
                 }
-                this.Show();
+                Show();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al abrir selección de profesor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Show();
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Show();
             }
         }
     }

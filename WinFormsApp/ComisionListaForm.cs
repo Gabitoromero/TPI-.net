@@ -65,7 +65,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al listar comisiones: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -102,7 +102,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al modificar comisión: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
             }
         }
@@ -137,7 +137,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al eliminar comisión: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

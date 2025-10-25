@@ -22,51 +22,56 @@ namespace WinFormsApp
 
         private async void btnVerInscripciones_Click_2(object? sender, EventArgs e)
         {
-
-            string username = APIClientBase.LoginResponse.Username;
-            ShowUsuarioDTO current = await APIUsuario.GetByUsernameAsync(username);
-
-            if (!current.Habilitado ?? false)
+            try
             {
-                MessageBox.Show("Su cuenta no está habilitada. No puede realizar nuevas inscripciones.", "Cuenta no habilitada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //Close();
-            }
-            else
-            {
-                Hide();
-                using (var detalle = new InscripcionDetalle())
+                string username = APIClientBase.LoginResponse.Username;
+                ShowUsuarioDTO current = await APIUsuario.GetByUsernameAsync(username);
+
+                if (!current.Habilitado ?? false)
                 {
-                    detalle.ShowDialog();
+                    MessageBox.Show("Su cuenta no está habilitada. No puede realizar nuevas inscripciones.", "Cuenta no habilitada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                Show();
+                else
+                {
+                    Hide();
+                    using (var detalle = new InscripcionDetalle())
+                    {
+                        detalle.ShowDialog();
+                    }
+                    Show();
+                }
             }
-
-           
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void btnNuevaInscripcion_Click(object? sender, EventArgs e)
         {
-            string username = APIClientBase.LoginResponse.Username;
-            ShowUsuarioDTO current = await APIUsuario.GetByUsernameAsync(username);
+            try
+            {
+                string username = APIClientBase.LoginResponse.Username;
+                ShowUsuarioDTO current = await APIUsuario.GetByUsernameAsync(username);
 
-            if (!current.Habilitado ?? false)
-            {
-                MessageBox.Show("Su cuenta no está habilitada. No puede realizar nuevas inscripciones.", "Cuenta no habilitada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //Close();
-            }
-            else
-            {
-                Hide();
-                using (var nuevaInscripcion = new InscripcionNueva())
+                if (!current.Habilitado ?? false)
                 {
-                    DialogResult result = nuevaInscripcion.ShowDialog();
+                    MessageBox.Show("Su cuenta no está habilitada. No puede realizar nuevas inscripciones.", "Cuenta no habilitada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                Show();
+                else
+                {
+                    Hide();
+                    using (var nuevaInscripcion = new InscripcionNueva())
+                    {
+                        DialogResult result = nuevaInscripcion.ShowDialog();
+                    }
+                    Show();
+                }
             }
-
-
-
-           
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnVolver_Click(object sender, EventArgs e)

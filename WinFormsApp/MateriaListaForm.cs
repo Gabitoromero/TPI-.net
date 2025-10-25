@@ -40,7 +40,7 @@ namespace WinFormsApp
                 }
                 catch
                 {
-                    throw new Exception("No se pudieron cargar los planes. Verifique la conexión con el servidor.");
+                    planes = new List<PlanDTO>();
                 }
 
                 var view = materias.Select(m => new
@@ -58,7 +58,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al listar materias: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -95,7 +95,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al modificar materia: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
             }
         }
@@ -130,7 +130,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al eliminar materia: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

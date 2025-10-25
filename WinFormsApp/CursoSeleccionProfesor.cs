@@ -59,7 +59,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar profesores: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -78,7 +78,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al seleccionar profesor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -116,7 +116,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al agregar profesor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

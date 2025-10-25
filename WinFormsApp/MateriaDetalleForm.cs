@@ -50,12 +50,10 @@ namespace WinFormsApp
                 }
             }
             }
-            catch (ArgumentException err)
+            catch (Exception ex)
             {
-                throw new Exception("Error al cargar los planes.", err);
-
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private async void btnGuardar_Click(object sender, EventArgs e)
@@ -83,7 +81,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al guardar materia: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

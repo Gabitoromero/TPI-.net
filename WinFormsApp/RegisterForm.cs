@@ -117,8 +117,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al registrar usuario " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //DialogResult = DialogResult.Cancel;
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

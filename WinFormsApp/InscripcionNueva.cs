@@ -85,7 +85,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar cursos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
         }
@@ -112,7 +112,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al procesar la inscripción: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -154,23 +154,7 @@ namespace WinFormsApp
             }
             catch (Exception ex)
             {
-                // Verificar si es error de alumno ya inscrito
-                if (ex.Message.Contains("inscrito") || ex.Message.Contains("inscripto") || ex.Message.Contains("duplicate") || ex.Message.Contains("already"))
-                {
-                    MessageBox.Show(
-                        "Ya estás inscrito en este curso.",
-                        "Inscripción Duplicada",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        $"Error al inscribirse: {ex.Message}",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

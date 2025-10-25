@@ -50,8 +50,11 @@ namespace WinFormsApp
             }
             catch (ArgumentException err)
             {
-                throw new Exception("Error al cargar los planes.", err);
-
+                MessageBox.Show($"Error al cargar comisión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar comisión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -77,7 +80,7 @@ namespace WinFormsApp
                     await APIComision.AddAsync(toSend);
                 }
 
-                this.Close();
+                Close();
             }
             catch (Exception ex)
             {

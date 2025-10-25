@@ -96,9 +96,9 @@ namespace WinFormsApp
 
                 }
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Error al guardar el plan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

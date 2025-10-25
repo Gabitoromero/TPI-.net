@@ -55,6 +55,7 @@ namespace WinFormsApp
             {
                 comboBoxMaterias.DataSource = null;
             }
+            numericAnio.Maximum = 2100;
             int anioActual = DateTime.Now.Year;
             numericAnio.Value = anioActual;
             numericCupo.Value = 0;
@@ -82,13 +83,9 @@ namespace WinFormsApp
 
                 Close();
             }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al guardar curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

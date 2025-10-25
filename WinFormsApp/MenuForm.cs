@@ -28,9 +28,9 @@ namespace WinFormsApp
             {
                 Close();
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Error al cerrar sesión: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnModulosCRUD_Click(object sender, EventArgs e)
@@ -44,9 +44,9 @@ namespace WinFormsApp
                 }
                 this.Show();
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Error al modificar especialidad: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
             }
         }
@@ -61,9 +61,9 @@ namespace WinFormsApp
                 }
                 this.Show();
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Error al modificar plan: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
             }
         }
@@ -78,10 +78,10 @@ namespace WinFormsApp
                 }
                 this.Show();
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Error al abrir especialidades: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Show(); // Asegurar que se muestre incluso si hay error
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Show();
             }
         }
         private void btnUsuariosCRUD_Click(object sender, EventArgs e)
@@ -95,9 +95,9 @@ namespace WinFormsApp
                 }
                 this.Show();
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Error al abrir usuarios: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
             }
         }
@@ -112,9 +112,9 @@ namespace WinFormsApp
                 }
                 this.Show();
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Error al abrir cursos: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
             }
         }
@@ -129,9 +129,9 @@ namespace WinFormsApp
                 }
                 this.Show();
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Error al abrir comisiones: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Show();
             }
         }

@@ -128,7 +128,7 @@ namespace Data
                     entity.Property(c => c.Id_comision).ValueGeneratedOnAdd();
                     entity.Property(c => c.Desc_comision).IsRequired().HasMaxLength(50);
                     entity.HasIndex(c => c.Desc_comision).IsUnique();
-                    entity.Property(c => c.Anio_especialidad).IsRequired();
+                    entity.Property(c => c.Anio_especialidad).IsRequired();  //no tengo ni idea a que se refiere
                     entity.HasOne<Plan>()
                           .WithMany()
                           .HasForeignKey(c => c.Id_plan)
