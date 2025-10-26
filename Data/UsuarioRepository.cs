@@ -92,10 +92,13 @@ namespace Data
         public async Task<bool> Delete(int id)
         {
             var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null) return false;
-            _context.Usuarios.Remove(usuario);
-            await _context.SaveChangesAsync();
-            return true;
+            if (usuario != null)
+            {
+                usuario.Habilitado = false;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
         public async Task<bool> Update(Usuario usuario)

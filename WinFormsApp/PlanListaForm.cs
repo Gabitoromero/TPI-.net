@@ -91,9 +91,16 @@ namespace WinFormsApp
                 string descripcionPlan = dataGridViewPlanes.CurrentRow.Cells["Descripcion"].Value?.ToString() ?? "este plan";
                 string especialidad = dataGridViewPlanes.CurrentRow.Cells["Especialidad"].Value?.ToString() ?? "desconocida";
 
-                // Mostrar mensaje de confirmación
+                // Mostrar mensaje de confirmación con cascada completa
                 DialogResult confirmResult = MessageBox.Show(
-                    $"¿Está seguro que desea eliminar el plan '{descripcionPlan}'?\n\nEspecialidad: {especialidad}\n\nEsta acción no se puede deshacer.",
+                    $"¿Está seguro que desea eliminar el plan '{descripcionPlan}'?\n\n" +
+                    $"Especialidad: {especialidad}\n\n" +
+                    $"Se darán de baja:\n" +
+                    $"- Todos los usuarios del plan\n" +
+                    $"- Todas las comisiones del plan\n" +
+                    $"- Todas las materias del plan\n" +
+                    $"- Todos los cursos relacionados\n\n" +
+                    $"Esta acción no se puede deshacer.",
                     "Confirmar Eliminación",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);

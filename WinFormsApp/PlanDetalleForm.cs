@@ -31,6 +31,38 @@ namespace WinFormsApp
         {
             try
             {
+                // Validar si el plan está deshabilitado
+                if (isEdit && plan != null && !plan.Habilitado)
+                {
+                    DialogResult result = MessageBox.Show(
+                        "Este plan está deshabilitado.\n\nAl reactivarlo se habilitarán:\n- Todos los usuarios del plan\n- Todas las comisiones del plan\n- Todas las materias del plan\n- Todos los cursos relacionados\n\n¿Desea darlo de alta?",
+                        "Plan Deshabilitado",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            plan.Habilitado = true;
+                            await APIPlan.UpdateAsync(plan);
+                            MessageBox.Show("Plan reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            MessageBox.Show($"Error al reactivar el plan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            this.Close();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Este plan está deshabilitado y no se puede modificar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Close();
+                        return;
+                    }
+                }
+
                 await LoadEspecialidades();
                 
                 if (isEdit && plan != null)
@@ -47,13 +79,19 @@ namespace WinFormsApp
         private async Task LoadEspecialidades()
         {
             var especialidades = await APIEspecialidad.GetAllAsync();
-            comboBoxEspecialidades.DataSource = especialidades;
+            // Filtrar solo especialidades habilitadas
+            var especialidadesHabilitadas = especialidades.Where(e => e.Habilitado).ToList();
+            if (especialidadesHabilitadas.Count == 0)
+            {
+                MessageBox.Show("No hay especialidades habilitadas disponibles.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            comboBoxEspecialidades.DataSource = especialidadesHabilitadas;
             comboBoxEspecialidades.DisplayMember = "Descripcion";
             comboBoxEspecialidades.ValueMember = "Id";
             
             if (isEdit && plan != null)
             {
-                if (especialidades.Any(e => e.Id == plan.IdEspecialidad))
+                if (especialidadesHabilitadas.Any(e => e.Id == plan.IdEspecialidad))
                 {
                     comboBoxEspecialidades.SelectedValue = plan.IdEspecialidad;
                 }
@@ -90,7 +128,8 @@ namespace WinFormsApp
                     {
                         IdPlan = plan.IdPlan,
                         Descripcion = txtBoxDescripcion.Text,
-                        IdEspecialidad = idEspecialidad
+                        IdEspecialidad = idEspecialidad,
+                        Habilitado = plan.Habilitado
                     };
 
                     await APIPlan.UpdateAsync(toSend);
@@ -99,7 +138,13 @@ namespace WinFormsApp
                 }
                 else
                 {
-                    PlanDTO nuevoPlan = new PlanDTO(0, txtBoxDescripcion.Text, idEspecialidad);
+                    PlanDTO nuevoPlan = new PlanDTO
+                    {
+                        IdPlan = 0,
+                        Descripcion = txtBoxDescripcion.Text,
+                        IdEspecialidad = idEspecialidad,
+                        Habilitado = true
+                    };
                     PlanDTO planAdded = await APIPlan.AddAsync(nuevoPlan);
                     MessageBox.Show("Plan agregado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();

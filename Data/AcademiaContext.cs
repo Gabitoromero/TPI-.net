@@ -49,11 +49,12 @@ namespace Data
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
                 entity.HasIndex(e => e.Descripcion).IsUnique();
+                entity.Property(e => e.Habilitado).HasDefaultValue(true);
 
                 entity.HasData(
-                    new { Id = 1, Descripcion = "Chef" },
-                    new { Id = 2, Descripcion = "Diseñador de interiores" },
-                    new { Id = 3, Descripcion = "Ingeniería en Sistemas" }
+                    new { Id = 1, Descripcion = "Chef", Habilitado = true },
+                    new { Id = 2, Descripcion = "Diseñador de interiores", Habilitado = true },
+                    new { Id = 3, Descripcion = "Ingeniería en Sistemas", Habilitado = true }
                     );
 
             });
@@ -64,15 +65,16 @@ namespace Data
                 entity.Property(e => e.IdPlan).ValueGeneratedOnAdd();
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
                 entity.HasIndex(e => e.Descripcion).IsUnique();
+                entity.Property(e => e.Habilitado).HasDefaultValue(true);
                 entity.HasOne<Especialidad>()
                       .WithMany()
                       .HasForeignKey(e => e.IdEspecialidad)
                       .OnDelete(DeleteBehavior.Restrict)
                       .IsRequired();
 
-                entity.HasData(new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1 },
-                                new { IdPlan = 2, Descripcion = "Plan Familiar", IdEspecialidad = 2 },
-                                new { IdPlan = 3, Descripcion = "Plan Premium", IdEspecialidad = 3 }
+                entity.HasData(new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1, Habilitado = true },
+                                new { IdPlan = 2, Descripcion = "Plan Familiar", IdEspecialidad = 2, Habilitado = true },
+                                new { IdPlan = 3, Descripcion = "Plan Premium", IdEspecialidad = 3, Habilitado = true }
                               );
             });
 

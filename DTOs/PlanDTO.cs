@@ -11,6 +11,8 @@ namespace DTOs
         public int IdPlan { get; set; }
         public string Descripcion { get; set; }
         public int IdEspecialidad { get; set; }
+        public bool Habilitado { get; set; }
+        
         public PlanDTO() : this(0, "Sin Descripcion", 1) { }
 
         public PlanDTO(int idplan, string desc, int idesp) {

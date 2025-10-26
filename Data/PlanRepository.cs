@@ -28,6 +28,7 @@ namespace Data
                     //if (_context.Planes.Any(p => p.Descripcion == plan.Descripcion && p.IdPlan != plan.IdPlan)) throw new ArgumentException($"Ya existe un plan con la descripcion {plan.Descripcion}.");
                     existingPlan.Descripcion = plan.Descripcion;
                     existingPlan.IdEspecialidad = plan.IdEspecialidad;
+                    existingPlan.Habilitado = plan.Habilitado;
                     await _context.SaveChangesAsync();
                     return true;
                 }
@@ -67,7 +68,7 @@ namespace Data
             Plan? plan = await _context.Planes.FindAsync(id);
             if (plan != null)
             {
-                _context.Planes.Remove(plan);
+                plan.Habilitado = false;
                 await _context.SaveChangesAsync();
                 return true;
             }

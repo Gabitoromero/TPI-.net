@@ -26,7 +26,8 @@ namespace Data
 
                 if (existingEsp != null)
                 {
-                    existingEsp.Descripcion = esp.Descripcion; // Ojo que en realidad deberiamos usar setters especiales que validen los datos
+                    existingEsp.Descripcion = esp.Descripcion;
+                    existingEsp.Habilitado = esp.Habilitado;
                     await _context.SaveChangesAsync();
                     return true;
                 }
@@ -58,8 +59,9 @@ namespace Data
         {
             Especialidad? especialidad = await _context.Especialidades.FindAsync(id);
 
-            if (especialidad != null) { 
-                _context.Especialidades.Remove(especialidad);
+            if (especialidad != null)
+            {
+                especialidad.Habilitado = false;
                 await _context.SaveChangesAsync();
                 return true;
             }

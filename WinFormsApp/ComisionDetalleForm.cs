@@ -28,7 +28,7 @@ namespace WinFormsApp
                 if (isEdit && dto != null && !dto.Habilitado)
                 {
                     DialogResult result = MessageBox.Show(
-                        "Esta comisión está deshabilitada.\n\n¿Desea darla de alta?",
+                        "Esta comisión está deshabilitada.\n\nAl reactivarla se habilitarán todos los cursos relacionados.\n\n¿Desea darla de alta?",
                         "Comisión Deshabilitada",
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question);
@@ -57,7 +57,13 @@ namespace WinFormsApp
                 }
 
                 var plans = await APIPlan.GetAllAsync();
-                comboBoxPlan.DataSource = plans;
+                // Filtrar solo planes habilitados
+                var planesHabilitados = plans.Where(p => p.Habilitado).ToList();
+                if (planesHabilitados.Count == 0)
+                {
+                    MessageBox.Show("No hay planes habilitados disponibles.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                comboBoxPlan.DataSource = planesHabilitados;
                 comboBoxPlan.DisplayMember = "Descripcion";
                 comboBoxPlan.ValueMember = "IdPlan";
             
