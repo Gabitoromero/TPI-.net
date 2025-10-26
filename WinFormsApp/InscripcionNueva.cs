@@ -27,8 +27,14 @@ namespace WinFormsApp
                     return;
                 }
 
-                // Cargar todos los cursos disponibles
-                var cursos = await APICurso.GetAllAsync();
+                // Cargar todos los cursos disponibles--------------------------
+                var cursos = await APICurso.GetAllDisponiblesAsync();
+                if (cursos == null || cursos.Count == 0)
+                {
+                    MessageBox.Show("No hay cursos disponibles para inscripción.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                    return;
+                }
 
                 // Crear lista para mostrar con información completa
                 cursosDisponibles = new List<CursoDisplayDTO>();

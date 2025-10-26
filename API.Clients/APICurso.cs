@@ -16,7 +16,6 @@ namespace API.Clients
         {
             client = CreateHttpClientAsync();
         }
-
         public static async Task<List<NewCursoDTO>> GetAllAsync()
         {
             try
@@ -45,7 +44,34 @@ namespace API.Clients
                 throw new ArgumentException("OOPS! Error al obtener los cursos");
             }
         }
-
+        public static async Task<List<NewCursoDTO>> GetAllDisponiblesAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync("cursos/disponibles");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<List<NewCursoDTO>>();
+                }
+                else
+                {
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    return new List<NewCursoDTO>();
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new ArgumentException("OOPS! Error al obtener los cursos");
+            }
+            catch (TaskCanceledException ex)
+            {
+                throw new ArgumentException("OOPS! Error al obtener los cursos. Timeout superado");
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("OOPS! Error al obtener los cursos");
+            }
+        }
         public static async Task<NewCursoDTO> GetAsync(int id)
         {
             try

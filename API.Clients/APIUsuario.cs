@@ -34,7 +34,7 @@ namespace API.Clients
                     }
                     else
                     {
-                        throw new Exception("OOPS! Login response was null despite successful status code.");
+                        throw new ArgumentException("No se pudo iniciar sesión");
                     }
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -44,22 +44,27 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to login. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException("No se pudo iniciar sesión");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while trying to login. Error: {ex.Message}");
+                throw new ArgumentException("Error al intentar conectarse al servidor");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout trying to login. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al intentar iniciar sesión");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException("Error al intentar iniciar sesión");
             }
         }
+
         public static async Task<FullUsuarioDTO> GetAsync(int id)
         {
             try
@@ -67,28 +72,37 @@ namespace API.Clients
                 HttpResponseMessage response = await client.GetAsync("usuarios/" + id);
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadFromJsonAsync<FullUsuarioDTO>(); //mandamos en JSON poque el "ReadAsAsync" es de un paquete viejo
+                    return await response.Content.ReadFromJsonAsync<FullUsuarioDTO>();
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"No se encontró el usuario con ID: {id}");
                 }
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve user with ID:{id}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"No se pudo obtener el usuario con ID: {id}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving user with ID:{id}. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar obtener el usuario");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving user with ID: {id}. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al obtener el usuario");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al obtener el usuario: {ex.Message}");
             }
         }
-        public static async Task<ShowUsuarioDTO?> GetByUsernameAsync(string username) //para buscar usuario una vez iniciado sesion
+
+        public static async Task<ShowUsuarioDTO?> GetByUsernameAsync(string username)
         {
             try
             {
@@ -104,22 +118,27 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve user by username. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException("No se pudo obtener el usuario por nombre de usuario");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving user by username. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar obtener el usuario");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving user by username. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al obtener el usuario");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al obtener el usuario: {ex.Message}");
             }
         }
+
         public static async Task<List<ShowUsuarioDTO>> GetAllAsync()
         {
             try
@@ -129,25 +148,34 @@ namespace API.Clients
                 {
                     return await response.Content.ReadFromJsonAsync<List<ShowUsuarioDTO>>();
                 }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException("No se encontraron usuarios");
+                }
                 else
                 {
-                    string errorMensage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong getting users. Eror: ${errorMensage}");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException("No se pudieron obtener los usuarios");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving users. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar obtener los usuarios");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving users. Error: ${ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al obtener los usuarios");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al obtener los usuarios: {ex.Message}");
             }
         }
+
         public static async Task<PostUsuarioDTO> AddAsync(FullUsuarioDTO dto)
         {
             try
@@ -160,22 +188,27 @@ namespace API.Clients
                 else
                 {
                     string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong posting user. Error:{errmen} ");
+                    throw new ArgumentException("No se pudo crear el usuario");
                 }
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while posting user. Error:{err.Message}");
+                throw new ArgumentException("Error de conexión al intentar crear el usuario");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout posting user. Error:{err.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al crear el usuario");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al crear el usuario: {ex.Message}");
             }
         }
+
         public static async Task UpdateAsync(PutUsuarioDTO dto)
         {
             try
@@ -185,49 +218,69 @@ namespace API.Clients
                 {
                     return;
                 }
+                else if (resp.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"No se encontró el usuario con ID: {dto.Id}");
+                }
                 else
                 {
                     string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong updating user with ID:{dto.Id}. Error:{errmen}");
+                    throw new ArgumentException($"No se pudo actualizar el usuario con ID: {dto.Id}");
                 }
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while updating user with ID:{dto.Id}. Error:{err.Message}");
+                throw new ArgumentException("Error de conexión al intentar actualizar el usuario");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout updating user with ID:{dto.Id}. Error:{err.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al actualizar el usuario");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al actualizar el usuario: {ex.Message}");
             }
         }
+
         public static async Task DeleteAsync(int id) 
         {
             try
             {
                 HttpResponseMessage resp = await client.DeleteAsync("usuarios/" + id);
-                if (!resp.IsSuccessStatusCode)
+                if (resp.IsSuccessStatusCode)
+                {
+                    return;
+                }
+                else if (resp.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"No se encontró el usuario con ID: {id}");
+                }
+                else
                 {
                     string errmen = await resp.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong deleting user with ID:{id}. Error: {errmen}");
+                    throw new ArgumentException($"No se pudo eliminar el usuario con ID: {id}");
                 }
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while deleting user with ID:{id}. Error:{err.Message}");
+                throw new ArgumentException("Error de conexión al intentar eliminar el usuario");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout deleting user with ID:{id}. Error:{err.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al eliminar el usuario");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al eliminar el usuario: {ex.Message}");
             }
-
         }
 
         // Búsqueda USUARIOS por Tipo (Profesor/Alumno)
@@ -240,25 +293,34 @@ namespace API.Clients
                 {
                     return await response.Content.ReadFromJsonAsync<List<ShowUsuarioDTO>>();
                 }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException("No se encontraron profesores");
+                }
                 else
                 {
-                    string errorMensage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong getting profesores. Eror: ${errorMensage}");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException("No se pudieron obtener los profesores");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving profesores. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar obtener los profesores");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving profesores. Error: ${ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al obtener los profesores");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al obtener los profesores: {ex.Message}");
             }
         }
+
         public static async Task<List<ShowUsuarioDTO>> GetAlumnosAsync()
         {
             try
@@ -268,23 +330,31 @@ namespace API.Clients
                 {
                     return await response.Content.ReadFromJsonAsync<List<ShowUsuarioDTO>>();
                 }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException("No se encontraron alumnos");
+                }
                 else
                 {
-                    string errorMensage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Something went wrong getting alumnos. Eror: ${errorMensage}");
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException("No se pudieron obtener los alumnos");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving alumnos. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar obtener los alumnos");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving alumnos. Error: ${ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al obtener los alumnos");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al obtener los alumnos: {ex.Message}");
             }
         }
 
@@ -298,25 +368,34 @@ namespace API.Clients
                 {
                     return await response.Content.ReadFromJsonAsync<List<AlumnoCursoDetalleDTO>>();
                 }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"No se encontraron alumnos para el curso con ID: {idCurso}");
+                }
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve alumnos by curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"No se pudieron obtener los alumnos del curso con ID: {idCurso}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving alumnos by curso. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar obtener los alumnos del curso");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving alumnos by curso. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al obtener los alumnos del curso");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al obtener los alumnos del curso: {ex.Message}");
             }
         }
+
         public static async Task<List<ShowAlumno_CursoDTO>> GetAlumnosCompletoByCursoAsync(int idCurso)
         {
             try
@@ -326,25 +405,34 @@ namespace API.Clients
                 {
                     return await response.Content.ReadFromJsonAsync<List<ShowAlumno_CursoDTO>>();
                 }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"No se encontraron alumnos para el curso con ID: {idCurso}");
+                }
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve alumnos completo by curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"No se pudieron obtener los alumnos del curso con ID: {idCurso}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving alumnos completo by curso. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar obtener los alumnos del curso");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving alumnos completo by curso. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al obtener los alumnos del curso");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al obtener los alumnos del curso: {ex.Message}");
             }
         }
+
         public static async Task<List<ProfesorCursoDetalleDTO>> GetProfesoresByCursoAsync(int idCurso)
         {
             try
@@ -354,23 +442,31 @@ namespace API.Clients
                 {
                     return await response.Content.ReadFromJsonAsync<List<ProfesorCursoDetalleDTO>>();
                 }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"No se encontraron profesores para el curso con ID: {idCurso}");
+                }
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve profesores by curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"No se pudieron obtener los profesores del curso con ID: {idCurso}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving profesores by curso. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar obtener los profesores del curso");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving profesores by curso. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al obtener los profesores del curso");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al obtener los profesores del curso: {ex.Message}");
             }
         }
 
@@ -384,25 +480,34 @@ namespace API.Clients
                 {
                     return await response.Content.ReadFromJsonAsync<List<ShowProfesor_CursoDTO>>();
                 }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"El profesor con ID: {idProfesor} no tiene cursos asignados o no existe");
+                }
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to retrieve profesor cursos. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"No se pudieron obtener los cursos del profesor con ID: {idProfesor}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving profesor cursos. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar obtener los cursos del profesor");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving profesor cursos. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al obtener los cursos del profesor");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al obtener los cursos del profesor: {ex.Message}");
             }
         }
+
         public static async Task<List<ShowAlumno_CursoDTO>> GetAlumnoCursosAsync(int idAlumno)
         {
             try
@@ -412,20 +517,32 @@ namespace API.Clients
                 {
                     return await response.Content.ReadFromJsonAsync<List<ShowAlumno_CursoDTO>>();
                 }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"El alumno con ID: {idAlumno} no tiene cursos asignados o no existe");
+                }
                 else
                 {
-                    return new List<ShowAlumno_CursoDTO>();
+                    string errorMessage = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException($"No se pudieron obtener los cursos del alumno con ID: {idAlumno}");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while retrieving alumno cursos. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar obtener los cursos del alumno");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout retrieving alumno cursos. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al obtener los cursos del alumno");
             }
-            
+            catch (ArgumentException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException($"Error al obtener los cursos del alumno: {ex.Message}");
+            }
         }
 
         // Gestión de Inscripciones
@@ -441,22 +558,27 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to add alumno curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException("No se pudo agregar la inscripción del alumno al curso");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while adding alumno curso. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar agregar la inscripción");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout adding alumno curso. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al agregar la inscripción");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al agregar la inscripción: {ex.Message}");
             }
         }
+
         public static async Task PutAlumnoCursoAsync(Alumno_CursoDTO dto)
         {
             try
@@ -466,47 +588,68 @@ namespace API.Clients
                 {
                     return;
                 }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"No se encontró la inscripción con ID: {dto.IdInscripcion}");
+                }
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to update alumno curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException("No se pudo actualizar la inscripción del alumno");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while updating alumno curso. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar actualizar la inscripción");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout updating alumno curso. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al actualizar la inscripción");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al actualizar la inscripción: {ex.Message}");
             }
         }
+
         public static async Task DeleteAlumnoCursoAsync(int idInscripcion)
         {
             try
             {
                 HttpResponseMessage response = await client.DeleteAsync($"usuarios/alumno_cursos/{idInscripcion}");
-                if (!response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
+                {
+                    return;
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"No se encontró la inscripción con ID: {idInscripcion}");
+                }
+                else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to delete inscripcion with ID:{idInscripcion}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"No se pudo eliminar la inscripción con ID: {idInscripcion}");
                 }
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while deleting inscripcion with ID:{idInscripcion}. Error:{err.Message}");
+                throw new ArgumentException("Error de conexión al intentar eliminar la inscripción");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout deleting inscripcion with ID:{idInscripcion}. Error:{err.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al eliminar la inscripción");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al eliminar la inscripción: {ex.Message}");
             }
         }
 
@@ -523,46 +666,62 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to add profesor curso. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException("No se pudo agregar la asignación del profesor al curso");
                 }
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception($"OOPS! A connection error occurred while adding profesor curso. Error: {ex.Message}");
+                throw new ArgumentException("Error de conexión al intentar agregar la asignación del profesor");
             }
             catch (TaskCanceledException ex)
             {
-                throw new Exception($"Timeout adding profesor curso. Error: {ex.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al agregar la asignación del profesor");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al agregar la asignación del profesor: {ex.Message}");
             }
         }
+
         public static async Task DeleteProfesorCursoAsync(int idDictado)
         {
             try
             {
                 HttpResponseMessage response = await client.DeleteAsync($"usuarios/profesor_cursos/{idDictado}");
-                if (!response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
+                {
+                    return;
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new ArgumentException($"No se encontró la asignación del profesor con ID: {idDictado}");
+                }
+                else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"OOPS! Failed to delete profesor curso with ID:{idDictado}. Status: {response.StatusCode}. Error:{errorMessage}");
+                    throw new ArgumentException($"No se pudo eliminar la asignación del profesor con ID: {idDictado}");
                 }
             }
             catch (HttpRequestException err)
             {
-                throw new Exception($"OOPS! A connection error ocurred while deleting profesor curso with ID:{idDictado}. Error:{err.Message}");
+                throw new ArgumentException("Error de conexión al intentar eliminar la asignación del profesor");
             }
             catch (TaskCanceledException err)
             {
-                throw new Exception($"Timeout deleting profesor curso with ID:{idDictado}. Error:{err.Message}");
+                throw new ArgumentException("Tiempo de espera agotado al eliminar la asignación del profesor");
+            }
+            catch (ArgumentException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}");
+                throw new ArgumentException($"Error al eliminar la asignación del profesor: {ex.Message}");
             }
         }
-
     }
 }

@@ -9,10 +9,13 @@ namespace WinFormsApp
         public InscripcionDetalle()
         {
             InitializeComponent();
-            this.Load += InscripcionDetalle_Load;
+        }
+        private void btnCerrar_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
-        private async void InscripcionDetalle_Load(object? sender, EventArgs e)
+        private async void InscripcionDetalle_Load_1(object sender, EventArgs e)
         {
             try
             {
@@ -51,16 +54,6 @@ namespace WinFormsApp
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
             }
-        }
-
-        private void btnCerrar_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void InscripcionDetalle_Load_1(object sender, EventArgs e)
-        {
-
         }
     }
 }
