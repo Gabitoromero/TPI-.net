@@ -21,6 +21,7 @@ namespace WinFormsApp
             btnEliminar = new Button();
             btnAgregar = new Button();
             btnModificar = new Button();
+            btnVolver = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewEspecialidades).BeginInit();
             SuspendLayout();
             // 
@@ -39,7 +40,7 @@ namespace WinFormsApp
             // btnEliminar
             // 
             btnEliminar.BackColor = Color.IndianRed;
-            btnEliminar.Location = new Point(12, 262);
+            btnEliminar.Location = new Point(239, 262);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 3;
@@ -60,7 +61,7 @@ namespace WinFormsApp
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(174, 262);
+            btnModificar.Location = new Point(137, 262);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 5;
@@ -68,11 +69,22 @@ namespace WinFormsApp
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += btnModificar_Click;
             // 
+            // btnVolver
+            // 
+            btnVolver.Location = new Point(12, 262);
+            btnVolver.Name = "btnVolver";
+            btnVolver.Size = new Size(75, 23);
+            btnVolver.TabIndex = 6;
+            btnVolver.Text = "Volver";
+            btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
+            // 
             // EspecialidadListaForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(428, 300);
+            Controls.Add(btnVolver);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);
             Controls.Add(btnEliminar);
@@ -89,5 +101,6 @@ namespace WinFormsApp
         private Button btnEliminar;
         private Button btnAgregar;
         private Button btnModificar;
+        private Button btnVolver;
     }
 }

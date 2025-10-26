@@ -21,12 +21,12 @@ namespace WinFormsApp
         {
             await LoadComisiones();
             btnModificar.Enabled = false;
-            btnEliminar.Enabled = false; 
+            btnEliminar.Enabled = false;
         }
 
         private void DataGridViewComisiones_SelectionChanged(object? sender, EventArgs e)
         {
-            
+
             bool haySeleccion = dataGridViewComisiones.SelectedRows.Count > 0 && dataGridViewComisiones.CurrentRow != null;
             btnModificar.Enabled = haySeleccion;
             btnEliminar.Enabled = haySeleccion;
@@ -36,7 +36,7 @@ namespace WinFormsApp
         {
             try
             {
-                List<PlanDTO>  planes = await APIPlan.GetAllAsync();
+                List<PlanDTO> planes = await APIPlan.GetAllAsync();
                 if (planes.Count == 0)
                 {
                     MessageBox.Show("No se pudieron cargar los planes.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -48,12 +48,12 @@ namespace WinFormsApp
                 }
 
                 var view = comisiones.Select(c => new
-                    {
-                        Id_comision = c.Id_comision,
-                        Desc_comision = c.Desc_comision,
-                        Anio_especialidad = c.Anio_especialidad,
-                        Plan = planes.FirstOrDefault(p => p.IdPlan == c.Id_plan)?.Descripcion
-                    })
+                {
+                    Id_comision = c.Id_comision,
+                    Desc_comision = c.Desc_comision,
+                    Anio_especialidad = c.Anio_especialidad,
+                    Plan = planes.FirstOrDefault(p => p.IdPlan == c.Id_plan)?.Descripcion
+                })
                     .ToList();
 
                 dataGridViewComisiones.DataSource = view;
@@ -136,12 +136,17 @@ namespace WinFormsApp
                     await LoadComisiones();
                 }
 
-                
+
             }
             catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace WinFormsApp
             btnAgregar = new Button();
             btnModificar = new Button();
             btnEliminar = new Button();
+            btnVolver = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewComisiones).BeginInit();
             SuspendLayout();
             // 
@@ -44,7 +45,7 @@ namespace WinFormsApp
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(209, 250);
+            btnModificar.Location = new Point(305, 250);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 2;
@@ -55,7 +56,7 @@ namespace WinFormsApp
             // btnEliminar
             // 
             btnEliminar.BackColor = Color.IndianRed;
-            btnEliminar.Location = new Point(20, 250);
+            btnEliminar.Location = new Point(209, 250);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 3;
@@ -63,11 +64,22 @@ namespace WinFormsApp
             btnEliminar.UseVisualStyleBackColor = false;
             btnEliminar.Click += btnEliminar_Click;
             // 
+            // btnVolver
+            // 
+            btnVolver.Location = new Point(20, 250);
+            btnVolver.Name = "btnVolver";
+            btnVolver.Size = new Size(75, 23);
+            btnVolver.TabIndex = 4;
+            btnVolver.Text = "Volver";
+            btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
+            // 
             // ComisionListaForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(504, 291);
+            Controls.Add(btnVolver);
             Controls.Add(btnEliminar);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);
@@ -83,5 +95,6 @@ namespace WinFormsApp
         private Button btnAgregar;
         private Button btnModificar;
         private Button btnEliminar;
+        private Button btnVolver;
     }
 }

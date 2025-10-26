@@ -32,6 +32,7 @@
             btnEliminar = new Button();
             btnAgregar = new Button();
             btnModificar = new Button();
+            btnVolver = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewCursos).BeginInit();
             SuspendLayout();
             // 
@@ -48,7 +49,7 @@
             // btnEliminar
             // 
             btnEliminar.BackColor = Color.IndianRed;
-            btnEliminar.Location = new Point(20, 275);
+            btnEliminar.Location = new Point(507, 275);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 4;
@@ -69,7 +70,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(315, 275);
+            btnModificar.Location = new Point(405, 275);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 6;
@@ -77,11 +78,22 @@
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += btnModificar_Click;
             // 
+            // btnVolver
+            // 
+            btnVolver.Location = new Point(20, 275);
+            btnVolver.Name = "btnVolver";
+            btnVolver.Size = new Size(75, 23);
+            btnVolver.TabIndex = 7;
+            btnVolver.Text = "Volver";
+            btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
+            // 
             // CursoListaForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(711, 320);
+            Controls.Add(btnVolver);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);
             Controls.Add(btnEliminar);
@@ -98,5 +110,6 @@
         private Button btnEliminar;
         private Button btnAgregar;
         private Button btnModificar;
+        private Button btnVolver;
     }
 }

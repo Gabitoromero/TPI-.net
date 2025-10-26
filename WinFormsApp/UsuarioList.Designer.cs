@@ -37,6 +37,7 @@
             btnProfesores = new Button();
             label1 = new Label();
             btnNuevoProfesional = new Button();
+            btnVolver = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewUsuarios).BeginInit();
             SuspendLayout();
             // 
@@ -56,7 +57,7 @@
             // btnEliminar
             // 
             btnEliminar.BackColor = Color.IndianRed;
-            btnEliminar.Location = new Point(87, 261);
+            btnEliminar.Location = new Point(332, 261);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 1;
@@ -66,7 +67,7 @@
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(346, 261);
+            btnModificar.Location = new Point(435, 261);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 2;
@@ -132,11 +133,22 @@
             btnNuevoProfesional.UseVisualStyleBackColor = false;
             btnNuevoProfesional.Click += btnNuevoProfesional_Click;
             // 
+            // btnVolver
+            // 
+            btnVolver.Location = new Point(13, 261);
+            btnVolver.Name = "btnVolver";
+            btnVolver.Size = new Size(75, 23);
+            btnVolver.TabIndex = 9;
+            btnVolver.Text = "Volver";
+            btnVolver.UseVisualStyleBackColor = true;
+            btnVolver.Click += btnVolver_Click;
+            // 
             // UsuarioList
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(522, 296);
+            Controls.Add(btnVolver);
             Controls.Add(btnNuevoProfesional);
             Controls.Add(label1);
             Controls.Add(btnProfesores);
@@ -165,5 +177,6 @@
         private Button btnProfesores;
         private Label label1;
         private Button btnNuevoProfesional;
+        private Button btnVolver;
     }
 }
