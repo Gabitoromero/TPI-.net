@@ -1,0 +1,91 @@
+﻿@page "/profesor/cursos"
+@using API.Clients
+@using DTOs
+@inject NavigationManager NavigationManager
+
+<PageTitle>Cursos del Profesor</PageTitle>
+<h3>Cursos Asignados</h3>
+
+@if (data == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else if (errorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Materia</th>
+                <th>Comisión</th>
+                <th>Año</th>
+                <th>Cargo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in data)
+            {
+                <tr>
+                    <td>@d.Materia</td>
+                    <td>@d.Comision</td>
+                    <td>@d.Año</td>
+                    <td>@d.Cargo</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" @onclick="() => VerAlumnos(d.IdCurso)">
+                            Ver Alumnos
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<CursoDTO> data;
+    private string errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    { 
+        try
+        {
+            ShowUsuarioDTO profesor = await APIUsuario.GetByUsernameAsync("martind");
+            var cursosProfesor = await APIUsuario.GetProfesorCursosAsync(profesor.Id);
+
+            // Obtener información de materias y comisiones
+            var materiaTasks = cursosProfesor.Select(c => APIMateria.GetAsync(c.Curso.Id_materia)).ToList();
+            var comisionTasks = cursosProfesor.Select(c => APIComision.GetAsync(c.Curso.Id_comision)).ToList();
+            var materias = await Task.WhenAll(materiaTasks);
+            var comisiones = await Task.WhenAll(comisionTasks);
+
+            data = cursosProfesor.Select((c, idx) => new CursoDTO
+            {
+                IdCurso = c.Curso.Id_curso,
+                Materia = materias[idx].Desc_materia,
+                Comision = comisiones[idx].Desc_comision,
+                Año = c.Curso.Anio_calendario,
+                Cargo = c.Cargo
+            }).ToList();
+        }
+        catch (ArgumentException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los cursos: {ex.Message}";
+        }
+    }
+
+    private void VerAlumnos(int idCurso)
+    {
+        NavigationManager.NavigateTo($"/profesor/cursos/{idCurso}/alumnos");
+    }
+
+}

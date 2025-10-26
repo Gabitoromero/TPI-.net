@@ -1,0 +1,136 @@
+@using API.Clients
+@using DTOs
+
+@if (AlumnoSeleccionado != null)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modificar Alumno: @AlumnoSeleccionado.Alumno.NombreUsuario</h5>
+                    <button type="button" class="btn-close" @onclick="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    @if (errorMessage != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @errorMessage
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <label class="form-label">Legajo</label>
+                        <input type="text" class="form-control" value="@AlumnoSeleccionado.Alumno.Legajo" disabled />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Condición</label>
+                        <select class="form-select" @bind="condicionSeleccionada">
+                            <option value="">-- Seleccione una condición --</option>
+                            <option value="Inscripto">Inscripto</option>
+                            <option value="Regular">Regular</option>
+                            <option value="Libre">Libre</option>
+                            <option value="Aprobado">Aprobado</option>
+                        </select>
+                    </div>
+
+                    @if (condicionSeleccionada == "Aprobado")
+                    {
+                        <div class="mb-3">
+                            <label class="form-label">Nota</label>
+                            <input type="number" class="form-control" @bind="nota" min="1" max="10" step="1" />
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="Cerrar" disabled="@guardando">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @onclick="Guardar" disabled="@guardando">
+                        @if (guardando)
+                        {
+                            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        }
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public ShowAlumno_CursoDTO AlumnoSeleccionado { get; set; }
+
+    [Parameter]
+    public EventCallback OnCerrar { get; set; }
+
+    [Parameter]
+    public EventCallback OnGuardado { get; set; }
+
+    private string condicionSeleccionada;
+    private int? nota;
+    private bool guardando = false;
+    private string errorMessage;
+
+    protected override void OnParametersSet()
+    {
+        if (AlumnoSeleccionado != null)
+        {
+            condicionSeleccionada = AlumnoSeleccionado.Condicion;
+            nota = AlumnoSeleccionado.Nota;
+        }
+    }
+
+    private void Cerrar()
+    {
+        errorMessage = null;
+        OnCerrar.InvokeAsync();
+    }
+
+    private async Task Guardar()
+    {
+        try
+        {
+            errorMessage = null;
+
+            if (string.IsNullOrEmpty(condicionSeleccionada))
+            {
+                errorMessage = "Debe seleccionar una condición.";
+                return;
+            }
+
+            if (condicionSeleccionada == "Inscripto")
+            {
+                errorMessage = "No se puede cambiar la condición a 'Inscripto'. Solo puede seleccionar: Regular, Libre o Aprobado.";
+                return;
+            }
+
+            if (condicionSeleccionada == "Aprobado" && (!nota.HasValue || nota.Value < 1 || nota.Value > 10))
+            {
+                errorMessage = "Debe ingresar una nota válida entre 1 y 10 para la condición 'Aprobado'.";
+                return;
+            }
+
+            guardando = true;
+
+            Alumno_CursoDTO dto = new Alumno_CursoDTO
+            {
+                IdInscripcion = AlumnoSeleccionado.IdInscripcion,
+                IdAlumno = AlumnoSeleccionado.Alumno.Id,
+                IdCurso = AlumnoSeleccionado.Curso.Id_curso,
+                Condicion = condicionSeleccionada,
+                Nota = condicionSeleccionada == "Aprobado" ? nota : null
+            };
+
+            // Enviar la actualización al servidor
+            await APIUsuario.PutAlumnoCursoAsync(dto);
+
+            await OnGuardado.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+            guardando = false;
+        }
+    }
+}

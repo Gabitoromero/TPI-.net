@@ -8,9 +8,11 @@ namespace DTOs
 {
     public class CursoDTO
     {
-        public int Id_curso { get; set; }
-        public int Anio_calendario { get; set; }
-        public int Cupo { get; set; }
+        public int IdCurso { get; set; }
+        public string Materia { get; set; }
+        public string Comision { get; set; }
+        public int Año { get; set; }
+        public string Cargo { get; set; }
     }
 }
 
