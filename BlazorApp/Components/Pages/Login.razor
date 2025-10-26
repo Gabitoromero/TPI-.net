@@ -1,0 +1,194 @@
+@page "/login"
+@using API.Clients
+@using DTOs
+@using BlazorApp.Services
+@inject AuthStateService AuthState
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>Iniciar Sesión</PageTitle>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Iniciar Sesión</h3>
+                    
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @errorMessage
+                        </div>
+                    }
+
+                    <form @onsubmit="HandleLogin" @onsubmit:preventDefault="true">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nombre de Usuario <span class="text-danger">*</span></label>
+                            <input type="text" id="username" class="form-control @(errorNombreUsuario ? "is-invalid" : "")" 
+                                   @bind="loginRequest.NombreUsuario" @bind:event="oninput"
+                                   placeholder="Ingrese su usuario" disabled="@isLoading" />
+                            @if (errorNombreUsuario)
+                            {
+                                <div class="invalid-feedback">El nombre de usuario es requerido</div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña <span class="text-danger">*</span></label>
+                            <input type="password" id="password" class="form-control @(errorClave ? "is-invalid" : "")" 
+                                   @bind="loginRequest.Clave" @bind:event="oninput"
+                                   placeholder="Ingrese su contraseña" disabled="@isLoading" />
+                            @if (errorClave)
+                            {
+                                <div class="invalid-feedback">La contraseña es requerida</div>
+                            }
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary" disabled="@isLoading">
+                                @if (isLoading)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    <span>Iniciando sesión...</span>
+                                }
+                                else
+                                {
+                                    <span>Iniciar Sesión</span>
+                                }
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginRequest loginRequest = new LoginRequest();
+    private string? errorMessage;
+    private bool errorNombreUsuario = false;
+    private bool errorClave = false;
+    private bool isLoading = false;
+
+    [SupplyParameterFromQuery(Name = "returnUrl")]
+    private string? ReturnUrl { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (AuthState.IsAuthenticated)
+        {
+            RedirectToHome();
+        }
+    }
+
+    private bool ValidarFormulario()
+    {
+        bool esValido = true;
+        
+        // Limpiar errores anteriores
+        errorNombreUsuario = false;
+        errorClave = false;
+        errorMessage = null;
+
+        // Validar nombre de usuario
+        if (string.IsNullOrWhiteSpace(loginRequest.NombreUsuario))
+        {
+            errorNombreUsuario = true;
+            esValido = false;
+        }
+
+        // Validar contraseña
+        if (string.IsNullOrWhiteSpace(loginRequest.Clave))
+        {
+            errorClave = true;
+            esValido = false;
+        }
+
+        if (!esValido)
+        {
+            errorMessage = "Por favor, complete todos los campos requeridos.";
+        }
+
+        return esValido;
+    }
+
+    private async Task HandleLogin()
+    {
+        // Validar antes de proceder
+        if (!ValidarFormulario())
+        {
+            return;
+        }
+
+        isLoading = true;
+        errorMessage = null;
+
+        try
+        {
+            bool loginSuccess = await APIUsuario.LoginAsync(loginRequest);
+
+            if (loginSuccess)
+            {
+                var loginResponse = APIUsuario.LoginResponse;
+
+                // Verificar que no sea un administrador
+                if (loginResponse?.Tipo?.ToLower() == "admin")
+                {
+                    errorMessage = "Los administradores no pueden acceder por la aplicación web. Por favor, use la aplicación de escritorio.";
+                    await APIUsuario.LogoutAsync();
+                    isLoading = false;
+                    return;
+                }
+
+                // Guardar el estado de autenticación
+                if (loginResponse != null)
+                {
+                    AuthState.SetUser(loginResponse);
+                    RedirectToHome();
+                }
+                else
+                {
+                    errorMessage = "Error al procesar la respuesta del servidor.";
+                }
+            }
+            else
+            {
+                errorMessage = "Usuario o contraseña incorrectos.";
+            }
+        }
+        catch (ArgumentException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception)
+        {
+            errorMessage = "Error al intentar iniciar sesión. Por favor, intente nuevamente.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void RedirectToHome()
+    {
+        if (!string.IsNullOrEmpty(ReturnUrl))
+        {
+            Navigation.NavigateTo(ReturnUrl);
+        }
+        else if (AuthState.IsAlumno)
+        {
+            Navigation.NavigateTo("/alumno/inscripciones");
+        }
+        else if (AuthState.IsProfesor)
+        {
+            Navigation.NavigateTo("/profesor/cursos");
+        }
+        else
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+}

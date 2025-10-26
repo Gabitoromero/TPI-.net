@@ -65,6 +65,12 @@ namespace API.Clients
             }
         }
 
+        public static async Task LogoutAsync()
+        {
+            LoginResponse = null;
+            await Task.CompletedTask;
+        }
+
         public static async Task<FullUsuarioDTO> GetAsync(int id)
         {
             try

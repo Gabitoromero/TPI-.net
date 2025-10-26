@@ -1,5 +1,6 @@
 using BlazorApp.Components;
 using API.Clients;
+using BlazorApp.Services;
 
 
 namespace BlazorApp
@@ -13,6 +14,9 @@ namespace BlazorApp
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            // Registrar el servicio de autenticación como Singleton para mantener el estado
+            builder.Services.AddSingleton<AuthStateService>();
 
             var app = builder.Build();
 

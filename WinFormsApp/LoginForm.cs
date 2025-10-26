@@ -24,7 +24,6 @@ namespace WinFormsApp
         {
             if (this.Visible)
             {
-                // Clear any previously entered credentials when the form becomes visible again
                 textBoxUsername.Text = string.Empty;
                 textBoxClave.Text = string.Empty;
                 textBoxUsername.Focus();

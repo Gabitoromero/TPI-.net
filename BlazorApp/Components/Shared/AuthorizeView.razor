@@ -1,0 +1,71 @@
+@using BlazorApp.Services
+@inject AuthStateService AuthState
+@inject NavigationManager Navigation
+@implements IDisposable
+
+@if (isAuthorized)
+{
+    @ChildContent
+}
+else if (isChecking)
+{
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public bool RequireAlumno { get; set; } = false;
+
+    [Parameter]
+    public bool RequireProfesor { get; set; } = false;
+
+    private bool isAuthorized = false;
+    private bool isChecking = true;
+
+    protected override void OnInitialized()
+    {
+        AuthState.OnAuthStateChanged += CheckAuthorization;
+        CheckAuthorization();
+    }
+
+    private void CheckAuthorization()
+    {
+        isChecking = false;
+
+        if (!AuthState.IsAuthenticated)
+        {
+            // Redirigir al login con returnUrl
+            var returnUrl = Uri.EscapeDataString(Navigation.Uri.Replace(Navigation.BaseUri, "/"));
+            Navigation.NavigateTo($"/login?returnUrl={returnUrl}");
+            return;
+        }
+
+        // Verificar roles específicos
+        if (RequireAlumno && !AuthState.IsAlumno)
+        {
+            Navigation.NavigateTo("/");
+            return;
+        }
+
+        if (RequireProfesor && !AuthState.IsProfesor)
+        {
+            Navigation.NavigateTo("/");
+            return;
+        }
+
+        isAuthorized = true;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        AuthState.OnAuthStateChanged -= CheckAuthorization;
+    }
+}

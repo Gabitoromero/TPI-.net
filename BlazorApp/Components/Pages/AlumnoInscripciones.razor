@@ -1,57 +1,62 @@
 @page "/alumno/inscripciones"
 @using API.Clients
 @using DTOs
+@using BlazorApp.Services
+@inject AuthStateService AuthState
 @rendermode InteractiveServer
 
 <PageTitle>Mis Inscripciones</PageTitle>
-<h3>Mis Inscripciones</h3>
 
-@if (alumnoDeshabilitado)
-{
-    <div class="alert alert-warning" role="alert">
-        Su cuenta no está habilitada. No puede ver sus inscripciones.
-    </div>
-}
-else if (inscripciones == null)
-{
-    <p><em>Cargando...</em></p>
-}
-else if (errorMessage != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @errorMessage
-    </div>
-}
-else if (!inscripciones.Any())
-{
-    <div class="alert alert-info" role="alert">
-        No tienes inscripciones activas.
-    </div>
-}
-else
-{
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Materia</th>
-                <th>Comisión</th>
-                <th>Condición</th>
-                <th>Nota</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var inscripcion in inscripciones)
-            {
+<AuthorizeView RequireAlumno="true">
+    <h3>Mis Inscripciones</h3>
+
+    @if (alumnoDeshabilitado)
+    {
+        <div class="alert alert-warning" role="alert">
+            Su cuenta no está habilitada. No puede ver sus inscripciones.
+        </div>
+    }
+    else if (inscripciones == null)
+    {
+        <p><em>Cargando...</em></p>
+    }
+    else if (errorMessage != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage
+        </div>
+    }
+    else if (!inscripciones.Any())
+    {
+        <div class="alert alert-info" role="alert">
+            No tienes inscripciones activas.
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped table-hover">
+            <thead>
                 <tr>
-                    <td>@inscripcion.Materia</td>
-                    <td>@inscripcion.Comision</td>
-                    <td>@inscripcion.Condicion</td>
-                    <td>@(inscripcion.Nota?.ToString() ?? "-")</td>
+                    <th>Materia</th>
+                    <th>Comisión</th>
+                    <th>Condición</th>
+                    <th>Nota</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var inscripcion in inscripciones)
+                {
+                    <tr>
+                        <td>@inscripcion.Materia</td>
+                        <td>@inscripcion.Comision</td>
+                        <td>@inscripcion.Condicion</td>
+                        <td>@(inscripcion.Nota?.ToString() ?? "-")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</AuthorizeView>
 
 @code {
     private List<InscripcionDisplayDTO> inscripciones;
@@ -67,9 +72,21 @@ else
     {
         try
         {
-            // Obtener el alumno actual (hardcodeado por ahora)
-            ShowUsuarioDTO alumno = await APIUsuario.GetByUsernameAsync("jmr");
+            // Obtener el alumno actual desde el usuario autenticado
+            if (AuthState.CurrentUser == null)
+            {
+                errorMessage = "No hay sesión activa";
+                return;
+            }
 
+            ShowUsuarioDTO alumno = await APIUsuario.GetByUsernameAsync(AuthState.CurrentUser.Username);
+
+            // Verificar si el usuario existe
+            if (alumno == null)
+            {
+                errorMessage = "Usuario no encontrado";
+                return;
+            }
             
             if (!(alumno.Habilitado ?? false))
             {

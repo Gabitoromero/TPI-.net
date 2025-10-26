@@ -1,52 +1,63 @@
 ﻿@page "/profesor/cursos"
 @using API.Clients
 @using DTOs
+@using BlazorApp.Services
+@inject AuthStateService AuthState
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Cursos del Profesor</PageTitle>
-<h3>Cursos Asignados</h3>
 
-@if (data == null)
-{
-    <p><em>Cargando...</em></p>
-}
-else if (errorMessage != null)
-{
-    <div class="alert alert-danger" role="alert">
-        @errorMessage
-    </div>
-}
-else
-{
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Materia</th>
-                <th>Comisión</th>
-                <th>Año</th>
-                <th>Cargo</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var d in data)
-            {
+<AuthorizeView RequireProfesor="true">
+    <h3>Cursos Asignados</h3>
+
+    @if (data == null)
+    {
+        <p><em>Cargando...</em></p>
+    }
+    else if (errorMessage != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage
+        </div>
+    }
+    else if (!data.Any())
+    {
+        <div class="alert alert-info" role="alert">
+            No tienes cursos asignados.
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped table-hover">
+            <thead>
                 <tr>
-                    <td>@d.Materia</td>
-                    <td>@d.Comision</td>
-                    <td>@d.Año</td>
-                    <td>@d.Cargo</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm" @onclick="() => VerAlumnos(d.IdCurso)">
-                            Ver Alumnos
-                        </button>
-                    </td>
+                    <th>Materia</th>
+                    <th>Comisión</th>
+                    <th>Año</th>
+                    <th>Cargo</th>
+                    <th>Acciones</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var d in data)
+                {
+                    <tr>
+                        <td>@d.Materia</td>
+                        <td>@d.Comision</td>
+                        <td>@d.Año</td>
+                        <td>@d.Cargo</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" @onclick="() => VerAlumnos(d.IdCurso)">
+                                Ver Alumnos
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</AuthorizeView>
 
 @code {
     private List<CursoDTO> data;
@@ -56,8 +67,29 @@ else
     { 
         try
         {
-            ShowUsuarioDTO profesor = await APIUsuario.GetByUsernameAsync("martind");
+            // Obtener el profesor actual desde el usuario autenticado
+            if (AuthState.CurrentUser == null)
+            {
+                errorMessage = "No hay sesión activa";
+                return;
+            }
+
+            ShowUsuarioDTO profesor = await APIUsuario.GetByUsernameAsync(AuthState.CurrentUser.Username);
+
+            // Verificar si el usuario existe
+            if (profesor == null)
+            {
+                errorMessage = "Usuario no encontrado";
+                return;
+            }
+
             var cursosProfesor = await APIUsuario.GetProfesorCursosAsync(profesor.Id);
+
+            if (cursosProfesor == null || !cursosProfesor.Any())
+            {
+                data = new List<CursoDTO>();
+                return;
+            }
 
             // Obtener información de materias y comisiones
             var materiaTasks = cursosProfesor.Select(c => APIMateria.GetAsync(c.Curso.Id_materia)).ToList();
