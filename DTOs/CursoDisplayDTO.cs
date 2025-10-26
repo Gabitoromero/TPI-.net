@@ -8,6 +8,7 @@ namespace DTOs
 {
     public class CursoDisplayDTO
     {
+        
         public int IdCurso { get; set; }
         public string Materia { get; set; }
         public string Comision { get; set; }

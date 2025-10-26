@@ -181,6 +181,7 @@ namespace Data
                 entity.HasIndex(e => e.Id_curso).IsUnique();
                 entity.Property(e => e.Anio_calendario).IsRequired();
                 entity.Property(e => e.Cupo).IsRequired();
+                entity.Property(e => e.Habilitado).HasDefaultValue(true);
                 entity.HasOne<Materia>()
                 .WithMany()
                 .HasForeignKey(c => c.Id_materia)

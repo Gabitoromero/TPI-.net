@@ -55,7 +55,7 @@ namespace WinFormsApp
             // labelAnio
             // 
             labelAnio.AutoSize = true;
-            labelAnio.Location = new Point(427, 21);
+            labelAnio.Location = new Point(433, 21);
             labelAnio.Name = "labelAnio";
             labelAnio.Size = new Size(90, 15);
             labelAnio.TabIndex = 2;
@@ -64,7 +64,7 @@ namespace WinFormsApp
             // numericAnio
             // 
             numericAnio.Enabled = false;
-            numericAnio.Location = new Point(523, 18);
+            numericAnio.Location = new Point(529, 18);
             numericAnio.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             numericAnio.Name = "numericAnio";
             numericAnio.Size = new Size(64, 23);
@@ -113,7 +113,7 @@ namespace WinFormsApp
             // labelComision
             // 
             labelComision.AutoSize = true;
-            labelComision.Location = new Point(204, 21);
+            labelComision.Location = new Point(218, 21);
             labelComision.Name = "labelComision";
             labelComision.Size = new Size(61, 15);
             labelComision.TabIndex = 8;
@@ -123,7 +123,7 @@ namespace WinFormsApp
             // 
             comboBoxComision.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxComision.Enabled = false;
-            comboBoxComision.Location = new Point(271, 18);
+            comboBoxComision.Location = new Point(285, 18);
             comboBoxComision.Name = "comboBoxComision";
             comboBoxComision.Size = new Size(120, 23);
             comboBoxComision.TabIndex = 9;
@@ -131,7 +131,7 @@ namespace WinFormsApp
             // labelMateria
             // 
             labelMateria.AutoSize = true;
-            labelMateria.Location = new Point(22, 21);
+            labelMateria.Location = new Point(27, 21);
             labelMateria.Name = "labelMateria";
             labelMateria.Size = new Size(50, 15);
             labelMateria.TabIndex = 10;
@@ -141,7 +141,7 @@ namespace WinFormsApp
             // 
             comboBoxMateria.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxMateria.Enabled = false;
-            comboBoxMateria.Location = new Point(78, 18);
+            comboBoxMateria.Location = new Point(92, 18);
             comboBoxMateria.Name = "comboBoxMateria";
             comboBoxMateria.Size = new Size(120, 23);
             comboBoxMateria.TabIndex = 11;

@@ -61,7 +61,19 @@ namespace Data
             Curso? curso = await _context.Cursos.FindAsync(id);
             if(curso != null)
             {
-                _context.Cursos.Remove(curso);
+                curso.Habilitado = false;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> Reactivar(int id)
+        {
+            Curso? curso = await _context.Cursos.FindAsync(id);
+            if (curso != null)
+            {
+                curso.Habilitado = true;
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -71,7 +83,7 @@ namespace Data
         public async Task<List<Curso>> GetAvailable()
         {
             var cursos = await _context.Cursos
-                .Where(c => _context.Alumno_Cursos.Count(ac => ac.IdCurso == c.Id_curso) < c.Cupo).ToListAsync();
+                .Where(c => _context.Alumno_Cursos.Count(ac => ac.IdCurso == c.Id_curso) < c.Cupo && c.Habilitado).ToListAsync();
 
             return cursos;
         }

@@ -22,8 +22,6 @@ namespace WinFormsApp
             InitializeComponent();
             this.idCurso = idCurso;
             this.Load += AlumnosCursoForm_Load;
-            btnVolver.Click += BtnVolver_Click;
-            btnModificar.Click += BtnModificar_Click;
             dataGridViewAlumnosCurso.SelectionChanged += DataGridViewAlumnosCurso_SelectionChanged;
             btnModificar.Enabled = false;
         }
@@ -58,6 +56,7 @@ namespace WinFormsApp
                     Nota = a.Nota
                 }).ToList();
 
+                dataGridViewAlumnosCurso.DataSource = null;
                 dataGridViewAlumnosCurso.DataSource = dataView;
 
                 // Ocultar la columna IdInscripcion
@@ -79,19 +78,19 @@ namespace WinFormsApp
                 dataGridViewAlumnosCurso.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dataGridViewAlumnosCurso.ClearSelection();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
         }
 
-        private void BtnVolver_Click(object? sender, EventArgs e)
+        private void btnVolver_Click_1(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
-        private void BtnModificar_Click(object? sender, EventArgs e)
+        private async void btnModificar_Click_2(object sender, EventArgs e)
         {
             try
             {
@@ -113,21 +112,20 @@ namespace WinFormsApp
                     return;
                 }
 
-                // Abrir el formulario de edición (sin Hide/Show)
+                Hide();
                 using (var formEditar = new AlumnoCursoPutForm(alumnoSeleccionado))
                 {
                     DialogResult result = formEditar.ShowDialog();
-                    
-                    // Si se guardó correctamente, recargar la lista
-                    if (result == DialogResult.OK)
-                    {
-                        _ = LoadAlumnosCurso();
-                    }
                 }
+                Show();
+
+
+                await LoadAlumnosCurso();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Show();
             }
         }
     }

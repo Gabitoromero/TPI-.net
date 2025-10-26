@@ -10,11 +10,14 @@ namespace WinFormsApp
         public InscripcionNueva()
         {
             InitializeComponent();
-            this.Load += InscripcionNueva_Load;
             btnCancelar.Click += BtnCancelar_Click;
             dataGridCursos.CellClick += DataGridCursos_CellClick;
+            dataGridCursos.SelectionChanged += DataGridCursos_SelectionChanged;
         }
+        private void DataGridCursos_SelectionChanged(object? sender, EventArgs e)
+        {
 
+        }
         private async void InscripcionNueva_Load(object? sender, EventArgs e)
         {
             try
@@ -27,7 +30,6 @@ namespace WinFormsApp
                     return;
                 }
 
-                // Cargar todos los cursos disponibles--------------------------
                 var cursos = await APICurso.GetAllDisponiblesAsync();
                 if (cursos == null || cursos.Count == 0)
                 {
@@ -43,10 +45,10 @@ namespace WinFormsApp
                 {
                     var materia = await APIMateria.GetAsync(curso.Id_materia);
                     var comision = await APIComision.GetAsync(curso.Id_comision);
-                    if (materia == null || comision == null) continue;
+                    //if (materia == null || comision == null) continue;
 
                     cursosDisponibles.Add(new CursoDisplayDTO
-                    {
+                    { 
                         IdCurso = curso.Id_curso,
                         Materia = materia.Desc_materia,
                         Comision = comision.Desc_comision,
@@ -55,9 +57,6 @@ namespace WinFormsApp
                     });
                 }
 
-                // Configurar el DataGridView
-                dataGridCursos.AutoGenerateColumns = true;
-                dataGridCursos.DataSource = null; // Limpiar datasource anterior
                 dataGridCursos.DataSource = cursosDisponibles;
 
                 // Configurar columnas después de establecer el DataSource
@@ -71,15 +70,6 @@ namespace WinFormsApp
                     dataGridCursos.Columns["Anio"].HeaderText = "Año";
                 if (dataGridCursos.Columns["DisplayText"] != null)
                     dataGridCursos.Columns["DisplayText"].Visible = false;
-
-                dataGridCursos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridCursos.MultiSelect = false;
-                dataGridCursos.ReadOnly = true;
-                dataGridCursos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                dataGridCursos.AllowUserToAddRows = false;
-
-                // Ocultar el botón confirmar inicialmente
-                btnGuardar.Visible = false;
             }
             catch (ArgumentException ex)
             {

@@ -37,14 +37,50 @@ namespace WinFormsApp
         {
             try
             {
-                List<ComisionDTO> comisiones = await APIComision.GetAllAsync();
-                if (comisiones.Count == 0)
+                DialogResult result = MessageBox.Show(
+                        "Este curso está deshabilitado.\n\n¿Desea darlo de alta?",
+                        "Curso Deshabilitado",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
                 {
-                    MessageBox.Show("No se pudieron cargar las comisiones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    try
+                    {
+                        curso.Habilitado = true;
+                        MessageBox.Show("Curso reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        MessageBox.Show($"Error al reactivar el curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        this.Close();
+                        return;
+                    }
                 }
-                comboBoxComision.DataSource = comisiones;
-                comboBoxComision.DisplayMember = "Desc_comision";
-                comboBoxComision.ValueMember = "Id_comision";
+                else
+                {
+                    MessageBox.Show("Este curso está deshabilitado y no se puede modificar. ", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    btnModificarCurso.Enabled = false;
+                    Close();
+                }
+                // Validar si el curso está deshabilitado
+                if (isEdit && curso != null && curso.Habilitado)
+                {
+                    List<ComisionDTO> comisiones = await APIComision.GetAllAsync();
+                    if (comisiones.Count == 0)
+                    {
+                        MessageBox.Show("No se pudieron cargar las comisiones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    comboBoxComision.DataSource = comisiones;
+                    comboBoxComision.DisplayMember = "Desc_comision";
+                    comboBoxComision.ValueMember = "Id_comision";
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show($"Error al verificar el estado del curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+                return;
             }
             catch
             {
@@ -208,7 +244,8 @@ namespace WinFormsApp
                     Anio_calendario = (int)numericAnio.Value,
                     Cupo = (int)numericCupo.Value,
                     Id_comision = comboBoxComision.SelectedValue != null ? (int)comboBoxComision.SelectedValue : 0,
-                    Id_materia = comboBoxMateria.SelectedValue != null ? (int)comboBoxMateria.SelectedValue : 0
+                    Id_materia = comboBoxMateria.SelectedValue != null ? (int)comboBoxMateria.SelectedValue : 0,
+                    Habilitado = true
                 };
 
                 if (isEdit)

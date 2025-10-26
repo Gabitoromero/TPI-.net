@@ -92,7 +92,8 @@ namespace Application.Services
                     Anio_calendario = dto.Anio_calendario,
                     Cupo = dto.Cupo,
                     Id_materia = dto.Id_materia,
-                    Id_comision = dto.Id_comision
+                    Id_comision = dto.Id_comision,
+                    Habilitado = dto.Habilitado
                 };
                 return await _repository.Update(curso);
                 

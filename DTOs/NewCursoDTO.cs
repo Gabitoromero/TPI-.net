@@ -13,5 +13,6 @@ namespace DTOs
         public int Id_comision { get; set; }
         public int Cupo { get; set; }
         public int Anio_calendario { get; set; }
+        public bool Habilitado { get; set; }
     }
 }

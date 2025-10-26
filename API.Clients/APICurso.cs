@@ -100,7 +100,6 @@ namespace API.Clients
                 throw new ArgumentException($"OOPS! Error al obtener el curso {id}");
             }
         }
-
         public static async Task<NewCursoDTO> AddAsync(NewCursoDTO dto)
         {
             try
