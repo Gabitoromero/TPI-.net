@@ -1,0 +1,389 @@
+@page "/usuario/perfil"
+@using API.Clients
+@using DTOs
+@using MudBlazor
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Mi Perfil</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Mi Perfil</h3>
+    <button class="btn btn-secondary" @onclick="Volver">Volver</button>
+</div>
+
+@if (cargando)
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3">Cargando información del perfil...</p>
+    </div>
+}
+else if (usuario == null)
+{
+    <div class="alert alert-danger" role="alert">
+        <strong>Error</strong>
+        <p>No se pudo cargar la información del usuario.</p>
+    </div>
+}
+else
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title mb-4">Información Personal</h5>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Legajo</label>
+                    <input type="text" class="form-control" value="@usuario.Legajo" disabled readonly />
+                    <small class="text-muted">Este campo no se puede modificar</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Tipo de Usuario</label>
+                    <input type="text" class="form-control" value="@usuario.Tipo" disabled readonly />
+                    <small class="text-muted">Este campo no se puede modificar</small>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Nombre <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @(errorNombre ? "is-invalid" : "")" 
+                           @bind="usuario.Nombre" @bind:event="oninput" 
+                           placeholder="Ingrese su nombre" />
+                    @if (errorNombre)
+                    {
+                        <div class="invalid-feedback">El nombre es requerido</div>
+                    }
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Apellido <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @(errorApellido ? "is-invalid" : "")" 
+                           @bind="usuario.Apellido" @bind:event="oninput" 
+                           placeholder="Ingrese su apellido" />
+                    @if (errorApellido)
+                    {
+                        <div class="invalid-feedback">El apellido es requerido</div>
+                    }
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Nombre de Usuario <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @(errorNombreUsuario ? "is-invalid" : "")" 
+                           @bind="usuario.NombreUsuario" @bind:event="oninput" 
+                           placeholder="Ingrese su nombre de usuario" />
+                    @if (errorNombreUsuario)
+                    {
+                        <div class="invalid-feedback">El nombre de usuario es requerido</div>
+                    }
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control @(errorEmail ? "is-invalid" : "")" 
+                           @bind="usuario.Email" @bind:event="oninput" 
+                           placeholder="ejemplo@correo.com" />
+                    @if (errorEmail)
+                    {
+                        <div class="invalid-feedback">@mensajeErrorEmail</div>
+                    }
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Dirección</label>
+                    <input type="text" class="form-control" 
+                           @bind="usuario.Direccion" 
+                           placeholder="Ingrese su dirección" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Teléfono</label>
+                    <input type="tel" class="form-control" 
+                           @bind="usuario.Telefono" 
+                           placeholder="Ingrese su teléfono" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" 
+                           @bind="usuario.FechaNacimiento" />
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-4" role="alert">
+                <i class="bi bi-info-circle me-2"></i>
+                Los campos marcados con <span class="text-danger">*</span> son obligatorios
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+                <button class="btn btn-primary" @onclick="MostrarConfirmacion">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (mostrarModalConfirmacion)
+{
+    <ConfirmarCambiosPerfilModal 
+        OnConfirmar="GuardarCambios"
+        OnCancelar="CerrarModalConfirmacion" />
+}
+
+@if (mostrarModalExito)
+{
+    <MensajeExitoModal 
+        Mensaje="@mensajeExito"
+        OnCerrar="CerrarModalExito" />
+}
+
+@if (mostrarModalError)
+{
+    <MensajeErrorModal 
+        Mensaje="@mensajeError"
+        OnCerrar="CerrarModalError" />
+}
+
+@code {
+    private FullUsuarioDTO usuario;
+    private FullUsuarioDTO usuarioOriginal;
+    private bool cargando = true;
+    private bool mostrarModalConfirmacion = false;
+    private bool mostrarModalExito = false;
+    private bool mostrarModalError = false;
+    private string mensajeExito;
+    private string mensajeError;
+
+    private bool errorNombre = false;
+    private bool errorApellido = false;
+    private bool errorNombreUsuario = false;
+    private bool errorEmail = false;
+    private string mensajeErrorEmail = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarUsuario();
+    }
+
+    private async Task CargarUsuario()
+    {
+        try
+        {
+            cargando = true;
+            
+            // Obtener el usuario actual (hardcodeado por ahora)
+            ShowUsuarioDTO usuarioBasico = await APIUsuario.GetByUsernameAsync("jmr");
+            
+            if (usuarioBasico != null)
+            {
+                // Obtener información completa del usuario
+                usuario = await APIUsuario.GetAsync(usuarioBasico.Id);
+                
+                // Guardar copia original para poder cancelar cambios
+                usuarioOriginal = new FullUsuarioDTO
+                {
+                    Id = usuario.Id,
+                    Nombre = usuario.Nombre,
+                    Apellido = usuario.Apellido,
+                    NombreUsuario = usuario.NombreUsuario,
+                    Email = usuario.Email,
+                    Direccion = usuario.Direccion,
+                    Telefono = usuario.Telefono,
+                    FechaNacimiento = usuario.FechaNacimiento,
+                    Legajo = usuario.Legajo,
+                    Tipo = usuario.Tipo,
+                    Habilitado = usuario.Habilitado,
+                    IdPlan = usuario.IdPlan,
+                    Clave = usuario.Clave,
+                    FechaAlta = usuario.FechaAlta
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error al cargar el usuario: {ex.Message}";
+            mostrarModalError = true;
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private void MostrarConfirmacion()
+    {
+        // Limpiar errores previos
+        LimpiarErrores();
+
+        // Validar antes de mostrar confirmación
+        if (!ValidarFormulario())
+        {
+            return;
+        }
+
+        mostrarModalConfirmacion = true;
+    }
+
+    private void CerrarModalConfirmacion()
+    {
+        mostrarModalConfirmacion = false;
+    }
+
+    private async Task GuardarCambios()
+    {
+        try
+        {
+            CerrarModalConfirmacion();
+
+            // Crear DTO para actualizar
+            PutUsuarioDTO usuarioActualizado = new PutUsuarioDTO
+            {
+                Id = usuario.Id,
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                NombreUsuario = usuario.NombreUsuario,
+                Email = usuario.Email,
+                Clave = usuario.Clave,
+                Habilitado = usuario.Habilitado,
+                IdPlan = usuario.IdPlan
+            };
+
+            // Guardar cambios
+            await APIUsuario.UpdateAsync(usuarioActualizado);
+
+            // Actualizar la copia original
+            usuarioOriginal = new FullUsuarioDTO
+            {
+                Id = usuario.Id,
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                NombreUsuario = usuario.NombreUsuario,
+                Email = usuario.Email,
+                Direccion = usuario.Direccion,
+                Telefono = usuario.Telefono,
+                FechaNacimiento = usuario.FechaNacimiento,
+                Legajo = usuario.Legajo,
+                Tipo = usuario.Tipo,
+                Habilitado = usuario.Habilitado,
+                IdPlan = usuario.IdPlan,
+                Clave = usuario.Clave,
+                FechaAlta = usuario.FechaAlta
+            };
+
+            mensajeExito = "¡Perfil actualizado exitosamente!";
+            mostrarModalExito = true;
+        }
+        catch (ArgumentException ex)
+        {
+            mensajeError = ex.Message;
+            mostrarModalError = true;
+        }
+        catch (Exception ex)
+        {
+            mensajeError = $"Error al guardar los cambios: {ex.Message}";
+            mostrarModalError = true;
+        }
+    }
+
+    private bool ValidarFormulario()
+    {
+        bool esValido = true;
+
+        // Validar nombre
+        if (string.IsNullOrWhiteSpace(usuario.Nombre))
+        {
+            errorNombre = true;
+            esValido = false;
+        }
+
+        // Validar apellido
+        if (string.IsNullOrWhiteSpace(usuario.Apellido))
+        {
+            errorApellido = true;
+            esValido = false;
+        }
+
+        // Validar nombre de usuario
+        if (string.IsNullOrWhiteSpace(usuario.NombreUsuario))
+        {
+            errorNombreUsuario = true;
+            esValido = false;
+        }
+
+        // Validar email
+        if (string.IsNullOrWhiteSpace(usuario.Email))
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El email es requerido";
+            esValido = false;
+        }
+        else if (usuario.Email.Length < 7)
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El email debe tener al menos 7 caracteres";
+            esValido = false;
+        }
+        else if (!usuario.Email.Contains("@"))
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El email debe contener el carácter @";
+            esValido = false;
+        }
+        else if (!usuario.Email.EndsWith(".com"))
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El email debe terminar en .com";
+            esValido = false;
+        }
+
+        return esValido;
+    }
+
+    private void LimpiarErrores()
+    {
+        errorNombre = false;
+        errorApellido = false;
+        errorNombreUsuario = false;
+        errorEmail = false;
+        mensajeErrorEmail = "";
+    }
+
+    private void Cancelar()
+    {
+        // Restaurar valores originales
+        if (usuarioOriginal != null)
+        {
+            usuario.Nombre = usuarioOriginal.Nombre;
+            usuario.Apellido = usuarioOriginal.Apellido;
+            usuario.NombreUsuario = usuarioOriginal.NombreUsuario;
+            usuario.Email = usuarioOriginal.Email;
+            usuario.Direccion = usuarioOriginal.Direccion;
+            usuario.Telefono = usuarioOriginal.Telefono;
+            usuario.FechaNacimiento = usuarioOriginal.FechaNacimiento;
+        }
+
+        LimpiarErrores();
+        Volver();
+    }
+
+    private void CerrarModalExito()
+    {
+        mostrarModalExito = false;
+    }
+
+    private void CerrarModalError()
+    {
+        mostrarModalError = false;
+    }
+
+    private void Volver()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}
