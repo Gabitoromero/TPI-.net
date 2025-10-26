@@ -19,7 +19,7 @@ namespace Application.Services
 
         public async Task<NewCursoDTO?> Get(int id)
         {
-           Curso curso = await _repository.Get(id);
+            Curso curso = await _repository.Get(id);
             if (curso == null) return null;
             return new NewCursoDTO
             {
@@ -27,7 +27,8 @@ namespace Application.Services
                 Anio_calendario = curso.Anio_calendario,
                 Cupo = curso.Cupo,
                 Id_materia = curso.Id_materia,
-                Id_comision = curso.Id_comision
+                Id_comision = curso.Id_comision,
+                Habilitado = curso.Habilitado
             };
         }
         public async Task<List<NewCursoDTO>> GetAll()
@@ -41,7 +42,8 @@ namespace Application.Services
                 Anio_calendario = m.Anio_calendario,
                 Cupo = m.Cupo,
                 Id_materia = m.Id_materia,
-                Id_comision = m.Id_comision
+                Id_comision = m.Id_comision,
+                Habilitado = m.Habilitado
             }).ToList();
         }
         public async Task<List<NewCursoDTO>> GetAvailable()
@@ -54,7 +56,8 @@ namespace Application.Services
                 Anio_calendario = m.Anio_calendario,
                 Cupo = m.Cupo,
                 Id_materia = m.Id_materia,
-                Id_comision = m.Id_comision
+                Id_comision = m.Id_comision,
+                Habilitado = m.Habilitado
             }).ToList();
         }
         public async Task<NewCursoDTO> Add(NewCursoDTO curso)
@@ -67,7 +70,8 @@ namespace Application.Services
                     Anio_calendario = curso.Anio_calendario,
                     Cupo = curso.Cupo,
                     Id_materia = curso.Id_materia,
-                    Id_comision = curso.Id_comision
+                    Id_comision = curso.Id_comision,
+                    Habilitado = curso.Habilitado
                 };
                 await _repository.Add(newCurso);
                 curso.Id_curso = newCurso.Id_curso;
