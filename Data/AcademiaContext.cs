@@ -260,14 +260,14 @@ namespace Data
                 entity.Property(ac => ac.Nota).IsRequired(false);
 
                 entity.HasData(
-                    new { IdInscripcion = 1, IdAlumno = 3, IdCurso = 1, Condicion = "Regular", Nota = 85 },
-                    new { IdInscripcion = 2, IdAlumno = 4, IdCurso = 2, Condicion = "Aprobado", Nota = 90 },
+                    new { IdInscripcion = 1, IdAlumno = 3, IdCurso = 1, Condicion = "Regular", Nota = 8 },
+                    new { IdInscripcion = 2, IdAlumno = 4, IdCurso = 2, Condicion = "Aprobado", Nota = 9 },
                     new { IdInscripcion = 3, IdAlumno = 5, IdCurso = 3, Condicion = "Libre", Nota = (int?)null },
-                    new { IdInscripcion = 4, IdAlumno = 6, IdCurso = 4, Condicion = "Regular", Nota = 75 },
-                    new { IdInscripcion = 5, IdAlumno = 7, IdCurso = 5, Condicion = "Aprobado", Nota = 88 },
+                    new { IdInscripcion = 4, IdAlumno = 6, IdCurso = 4, Condicion = "Regular", Nota = 7 },
+                    new { IdInscripcion = 5, IdAlumno = 7, IdCurso = 5, Condicion = "Aprobado", Nota = 8 },
                     new { IdInscripcion = 6, IdAlumno = 3, IdCurso = 6, Condicion = "Libre", Nota = (int?)null },
-                    new { IdInscripcion = 7, IdAlumno = 4, IdCurso = 7, Condicion = "Regular", Nota = 82 },
-                    new { IdInscripcion = 8, IdAlumno = 5, IdCurso = 8, Condicion = "Aprobado", Nota = 91 }
+                    new { IdInscripcion = 7, IdAlumno = 4, IdCurso = 7, Condicion = "Regular", Nota = 8 },
+                    new { IdInscripcion = 8, IdAlumno = 5, IdCurso = 8, Condicion = "Aprobado", Nota = 9 }
                     );
             });
         }
