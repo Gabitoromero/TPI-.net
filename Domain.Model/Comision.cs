@@ -12,6 +12,7 @@ namespace Domain.Model
         public string Desc_comision { get; set; }
         public int Anio_especialidad { get; set; }
         public int Id_plan { get; set; }
+        public bool Habilitado { get; set; }
 
         public Comision() { }
         public Comision(int id_comision, string desc_comision, int anio_especialidad, int id_plan)

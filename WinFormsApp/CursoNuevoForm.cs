@@ -39,7 +39,13 @@ namespace WinFormsApp
                 {
                     MessageBox.Show("No se pudieron cargar las comisiones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                comboBoxComision.DataSource = comisiones;
+                // Filtrar solo comisiones habilitadas
+                var comisionesHabilitadas = comisiones.Where(c => c.Habilitado).ToList();
+                if (comisionesHabilitadas.Count == 0)
+                {
+                    MessageBox.Show("No hay comisiones habilitadas disponibles.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                comboBoxComision.DataSource = comisionesHabilitadas;
                 comboBoxComision.DisplayMember = "Desc_comision";
                 comboBoxComision.ValueMember = "Id_comision";
 

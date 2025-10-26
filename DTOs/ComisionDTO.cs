@@ -12,5 +12,6 @@ namespace DTOs
         public string Desc_comision { get; set; }
         public int Anio_especialidad { get; set; }
         public int Id_plan { get; set; }
+        public bool Habilitado { get; set; }
     }
 }

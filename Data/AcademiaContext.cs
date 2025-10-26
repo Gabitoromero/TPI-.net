@@ -130,6 +130,7 @@ namespace Data
                     entity.Property(c => c.Desc_comision).IsRequired().HasMaxLength(50);
                     entity.HasIndex(c => c.Desc_comision).IsUnique();
                     entity.Property(c => c.Anio_especialidad).IsRequired();  //no tengo ni idea a que se refiere
+                    entity.Property(c => c.Habilitado).HasDefaultValue(true);
                     entity.HasOne<Plan>()
                           .WithMany()
                           .HasForeignKey(c => c.Id_plan)
@@ -137,12 +138,12 @@ namespace Data
                           .IsRequired();
 
                     entity.HasData(
-                        new { Id_comision = 1, Desc_comision = "Comision A", Anio_especialidad = 1, Id_plan = 1 },
-                        new { Id_comision = 2, Desc_comision = "Comision B", Anio_especialidad = 2, Id_plan = 1 },
-                        new { Id_comision = 3, Desc_comision = "Comision C", Anio_especialidad = 1, Id_plan = 2 },
-                        new { Id_comision = 4, Desc_comision = "Comision D", Anio_especialidad = 3, Id_plan = 2 },
-                        new { Id_comision = 5, Desc_comision = "Comision E", Anio_especialidad = 2, Id_plan = 3 },
-                        new { Id_comision = 6, Desc_comision = "Comision F", Anio_especialidad = 1, Id_plan = 3 }
+                        new { Id_comision = 1, Desc_comision = "Comision A", Anio_especialidad = 1, Id_plan = 1, Habilitado = true },
+                        new { Id_comision = 2, Desc_comision = "Comision B", Anio_especialidad = 2, Id_plan = 1, Habilitado = true },
+                        new { Id_comision = 3, Desc_comision = "Comision C", Anio_especialidad = 1, Id_plan = 2, Habilitado = true },
+                        new { Id_comision = 4, Desc_comision = "Comision D", Anio_especialidad = 3, Id_plan = 2, Habilitado = true },
+                        new { Id_comision = 5, Desc_comision = "Comision E", Anio_especialidad = 2, Id_plan = 3, Habilitado = true },
+                        new { Id_comision = 6, Desc_comision = "Comision F", Anio_especialidad = 1, Id_plan = 3, Habilitado = true }
                         );
                 });
 

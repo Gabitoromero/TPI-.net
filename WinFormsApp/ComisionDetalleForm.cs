@@ -24,39 +24,69 @@ namespace WinFormsApp
         {
             try
             {
+                // Validar si la comisión está deshabilitada
+                if (isEdit && dto != null && !dto.Habilitado)
+                {
+                    DialogResult result = MessageBox.Show(
+                        "Esta comisión está deshabilitada.\n\n¿Desea darla de alta?",
+                        "Comisión Deshabilitada",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            dto.Habilitado = true;
+                            await APIComision.UpdateAsync(dto);
+                            MessageBox.Show("Comisión reactivada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            MessageBox.Show($"Error al reactivar la comisión: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            this.Close();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Esta comisión está deshabilitada y no se puede modificar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Close();
+                        return;
+                    }
+                }
+
                 var plans = await APIPlan.GetAllAsync();
                 comboBoxPlan.DataSource = plans;
                 comboBoxPlan.DisplayMember = "Descripcion";
                 comboBoxPlan.ValueMember = "IdPlan";
             
-
-            if (isEdit && dto != null)
-            {
-                txtDesc.Text = dto.Desc_comision;
-                numericAnio.Value = dto.Anio_especialidad;
-                if (comboBoxPlan.DataSource != null)
+                if (isEdit && dto != null)
                 {
-                    var planList = (System.Collections.IList)comboBoxPlan.DataSource;
-                    if (planList.Cast<PlanDTO>().Any(p => p.IdPlan == dto.Id_plan))
+                    txtDesc.Text = dto.Desc_comision;
+                    numericAnio.Value = dto.Anio_especialidad;
+                    if (comboBoxPlan.DataSource != null)
                     {
-                        comboBoxPlan.SelectedValue = dto.Id_plan;
-                    }
-                    else
-                    {
-                        comboBoxPlan.SelectedIndex = -1;
+                        var planList = (System.Collections.IList)comboBoxPlan.DataSource;
+                        if (planList.Cast<PlanDTO>().Any(p => p.IdPlan == dto.Id_plan))
+                        {
+                            comboBoxPlan.SelectedValue = dto.Id_plan;
+                        }
+                        else
+                        {
+                            comboBoxPlan.SelectedIndex = -1;
+                        }
                     }
                 }
             }
-            }
             catch (ArgumentException err)
             {
-                MessageBox.Show($"Error al cargar comisión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al cargar comisión: {err.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al guardar comisión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error inesperado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private async void btnGuardar_Click(object sender, EventArgs e)
@@ -72,16 +102,19 @@ namespace WinFormsApp
                     Id_comision = (dto != null) ? dto.Id_comision : 0,
                     Desc_comision = txtDesc.Text,
                     Anio_especialidad = (int)numericAnio.Value,
-                    Id_plan = comboBoxPlan.SelectedValue != null ? (int)comboBoxPlan.SelectedValue : 0
+                    Id_plan = comboBoxPlan.SelectedValue != null ? (int)comboBoxPlan.SelectedValue : 0,
+                    Habilitado = (dto != null) ? dto.Habilitado : true
                 };
 
                 if (isEdit)
                 {
                     await APIComision.UpdateAsync(toSend);
+                    MessageBox.Show("Comisión actualizada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
                     await APIComision.AddAsync(toSend);
+                    MessageBox.Show("Comisión agregada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 Close();

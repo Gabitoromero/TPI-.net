@@ -123,7 +123,7 @@ namespace WinFormsApp
 
                 // Mostrar mensaje de confirmación
                 DialogResult confirmResult = MessageBox.Show(
-                    $"¿Está seguro que desea eliminar la comisión'{id}'?\n\nEsta acción no se puede deshacer.",
+                    $"¿Está seguro que desea eliminar la comisión'{id}'?\n\nSe darán de baja todos los cursos de esta comisión. Esta acción no se puede deshacer.",
                     "Confirmar Eliminación",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);

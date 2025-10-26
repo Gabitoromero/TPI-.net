@@ -37,34 +37,39 @@ namespace WinFormsApp
         {
             try
             {
-                DialogResult result = MessageBox.Show(
+                // Validar si el curso está deshabilitado
+                if (isEdit && curso != null && !curso.Habilitado)
+                {
+                    DialogResult result = MessageBox.Show(
                         "Este curso está deshabilitado.\n\n¿Desea darlo de alta?",
                         "Curso Deshabilitado",
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question);
 
-                if (result == DialogResult.Yes)
-                {
-                    try
+                    if (result == DialogResult.Yes)
                     {
-                        curso.Habilitado = true;
-                        await APICurso.UpdateAsync(curso);
-                        MessageBox.Show("Curso reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        try
+                        {
+                            curso.Habilitado = true;
+                            await APICurso.UpdateAsync(curso);
+                            MessageBox.Show("Curso reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            MessageBox.Show($"Error al reactivar el curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            this.Close();
+                            return;
+                        }
                     }
-                    catch (ArgumentException ex)
+                    else
                     {
-                        MessageBox.Show($"Error al reactivar el curso: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.Close();
+                        MessageBox.Show("Este curso está deshabilitado y no se puede modificar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        btnModificarCurso.Enabled = false;
+                        Close();
                         return;
                     }
                 }
-                else
-                {
-                    MessageBox.Show("Este curso está deshabilitado y no se puede modificar. ", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    btnModificarCurso.Enabled = false;
-                    Close();
-                }
-                // Validar si el curso está deshabilitado
+
                 if (isEdit && curso != null && curso.Habilitado)
                 {
                     List<ComisionDTO> comisiones = await APIComision.GetAllAsync();
@@ -72,7 +77,13 @@ namespace WinFormsApp
                     {
                         MessageBox.Show("No se pudieron cargar las comisiones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
-                    comboBoxComision.DataSource = comisiones;
+                    // Filtrar solo comisiones habilitadas
+                    var comisionesHabilitadas = comisiones.Where(c => c.Habilitado).ToList();
+                    if (comisionesHabilitadas.Count == 0)
+                    {
+                        MessageBox.Show("No hay comisiones habilitadas disponibles.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    comboBoxComision.DataSource = comisionesHabilitadas;
                     comboBoxComision.DisplayMember = "Desc_comision";
                     comboBoxComision.ValueMember = "Id_comision";
                 }

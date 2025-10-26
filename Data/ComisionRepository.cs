@@ -40,6 +40,7 @@ namespace Data
                 existing.Desc_comision = comision.Desc_comision;
                 existing.Anio_especialidad = comision.Anio_especialidad;
                 existing.Id_plan = comision.Id_plan;
+                existing.Habilitado = comision.Habilitado;
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -51,11 +52,14 @@ namespace Data
 
         public async Task<bool> Delete(int id)
         {
-            Comision? existing = await _context.Comisiones.FindAsync(id);
-            if (existing == null) return false;
-            _context.Comisiones.Remove(existing);
-            await _context.SaveChangesAsync();
-            return true;
+            Comision? comision = await _context.Comisiones.FindAsync(id);
+            if (comision != null)
+            {
+                comision.Habilitado = false;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }
