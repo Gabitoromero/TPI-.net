@@ -1,0 +1,205 @@
+@page "/alumno/inscripciones/nueva"
+@using API.Clients
+@using DTOs
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Nueva Inscripción</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Inscribirse a un Curso</h3>
+    <button class="btn btn-secondary" @onclick="Volver">Cancelar</button>
+</div>
+
+@if (alumnoDeshabilitado)
+{
+    <div class="alert alert-warning" role="alert">
+        <strong>Cuenta no habilitada</strong>
+        <p>Su cuenta no está habilitada. No puede realizar nuevas inscripciones.</p>
+    </div>
+}
+else if (cursosDisponibles == null)
+{
+    <p><em>Cargando cursos disponibles...</em></p>
+}
+else if (errorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+else if (!cursosDisponibles.Any())
+{
+    <div class="alert alert-info" role="alert">
+        No hay cursos disponibles para inscripción en este momento.
+    </div>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        Seleccione un curso y haga clic en el botón "Inscribir" para confirmar su inscripción.
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Materia</th>
+                <th>Comisión</th>
+                <th>Año</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var curso in cursosDisponibles)
+            {
+                <tr>
+                    <td>@curso.Materia</td>
+                    <td>@curso.Comision</td>
+                    <td>@curso.Anio</td>
+                    <td>
+                        <button class="btn btn-success btn-sm" 
+                                @onclick="() => MostrarConfirmacion(curso)"
+                                disabled="@alumnoDeshabilitado">
+                            Inscribir
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (mostrarModalConfirmacion)
+{
+    <ConfirmarInscripcionModal 
+        Curso="cursoSeleccionado"
+        OnConfirmar="InscribirAlumno"
+        OnCancelar="CerrarModal" />
+}
+
+@if (mostrarModalExito)
+{
+    <MensajeExitoModal 
+        Mensaje="@mensajeExito"
+        OnCerrar="CerrarModalExito" />
+}
+
+@code {
+    private List<CursoDisplayDTO> cursosDisponibles;
+    private CursoDisplayDTO cursoSeleccionado;
+    private string errorMessage;
+    private bool alumnoDeshabilitado = false;
+    private bool mostrarModalConfirmacion = false;
+    private bool mostrarModalExito = false;
+    private string mensajeExito;
+    private int alumnoId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarCursosDisponibles();
+    }
+
+    private async Task CargarCursosDisponibles()
+    {
+        try
+        {
+            // Obtener el alumno actual (hardcodeado por ahora)
+            ShowUsuarioDTO alumno = await APIUsuario.GetByUsernameAsync("jmr");
+            alumnoId = alumno.Id;
+
+            // Verificar si el alumno está habilitado
+            if (!(alumno.Habilitado ?? false))
+            {
+                alumnoDeshabilitado = true;
+                cursosDisponibles = new List<CursoDisplayDTO>();
+                return;
+            }
+
+            List<NewCursoDTO> cursos = await APICurso.GetAllDisponiblesAsync();
+            List<ShowAlumno_CursoDTO> cursosInscriptos = await APIUsuario.GetAlumnoCursosAsync(alumno.Id);
+
+            if (cursos == null || !cursos.Any())
+            {
+                cursosDisponibles = new List<CursoDisplayDTO>();
+                return;
+            }
+
+            cursosDisponibles = new List<CursoDisplayDTO>();
+
+            foreach (NewCursoDTO curso in cursos)
+            {
+                MateriaDTO materia = await APIMateria.GetAsync(curso.Id_materia);
+                ComisionDTO comision = await APIComision.GetAsync(curso.Id_comision);
+                
+                if (cursosInscriptos.Any(ic => ic.Curso.Id_curso == curso.Id_curso)) continue;
+                
+                cursosDisponibles.Add(new CursoDisplayDTO
+                {
+                    IdCurso = curso.Id_curso,
+                    Materia = materia.Desc_materia,
+                    Comision = comision.Desc_comision,
+                    Anio = curso.Anio_calendario,
+                    DisplayText = $"{materia.Desc_materia} - {comision.Desc_comision} - {curso.Anio_calendario}"
+                });
+            }
+        }
+        catch (ArgumentException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los cursos: {ex.Message}";
+        }
+    }
+
+    private void MostrarConfirmacion(CursoDisplayDTO curso)
+    {
+        cursoSeleccionado = curso;
+        mostrarModalConfirmacion = true;
+    }
+
+    private void CerrarModal()
+    {
+        mostrarModalConfirmacion = false;
+        cursoSeleccionado = null;
+    }
+
+    private async Task InscribirAlumno()
+    {
+        try
+        {
+            Alumno_CursoDTO inscripcionDTO = new Alumno_CursoDTO
+            {
+                IdInscripcion = 0,
+                IdAlumno = alumnoId,
+                IdCurso = cursoSeleccionado.IdCurso,
+                Condicion = "Inscripto",
+                Nota = null
+            };
+
+            // Realizar la inscripción
+            await APIUsuario.AddAlumnoCursoAsync(inscripcionDTO);
+
+            
+            mensajeExito = $"¡Inscripción exitosa!\n\nCurso: {cursoSeleccionado.DisplayText}";
+            mostrarModalExito = true;
+            CerrarModal();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+
+    private void CerrarModalExito()
+    {
+        mostrarModalExito = false;
+        NavigationManager.NavigateTo("/alumno/inscripciones");
+    }
+
+    private void Volver()
+    {
+        NavigationManager.NavigateTo("/alumno/inscripciones");
+    }
+}

@@ -1,0 +1,111 @@
+@page "/alumno/inscripciones"
+@using API.Clients
+@using DTOs
+@rendermode InteractiveServer
+
+<PageTitle>Mis Inscripciones</PageTitle>
+<h3>Mis Inscripciones</h3>
+
+@if (alumnoDeshabilitado)
+{
+    <div class="alert alert-warning" role="alert">
+        Su cuenta no está habilitada. No puede ver sus inscripciones.
+    </div>
+}
+else if (inscripciones == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else if (errorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+else if (!inscripciones.Any())
+{
+    <div class="alert alert-info" role="alert">
+        No tienes inscripciones activas.
+    </div>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Materia</th>
+                <th>Comisión</th>
+                <th>Condición</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inscripcion in inscripciones)
+            {
+                <tr>
+                    <td>@inscripcion.Materia</td>
+                    <td>@inscripcion.Comision</td>
+                    <td>@inscripcion.Condicion</td>
+                    <td>@(inscripcion.Nota?.ToString() ?? "-")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<InscripcionDisplayDTO> inscripciones;
+    private string errorMessage;
+    private bool alumnoDeshabilitado = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarInscripciones();
+    }
+
+    private async Task CargarInscripciones()
+    {
+        try
+        {
+            // Obtener el alumno actual (hardcodeado por ahora)
+            ShowUsuarioDTO alumno = await APIUsuario.GetByUsernameAsync("jmr");
+
+            
+            if (!(alumno.Habilitado ?? false))
+            {
+                alumnoDeshabilitado = true;
+                return;
+            }
+            
+
+            var inscripcionesAlumno = await APIUsuario.GetAlumnoCursosAsync(alumno.Id);
+
+            if (inscripcionesAlumno == null || !inscripcionesAlumno.Any())
+            {
+                inscripciones = new List<InscripcionDisplayDTO>();
+                return;
+            }
+
+            var materiaTasks = inscripcionesAlumno.Select(i => APIMateria.GetAsync(i.Curso.Id_materia)).ToList();
+            var comisionTasks = inscripcionesAlumno.Select(i => APIComision.GetAsync(i.Curso.Id_comision)).ToList();
+            var materias = await Task.WhenAll(materiaTasks);
+            var comisiones = await Task.WhenAll(comisionTasks);
+
+            inscripciones = inscripcionesAlumno.Select((i, idx) => new InscripcionDisplayDTO
+            {
+                Materia = materias[idx].Desc_materia,
+                Comision = comisiones[idx].Desc_comision,
+                Condicion = i.Condicion,
+                Nota = i.Nota
+            }).ToList();
+        }
+        catch (ArgumentException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar las inscripciones: {ex.Message}";
+        }
+    }
+}

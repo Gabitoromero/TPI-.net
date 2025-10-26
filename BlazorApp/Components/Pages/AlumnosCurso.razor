@@ -84,10 +84,10 @@ else
     {
         try
         {
-            // Obtener todos los alumnos del curso con información completa
+            
             var todosLosAlumnos = await APIUsuario.GetAlumnosCompletoByCursoAsync(IdCurso);
 
-            // Filtrar solo alumnos habilitados
+
             alumnosDelCurso = todosLosAlumnos.Where(a => a.Alumno.Habilitado == true).ToList();
         }
         catch (ArgumentException ex)

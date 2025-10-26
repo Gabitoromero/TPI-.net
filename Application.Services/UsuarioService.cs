@@ -56,6 +56,7 @@ namespace Application.Services
         public async Task<ShowUsuarioDTO> GetByUsername(string nombreUsuario)
         {
             var user = await _repository.GetByUsername(nombreUsuario);
+            if (user == null) return null;
 
             ShowUsuarioDTO dto = new ShowUsuarioDTO
             {

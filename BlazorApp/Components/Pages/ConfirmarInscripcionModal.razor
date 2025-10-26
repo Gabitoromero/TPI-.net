@@ -1,0 +1,51 @@
+@using DTOs
+
+@if (Curso != null)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Inscripción</h5>
+                    <button type="button" class="btn-close" @onclick="Cancelar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Desea inscribirse al siguiente curso?</p>
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Detalles del curso:</h6>
+                            <p class="mb-1"><strong>Materia:</strong> @Curso.Materia</p>
+                            <p class="mb-1"><strong>Comisión:</strong> @Curso.Comision</p>
+                            <p class="mb-0"><strong>Año:</strong> @Curso.Anio</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="Cancelar">No</button>
+                    <button type="button" class="btn btn-success" @onclick="Confirmar">Sí, Inscribirme</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public CursoDisplayDTO Curso { get; set; }
+
+    [Parameter]
+    public EventCallback OnConfirmar { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancelar { get; set; }
+
+    private void Confirmar()
+    {
+        OnConfirmar.InvokeAsync();
+    }
+
+    private void Cancelar()
+    {
+        OnCancelar.InvokeAsync();
+    }
+}
