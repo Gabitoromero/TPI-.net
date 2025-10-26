@@ -46,6 +46,7 @@ namespace Data
                     cursoToUpdate.Cupo = curso.Cupo;
                     cursoToUpdate.Id_comision = curso.Id_comision;
                     cursoToUpdate.Id_materia = curso.Id_materia;
+                    cursoToUpdate.Habilitado = curso.Habilitado;
                     await _context.SaveChangesAsync();
                     return true;
                 }
@@ -68,17 +69,6 @@ namespace Data
             return false;
         }
 
-        public async Task<bool> Reactivar(int id)
-        {
-            Curso? curso = await _context.Cursos.FindAsync(id);
-            if (curso != null)
-            {
-                curso.Habilitado = true;
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            return false;
-        }
 
         public async Task<List<Curso>> GetAvailable()
         {

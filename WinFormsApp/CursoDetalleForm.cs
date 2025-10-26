@@ -48,6 +48,7 @@ namespace WinFormsApp
                     try
                     {
                         curso.Habilitado = true;
+                        await APICurso.UpdateAsync(curso);
                         MessageBox.Show("Curso reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (ArgumentException ex)
