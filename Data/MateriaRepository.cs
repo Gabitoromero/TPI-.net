@@ -33,17 +33,21 @@ namespace Data
             existing.Hs_semanales = materia.Hs_semanales;
             existing.Hs_totales = materia.Hs_totales;
             existing.Id_plan = materia.Id_plan;
+            existing.Habilitado = materia.Habilitado;
             await _context.SaveChangesAsync();
             return true;
         }
 
         public async Task<bool> Delete(int id)
         {
-            Materia? existing = await _context.Materias.FindAsync(id);
-            if (existing == null) return false;
-            _context.Materias.Remove(existing);
-            await _context.SaveChangesAsync();
-            return true;
+            Materia? materia = await _context.Materias.FindAsync(id);
+            if (materia != null)
+            {
+                materia.Habilitado = false;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

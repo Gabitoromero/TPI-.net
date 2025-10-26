@@ -25,34 +25,65 @@ namespace WinFormsApp
         {
             try
             {
+                // Validar si la materia está deshabilitada
+                if (isEdit && dto != null && !dto.Habilitado)
+                {
+                    DialogResult result = MessageBox.Show(
+                        "Esta materia está deshabilitada.\n\n¿Desea darla de alta?",
+                        "Materia Deshabilitada",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            dto.Habilitado = true;
+                            await APIMateria.UpdateAsync(dto);
+                            MessageBox.Show("Materia reactivada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            MessageBox.Show($"Error al reactivar la materia: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            this.Close();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Esta materia está deshabilitada y no se puede modificar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Close();
+                        return;
+                    }
+                }
+
                 var plans = await APIPlan.GetAllAsync();
                 comboBoxPlan.DataSource = plans;
                 comboBoxPlan.DisplayMember = "Descripcion";
                 comboBoxPlan.ValueMember = "IdPlan";
            
-
-            if (isEdit && dto != null)
-            {
-                txtDesc.Text = dto.Desc_materia;
-                numericHsSem.Value = dto.Hs_semanales;
-                numericHsTot.Value = dto.Hs_totales;
-                if (comboBoxPlan.DataSource != null)
+                if (isEdit && dto != null)
                 {
-                    var planList = (System.Collections.IList)comboBoxPlan.DataSource;
-                    if (planList.Cast<PlanDTO>().Any(p => p.IdPlan == dto.Id_plan))
+                    txtDesc.Text = dto.Desc_materia;
+                    numericHsSem.Value = dto.Hs_semanales;
+                    numericHsTot.Value = dto.Hs_totales;
+                    if (comboBoxPlan.DataSource != null)
                     {
-                        comboBoxPlan.SelectedValue = dto.Id_plan;
-                    }
-                    else
-                    {
-                        comboBoxPlan.SelectedIndex = -1;
+                        var planList = (System.Collections.IList)comboBoxPlan.DataSource;
+                        if (planList.Cast<PlanDTO>().Any(p => p.IdPlan == dto.Id_plan))
+                        {
+                            comboBoxPlan.SelectedValue = dto.Id_plan;
+                        }
+                        else
+                        {
+                            comboBoxPlan.SelectedIndex = -1;
+                        }
                     }
                 }
             }
-            }
             catch (ArgumentException ex)
             {
-                MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -70,16 +101,19 @@ namespace WinFormsApp
                     Desc_materia = txtDesc.Text,
                     Hs_semanales = (int)numericHsSem.Value,
                     Hs_totales = (int)numericHsTot.Value,
-                    Id_plan = comboBoxPlan.SelectedValue != null ? (int)comboBoxPlan.SelectedValue : 0
+                    Id_plan = comboBoxPlan.SelectedValue != null ? (int)comboBoxPlan.SelectedValue : 0,
+                    Habilitado = (dto != null) ? dto.Habilitado : true
                 };
 
                 if (isEdit)
                 {
                     await APIMateria.UpdateAsync(toSend);
+                    MessageBox.Show("Materia actualizada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
                     await APIMateria.AddAsync(toSend);
+                    MessageBox.Show("Materia agregada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 this.Close();
             }

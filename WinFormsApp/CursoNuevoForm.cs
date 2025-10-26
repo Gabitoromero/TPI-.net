@@ -54,7 +54,13 @@ namespace WinFormsApp
                 {
                     MessageBox.Show("No se pudieron cargar las materias.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                comboBoxMaterias.DataSource = materias;
+                // Filtrar solo materias habilitadas
+                var materiasHabilitadas = materias.Where(m => m.Habilitado).ToList();
+                if (materiasHabilitadas.Count == 0)
+                {
+                    MessageBox.Show("No hay materias habilitadas disponibles.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                comboBoxMaterias.DataSource = materiasHabilitadas;
                 comboBoxMaterias.DisplayMember = "Desc_materia";
                 comboBoxMaterias.ValueMember = "Id_materia";
                 
