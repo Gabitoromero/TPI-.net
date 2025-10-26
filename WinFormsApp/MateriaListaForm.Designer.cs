@@ -45,7 +45,7 @@ namespace WinFormsApp
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(461, 250);
+            btnModificar.Location = new Point(380, 250);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
             btnModificar.TabIndex = 2;
@@ -56,7 +56,7 @@ namespace WinFormsApp
             // btnEliminar
             // 
             btnEliminar.BackColor = Color.IndianRed;
-            btnEliminar.Location = new Point(365, 250);
+            btnEliminar.Location = new Point(471, 250);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
             btnEliminar.TabIndex = 3;

@@ -69,6 +69,31 @@ namespace Application.Services
         {
             try
             {
+
+                Comision? comisionActual = await _repository.Get(dto.Id_comision);
+                
+                if (comisionActual == null)
+                {
+                    return false;
+                }
+
+
+                bool seEstaReactivando = !comisionActual.Habilitado && dto.Habilitado;
+
+                if (seEstaReactivando)
+                {
+
+                    List<Curso> cursos = await _cursoRepository.GetAll();
+                    List<Curso> cursosComision = cursos.Where(c => c.Id_comision == dto.Id_comision).ToList();
+                    
+
+                    foreach (Curso curso in cursosComision)
+                    {
+                        curso.Habilitado = true;
+                        await _cursoRepository.Update(curso);
+                    }
+                }
+
                 Comision c = new Comision
                 {
                     Id_comision = dto.Id_comision,
@@ -87,9 +112,11 @@ namespace Application.Services
 
         public async Task<bool> Delete(int id)
         {
+
             List<Curso> cursos = await _cursoRepository.GetAll();
             List<Curso> cursosComision = cursos.Where(c => c.Id_comision == id).ToList();
             
+   
             foreach (Curso curso in cursosComision)
             {
                 await _cursoRepository.Delete(curso.Id_curso);
