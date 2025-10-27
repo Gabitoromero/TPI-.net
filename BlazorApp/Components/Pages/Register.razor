@@ -1,0 +1,429 @@
+@page "/register"
+@using API.Clients
+@using DTOs
+@using BlazorApp.Services
+@inject AuthStateService AuthState
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>Registrarse</PageTitle>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Crear Cuenta</h3>
+                    
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @errorMessage
+                        </div>
+                    }
+
+                    <form @onsubmit="HandleRegister" @onsubmit:preventDefault="true">
+                        <div class="row">
+                            <!-- Nombre -->
+                            <div class="col-md-6 mb-3">
+                                <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+                                <input type="text" id="nombre" class="form-control @(errorNombre ? "is-invalid" : "")" 
+                                       @bind="registerDto.Nombre" @bind:event="oninput"
+                                       placeholder="Ingrese su nombre" disabled="@isLoading" />
+                                @if (errorNombre)
+                                {
+                                    <div class="invalid-feedback">El nombre es requerido</div>
+                                }
+                            </div>
+
+                            <!-- Apellido -->
+                            <div class="col-md-6 mb-3">
+                                <label for="apellido" class="form-label">Apellido <span class="text-danger">*</span></label>
+                                <input type="text" id="apellido" class="form-control @(errorApellido ? "is-invalid" : "")" 
+                                       @bind="registerDto.Apellido" @bind:event="oninput"
+                                       placeholder="Ingrese su apellido" disabled="@isLoading" />
+                                @if (errorApellido)
+                                {
+                                    <div class="invalid-feedback">El apellido es requerido</div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Nombre de Usuario -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nombre de Usuario <span class="text-danger">*</span></label>
+                            <input type="text" id="username" class="form-control @(errorNombreUsuario ? "is-invalid" : "")" 
+                                   @bind="registerDto.NombreUsuario" @bind:event="oninput"
+                                   placeholder="Elija un nombre de usuario" disabled="@isLoading" />
+                            @if (errorNombreUsuario)
+                            {
+                                <div class="invalid-feedback">El nombre de usuario es requerido</div>
+                            }
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
+                            <input type="email" id="email" class="form-control @(errorEmail ? "is-invalid" : "")" 
+                                   @bind="registerDto.Email" @bind:event="oninput"
+                                   placeholder="correo@ejemplo.com" disabled="@isLoading" />
+                            @if (errorEmail)
+                            {
+                                <div class="invalid-feedback">@mensajeErrorEmail</div>
+                            }
+                        </div>
+
+                        <!-- Contraseña -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña <span class="text-danger">*</span></label>
+                            <input type="password" id="password" class="form-control @(errorClave ? "is-invalid" : "")" 
+                                   @bind="registerDto.Clave" @bind:event="oninput"
+                                   placeholder="Mínimo 6 caracteres" disabled="@isLoading" />
+                            @if (errorClave)
+                            {
+                                <div class="invalid-feedback">@mensajeErrorClave</div>
+                            }
+                        </div>
+
+                        <div class="row">
+                            <!-- Tipo de Usuario -->
+                            <div class="col-md-6 mb-3">
+                                <label for="tipo" class="form-label">Tipo de Usuario <span class="text-danger">*</span></label>
+                                <select id="tipo" class="form-select @(errorTipo ? "is-invalid" : "")" 
+                                        @bind="registerDto.Tipo" disabled="@isLoading">
+                                    <option value="">Seleccione...</option>
+                                    <option value="alumno">Alumno</option>
+                                    <option value="profesor">Profesor</option>
+                                </select>
+                                @if (errorTipo)
+                                {
+                                    <div class="invalid-feedback">Debe seleccionar un tipo de usuario</div>
+                                }
+                            </div>
+
+                            <!-- Plan -->
+                            <div class="col-md-6 mb-3">
+                                <label for="plan" class="form-label">Plan de Estudios <span class="text-danger">*</span></label>
+                                <select id="plan" class="form-select @(errorPlan ? "is-invalid" : "")" 
+                                        @bind="registerDto.IdPlan" disabled="@isLoading">
+                                    <option value="0">Seleccione...</option>
+                                    @if (planes != null)
+                                    {
+                                        @foreach (var plan in planes.Where(p => p.Habilitado))
+                                        {
+                                            <option value="@plan.IdPlan">@plan.Descripcion</option>
+                                        }
+                                    }
+                                </select>
+                                @if (errorPlan)
+                                {
+                                    <div class="invalid-feedback">Debe seleccionar un plan</div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Fecha de Nacimiento -->
+                        <div class="mb-3">
+                            <label for="fechaNac" class="form-label">Fecha de Nacimiento</label>
+                            <input type="date" id="fechaNac" class="form-control" 
+                                   @bind="registerDto.FechaNacimiento" disabled="@isLoading" />
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" id="direccion" class="form-control" 
+                                   @bind="registerDto.Direccion" 
+                                   placeholder="Calle, número, ciudad" disabled="@isLoading" />
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="tel" id="telefono" class="form-control @(errorTelefono ? "is-invalid" : "")" 
+                                   @bind="telefonoInput" @bind:event="oninput"
+                                   placeholder="10 dígitos sin espacios" 
+                                   maxlength="10" disabled="@isLoading" />
+                            @if (errorTelefono)
+                            {
+                                <div class="invalid-feedback">El teléfono debe contener exactamente 10 dígitos</div>
+                            }
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg" disabled="@isLoading">
+                                @if (isLoading)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    <span>Registrando...</span>
+                                }
+                                else
+                                {
+                                    <span>Crear Cuenta</span>
+                                }
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" 
+                                    @onclick="VolverAlLogin" disabled="@isLoading">
+                                Volver al Login
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private FullUsuarioDTO registerDto = new FullUsuarioDTO
+    {
+        Id = 0,
+        Legajo = 0,
+        Habilitado = true,
+        FechaAlta = DateTime.Now,
+        FechaNacimiento = DateTime.Now.AddYears(-18),
+        Nombre = string.Empty,
+        Apellido = string.Empty,
+        NombreUsuario = string.Empty,
+        Email = string.Empty,
+        Clave = string.Empty,
+        Direccion = string.Empty,
+        Telefono = string.Empty,
+        Tipo = string.Empty,
+        IdPlan = 0
+    };
+
+    private List<PlanDTO>? planes;
+    private string? errorMessage;
+    private string telefonoInput = string.Empty;
+    private bool isLoading = false;
+
+    // Errores de validación
+    private bool errorNombre = false;
+    private bool errorApellido = false;
+    private bool errorNombreUsuario = false;
+    private bool errorEmail = false;
+    private string mensajeErrorEmail = "El email es requerido";
+    private bool errorClave = false;
+    private string mensajeErrorClave = "La contraseña es requerida";
+    private bool errorTipo = false;
+    private bool errorPlan = false;
+    private bool errorTelefono = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Si ya está autenticado, redirigir
+        if (AuthState.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/");
+        }
+
+        // Cargar planes
+        await CargarPlanes();
+    }
+
+    private async Task CargarPlanes()
+    {
+        try
+        {
+            planes = await APIPlan.GetAllAsync();
+        }
+        catch
+        {
+            planes = new List<PlanDTO>();
+        }
+    }
+
+    private bool ValidarFormulario()
+    {
+        bool esValido = true;
+
+        // Limpiar errores anteriores
+        errorNombre = false;
+        errorApellido = false;
+        errorNombreUsuario = false;
+        errorEmail = false;
+        errorClave = false;
+        errorTipo = false;
+        errorPlan = false;
+        errorTelefono = false;
+        errorMessage = null;
+
+        // Validar Nombre
+        if (string.IsNullOrWhiteSpace(registerDto.Nombre))
+        {
+            errorNombre = true;
+            esValido = false;
+        }
+
+        // Validar Apellido
+        if (string.IsNullOrWhiteSpace(registerDto.Apellido))
+        {
+            errorApellido = true;
+            esValido = false;
+        }
+
+        // Validar Nombre de Usuario
+        if (string.IsNullOrWhiteSpace(registerDto.NombreUsuario))
+        {
+            errorNombreUsuario = true;
+            esValido = false;
+        }
+
+        // Validar Email (formato)
+        if (string.IsNullOrWhiteSpace(registerDto.Email))
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El email es requerido";
+            esValido = false;
+        }
+        else if (!IsValidEmail(registerDto.Email))
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El formato del email no es válido";
+            esValido = false;
+        }
+
+        // Validar Contraseña (mínimo 6 caracteres)
+        if (string.IsNullOrWhiteSpace(registerDto.Clave))
+        {
+            errorClave = true;
+            mensajeErrorClave = "La contraseña es requerida";
+            esValido = false;
+        }
+        else if (registerDto.Clave.Length < 6)
+        {
+            errorClave = true;
+            mensajeErrorClave = "La contraseña debe tener al menos 6 caracteres";
+            esValido = false;
+        }
+
+        // Validar Tipo
+        if (string.IsNullOrWhiteSpace(registerDto.Tipo))
+        {
+            errorTipo = true;
+            esValido = false;
+        }
+
+        // Validar Plan
+        if (registerDto.IdPlan == 0)
+        {
+            errorPlan = true;
+            esValido = false;
+        }
+
+        // Validar Teléfono (si se ingresó, debe tener 10 dígitos)
+        if (!string.IsNullOrWhiteSpace(telefonoInput))
+        {
+            string digitosTelefono = new string(telefonoInput.Where(char.IsDigit).ToArray());
+            if (digitosTelefono.Length != 10)
+            {
+                errorTelefono = true;
+                esValido = false;
+            }
+            else
+            {
+                registerDto.Telefono = digitosTelefono;
+            }
+        }
+
+        if (!esValido)
+        {
+            errorMessage = "Por favor, complete todos los campos requeridos correctamente.";
+        }
+
+        return esValido;
+    }
+
+    private bool IsValidEmail(string email)
+    {
+        try
+        {
+            var addr = new System.Net.Mail.MailAddress(email);
+            return addr.Address == email;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private async Task HandleRegister()
+    {
+        // Validar antes de proceder
+        if (!ValidarFormulario())
+        {
+            return;
+        }
+
+        isLoading = true;
+        errorMessage = null;
+
+        try
+        {
+            // Llamar a la API para registrar el usuario
+            PostUsuarioDTO response = await APIUsuario.AddAsync(registerDto);
+
+            // Login automático después del registro exitoso
+            bool loginSuccess = await APIUsuario.LoginAsync(new LoginRequest 
+            { 
+                NombreUsuario = response.NombreUsuario, 
+                Clave = response.Clave 
+            });
+
+            if (loginSuccess)
+            {
+                var loginResponse = APIUsuario.LoginResponse;
+
+                // Guardar el estado de autenticación
+                if (loginResponse != null)
+                {
+                    AuthState.SetUser(loginResponse);
+                    
+                    // Redirigir a la página principal según el tipo de usuario
+                    if (AuthState.IsAlumno)
+                    {
+                        Navigation.NavigateTo("/alumno/inscripciones");
+                    }
+                    else if (AuthState.IsProfesor)
+                    {
+                        Navigation.NavigateTo("/profesor/cursos");
+                    }
+                    else
+                    {
+                        Navigation.NavigateTo("/");
+                    }
+                }
+                else
+                {
+                    errorMessage = "Error al procesar la respuesta del servidor.";
+                }
+            }
+            else
+            {
+                errorMessage = "Usuario registrado, pero no se pudo iniciar sesión automáticamente. Por favor, inicie sesión manualmente.";
+                // Redirigir al login después de 3 segundos
+                await Task.Delay(3000);
+                Navigation.NavigateTo("/login");
+            }
+        }
+        catch (ArgumentException ex)
+        {
+            // Capturar errores del backend (email repetido, usuario repetido, etc.)
+            errorMessage = ex.Message;
+        }
+        catch (Exception)
+        {
+            errorMessage = "Error al registrar el usuario. Por favor, intente nuevamente.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void VolverAlLogin()
+    {
+        Navigation.NavigateTo("/login");
+    }
+}
