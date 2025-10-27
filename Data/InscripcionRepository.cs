@@ -1,5 +1,6 @@
 ﻿using Domain.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -96,26 +97,113 @@ namespace Data
 
         public async Task<List<(Alumno_Curso inscripcion, Usuario alumno)>> GetAlumnosByCursoAsync(int idCurso)
         {
-            var query = from ac in _context.Alumno_Cursos
-                        join u in _context.Usuarios on ac.IdAlumno equals u.Id
-                        where ac.IdCurso == idCurso
-                        //orderby ac.IdInscripcion
-                        select new { inscripcion = ac, alumno = u };
+            const string sql = @"
+                SELECT ac.IdInscripcion, ac.IdAlumno, ac.IdCurso, ac.Condicion, ac.Nota,
+                       u.Id, u.Apellido, u.ClaveHash, u.Email, u.Habilitado, u.Nombre, 
+                       u.NombreUsuario, u.Salt, u.FechaAlta, u.Direccion, u.Telefono, 
+                       u.Tipo, u.Legajo, u.FechaNacimiento, u.IdPlan
+                FROM Alumno_Cursos ac
+                INNER JOIN Usuarios u ON ac.IdAlumno = u.Id
+                WHERE ac.IdCurso = @IdCurso";
 
-            var result = await query.ToListAsync();
-            return result.Select(x => (x.inscripcion, x.alumno)).ToList();
+            var resultado = new List<(Alumno_Curso inscripcion, Usuario alumno)>();
+            string connectionString = _context.Database.GetConnectionString();
+
+            using var connection = new SqlConnection(connectionString);
+            using var command = new SqlCommand(sql, connection);
+            
+            command.Parameters.AddWithValue("@IdCurso", idCurso);
+
+            await connection.OpenAsync();
+            using var reader = await command.ExecuteReaderAsync();
+            
+            while (await reader.ReadAsync())
+            {
+                var inscripcion = new Alumno_Curso
+                {
+                    IdInscripcion = reader.GetInt32(0),
+                    IdAlumno = reader.GetInt32(1),
+                    IdCurso = reader.GetInt32(2),
+                    Condicion = reader.IsDBNull(3) ? null : reader.GetString(3),
+                    Nota = reader.IsDBNull(4) ? null : reader.GetInt32(4)
+                };
+
+                var alumno = new Usuario(
+                    reader.GetInt32(5),
+                    reader.GetString(6),
+                    reader.GetString(7),
+                    reader.GetString(8),
+                    reader.GetBoolean(9),
+                    reader.GetString(10),
+                    reader.GetString(11),
+                    reader.GetDateTime(13),
+                    reader.GetString(14),
+                    reader.GetString(15),
+                    reader.GetString(16),
+                    reader.GetInt32(17),
+                    reader.GetDateTime(18),
+                    reader.GetInt32(19)
+                );
+                
+                resultado.Add((inscripcion, alumno));
+            }
+
+            return resultado;
         }
 
         public async Task<List<(Profesor_Curso dictado, Usuario profesor)>> GetProfesoresByCursoAsync(int idCurso)
         {
-            var query = from pc in _context.Profesor_Cursos
-                        join u in _context.Usuarios on pc.IdProfesor equals u.Id
-                        where pc.IdCurso == idCurso
-                        //orderby pc.Cargo descending // Titular primero (T > A alfabéticamente), luego Auxiliar
-                        select new { dictado = pc, profesor = u };
+            const string sql = @"
+                SELECT pc.IdDictado, pc.IdCurso, pc.IdProfesor, pc.Cargo,
+                       u.Id, u.Apellido, u.ClaveHash, u.Email, u.Habilitado, u.Nombre, 
+                       u.NombreUsuario, u.Salt, u.FechaAlta, u.Direccion, u.Telefono, 
+                       u.Tipo, u.Legajo, u.FechaNacimiento, u.IdPlan
+                FROM Profesor_Cursos pc
+                INNER JOIN Usuarios u ON pc.IdProfesor = u.Id
+                WHERE pc.IdCurso = @IdCurso";
 
-            var result = await query.ToListAsync();
-            return result.Select(x => (x.dictado, x.profesor)).ToList();
+            var resultado = new List<(Profesor_Curso dictado, Usuario profesor)>();
+            string connectionString = _context.Database.GetConnectionString();
+
+            using var connection = new SqlConnection(connectionString);
+            using var command = new SqlCommand(sql, connection);
+            
+            command.Parameters.AddWithValue("@IdCurso", idCurso);
+
+            await connection.OpenAsync();
+            using var reader = await command.ExecuteReaderAsync();
+            
+            while (await reader.ReadAsync())
+            {
+                var dictado = new Profesor_Curso
+                {
+                    IdDictado = reader.GetInt32(0),
+                    IdCurso = reader.GetInt32(1),
+                    IdProfesor = reader.GetInt32(2),
+                    Cargo = reader.GetString(3)
+                };
+
+                var profesor = new Usuario(
+                    reader.GetInt32(4),
+                    reader.GetString(5),
+                    reader.GetString(6),
+                    reader.GetString(7),
+                    reader.GetBoolean(8),
+                    reader.GetString(9),
+                    reader.GetString(10),
+                    reader.GetDateTime(12),
+                    reader.GetString(13),
+                    reader.GetString(14),
+                    reader.GetString(15),
+                    reader.GetInt32(16),
+                    reader.GetDateTime(17),
+                    reader.GetInt32(18)
+                );
+                
+                resultado.Add((dictado, profesor));
+            }
+
+            return resultado;
         }
     }
 }
