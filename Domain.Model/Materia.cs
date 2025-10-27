@@ -13,7 +13,6 @@ namespace Domain.Model
         public int Hs_semanales { get; set; }
         public int Hs_totales { get; set; }
         public int Id_plan { get; set; }
-        public bool Habilitado { get; set; }
 
         public Materia() { }
         public Materia(int id_materia, string desc_materia, int hs_semanales, int hs_totales, int id_plan)

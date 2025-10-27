@@ -15,7 +15,6 @@ namespace Domain.Model
         public string Descripcion { get; set; }
         public int IdPlan { get; set; }
         public int IdEspecialidad { get; set; }
-        public bool Habilitado { get; set; }
 
         public Plan(int idPlan, string descripcion, int idEspecialidad)
         {

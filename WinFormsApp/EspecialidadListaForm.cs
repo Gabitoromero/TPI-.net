@@ -111,12 +111,6 @@ namespace WinFormsApp
                 // Mostrar mensaje de confirmación con cascada completa
                 DialogResult confirmResult = MessageBox.Show(
                     $"¿Está seguro que desea eliminar la especialidad '{descripcionEspecialidad}'?\n\n" +
-                    $"Se darán de baja:\n" +
-                    $"- Todos los planes de la especialidad\n" +
-                    $"- Todos los usuarios de esos planes\n" +
-                    $"- Todas las comisiones de esos planes\n" +
-                    $"- Todas las materias de esos planes\n" +
-                    $"- Todos los cursos relacionados\n\n" +
                     $"Esta acción no se puede deshacer.",
                     "Confirmar Eliminación",
                     MessageBoxButtons.YesNo,

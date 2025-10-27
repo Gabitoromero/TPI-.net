@@ -32,7 +32,7 @@ namespace WinFormsApp
             try
             {
                 // Validar si el plan está deshabilitado
-                if (isEdit && plan != null && !plan.Habilitado)
+                if (isEdit && plan != null)
                 {
                     DialogResult result = MessageBox.Show(
                         "Este plan está deshabilitado.\n\nAl reactivarlo se habilitarán:\n- Todos los usuarios del plan\n- Todas las comisiones del plan\n- Todas las materias del plan\n- Todos los cursos relacionados\n\n¿Desea darlo de alta?",
@@ -44,7 +44,6 @@ namespace WinFormsApp
                     {
                         try
                         {
-                            plan.Habilitado = true;
                             await APIPlan.UpdateAsync(plan);
                             MessageBox.Show("Plan reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
@@ -79,19 +78,14 @@ namespace WinFormsApp
         private async Task LoadEspecialidades()
         {
             var especialidades = await APIEspecialidad.GetAllAsync();
-            // Filtrar solo especialidades habilitadas
-            var especialidadesHabilitadas = especialidades.Where(e => e.Habilitado).ToList();
-            if (especialidadesHabilitadas.Count == 0)
-            {
-                MessageBox.Show("No hay especialidades habilitadas disponibles.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            comboBoxEspecialidades.DataSource = especialidadesHabilitadas;
+     
+            comboBoxEspecialidades.DataSource = especialidades;
             comboBoxEspecialidades.DisplayMember = "Descripcion";
             comboBoxEspecialidades.ValueMember = "Id";
             
             if (isEdit && plan != null)
             {
-                if (especialidadesHabilitadas.Any(e => e.Id == plan.IdEspecialidad))
+                if (especialidades.Any(e => e.Id == plan.IdEspecialidad))
                 {
                     comboBoxEspecialidades.SelectedValue = plan.IdEspecialidad;
                 }
@@ -128,8 +122,7 @@ namespace WinFormsApp
                     {
                         IdPlan = plan.IdPlan,
                         Descripcion = txtBoxDescripcion.Text,
-                        IdEspecialidad = idEspecialidad,
-                        Habilitado = plan.Habilitado
+                        IdEspecialidad = idEspecialidad
                     };
 
                     await APIPlan.UpdateAsync(toSend);
@@ -142,8 +135,7 @@ namespace WinFormsApp
                     {
                         IdPlan = 0,
                         Descripcion = txtBoxDescripcion.Text,
-                        IdEspecialidad = idEspecialidad,
-                        Habilitado = true
+                        IdEspecialidad = idEspecialidad
                     };
                     PlanDTO planAdded = await APIPlan.AddAsync(nuevoPlan);
                     MessageBox.Show("Plan agregado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);

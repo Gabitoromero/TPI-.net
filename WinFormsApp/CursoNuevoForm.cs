@@ -1,4 +1,4 @@
-﻿using API.Clients;
+using API.Clients;
 using Domain.Model;
 using DTOs;
 using System;
@@ -55,19 +55,19 @@ namespace WinFormsApp
                     MessageBox.Show("No se pudieron cargar las materias.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 // Filtrar solo materias habilitadas
-                var materiasHabilitadas = materias.Where(m => m.Habilitado).ToList();
-                if (materiasHabilitadas.Count == 0)
+                var materiasDisponibles = materias;
+                if (materiasDisponibles.Count == 0)
                 {
                     MessageBox.Show("No hay materias habilitadas disponibles.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                comboBoxMaterias.DataSource = materiasHabilitadas;
+                comboBoxMaterias.DataSource = materiasDisponibles;
                 comboBoxMaterias.DisplayMember = "Desc_materia";
                 comboBoxMaterias.ValueMember = "Id_materia";
                 
                 numericAnio.Maximum = 2100;
                 int anioActual = DateTime.Now.Year;
                 numericAnio.Value = anioActual;
-                numericCupo.Value = 0;
+                numericCupo.Value = 1;
                 comboBoxComision.SelectedIndex = -1;
                 comboBoxMaterias.SelectedIndex = -1;
             }
@@ -91,7 +91,7 @@ namespace WinFormsApp
                 };
 
                 await APICurso.AddAsync(dto);
-                MessageBox.Show("Curso agregado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Curso agregado correctamente.", "�xito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();
             }
             catch (ArgumentException ex)
@@ -101,3 +101,4 @@ namespace WinFormsApp
         }
     }
 }
+

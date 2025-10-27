@@ -122,7 +122,7 @@ namespace WinFormsApp
 
                 // Mostrar mensaje de confirmación
                 DialogResult confirmResult = MessageBox.Show(
-                    $"¿Está seguro que desea eliminar la materia '{descripcionMateria}'?\n\nSe darán de baja todos sus cursos. Esta acción no se puede deshacer.",
+                    $"¿Está seguro que desea eliminar la materia '{descripcionMateria}'?\n\nEsta acción no se puede deshacer.",
                     "Confirmar Eliminación",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);

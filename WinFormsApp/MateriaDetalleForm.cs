@@ -25,46 +25,8 @@ namespace WinFormsApp
         {
             try
             {
-                // Validar si la materia está deshabilitada
-                if (isEdit && dto != null && !dto.Habilitado)
-                {
-                    DialogResult result = MessageBox.Show(
-                        "Esta materia está deshabilitada.\n\nAl reactivarla se habilitarán todos los cursos relacionados.\n\n¿Desea darla de alta?",
-                        "Materia Deshabilitada",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        try
-                        {
-                            dto.Habilitado = true;
-                            await APIMateria.UpdateAsync(dto);
-                            MessageBox.Show("Materia reactivada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (ArgumentException ex)
-                        {
-                            MessageBox.Show($"Error al reactivar la materia: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            this.Close();
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Esta materia está deshabilitada y no se puede modificar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        Close();
-                        return;
-                    }
-                }
-
                 var plans = await APIPlan.GetAllAsync();
-                // Filtrar solo planes habilitados
-                var planesHabilitados = plans.Where(p => p.Habilitado).ToList();
-                if (planesHabilitados.Count == 0)
-                {
-                    MessageBox.Show("No hay planes habilitados disponibles.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                comboBoxPlan.DataSource = planesHabilitados;
+                comboBoxPlan.DataSource = plans;
                 comboBoxPlan.DisplayMember = "Descripcion";
                 comboBoxPlan.ValueMember = "IdPlan";
            
@@ -101,14 +63,21 @@ namespace WinFormsApp
                 {
                     throw new ArgumentException("Las horas totales son menores a las horas semanales");
                 }
+                if((int)numericHsTot.Value <= 0)
+                {
+                    MessageBox.Show($"Ingrese horas positivas", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                if((int)numericHsSem.Value <= 0)
+                {
+                    MessageBox.Show($"Ingrese horas positivas", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 MateriaDTO toSend = new MateriaDTO
                 {
                     Id_materia = (dto != null) ? dto.Id_materia : 0,
                     Desc_materia = txtDesc.Text,
                     Hs_semanales = (int)numericHsSem.Value,
                     Hs_totales = (int)numericHsTot.Value,
-                    Id_plan = comboBoxPlan.SelectedValue != null ? (int)comboBoxPlan.SelectedValue : 0,
-                    Habilitado = (dto != null) ? dto.Habilitado : true
+                    Id_plan = comboBoxPlan.SelectedValue != null ? (int)comboBoxPlan.SelectedValue : 0
                 };
 
                 if (isEdit)

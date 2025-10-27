@@ -73,9 +73,11 @@
             // numericCupo
             // 
             numericCupo.Location = new Point(139, 151);
+            numericCupo.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numericCupo.Name = "numericCupo";
             numericCupo.Size = new Size(120, 23);
             numericCupo.TabIndex = 3;
+            numericCupo.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label1
             // 

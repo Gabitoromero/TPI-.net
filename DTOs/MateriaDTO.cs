@@ -13,6 +13,5 @@ namespace DTOs
         public int Hs_semanales { get; set; }
         public int Hs_totales { get; set; }
         public int Id_plan { get; set; }
-        public bool Habilitado { get; set; }
     }
 }

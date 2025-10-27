@@ -33,7 +33,6 @@ namespace Data
             existing.Hs_semanales = materia.Hs_semanales;
             existing.Hs_totales = materia.Hs_totales;
             existing.Id_plan = materia.Id_plan;
-            existing.Habilitado = materia.Habilitado;
             await _context.SaveChangesAsync();
             return true;
         }
@@ -43,7 +42,7 @@ namespace Data
             Materia? materia = await _context.Materias.FindAsync(id);
             if (materia != null)
             {
-                materia.Habilitado = false;
+                _context.Materias.Remove(materia);
                 await _context.SaveChangesAsync();
                 return true;
             }

@@ -27,7 +27,6 @@ namespace Data
                 if (existingEsp != null)
                 {
                     existingEsp.Descripcion = esp.Descripcion;
-                    existingEsp.Habilitado = esp.Habilitado;
                     await _context.SaveChangesAsync();
                     return true;
                 }
@@ -61,7 +60,7 @@ namespace Data
 
             if (especialidad != null)
             {
-                especialidad.Habilitado = false;
+                _context.Especialidades.Remove(especialidad);
                 await _context.SaveChangesAsync();
                 return true;
             }

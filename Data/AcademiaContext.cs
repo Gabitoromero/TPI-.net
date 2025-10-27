@@ -49,12 +49,11 @@ namespace Data
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
                 entity.HasIndex(e => e.Descripcion).IsUnique();
-                entity.Property(e => e.Habilitado).HasDefaultValue(true);
 
                 entity.HasData(
-                    new { Id = 1, Descripcion = "Chef", Habilitado = true },
-                    new { Id = 2, Descripcion = "Diseñador de interiores", Habilitado = true },
-                    new { Id = 3, Descripcion = "Ingeniería en Sistemas", Habilitado = true }
+                    new { Id = 1, Descripcion = "Chef" },
+                    new { Id = 2, Descripcion = "Diseñador de interiores" },
+                    new { Id = 3, Descripcion = "Ingeniería en Sistemas" }
                     );
 
             });
@@ -65,16 +64,15 @@ namespace Data
                 entity.Property(e => e.IdPlan).ValueGeneratedOnAdd();
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
                 entity.HasIndex(e => e.Descripcion).IsUnique();
-                entity.Property(e => e.Habilitado).HasDefaultValue(true);
                 entity.HasOne<Especialidad>()
                       .WithMany()
                       .HasForeignKey(e => e.IdEspecialidad)
                       .OnDelete(DeleteBehavior.Restrict)
                       .IsRequired();
 
-                entity.HasData(new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1, Habilitado = true },
-                                new { IdPlan = 2, Descripcion = "Plan Familiar", IdEspecialidad = 2, Habilitado = true },
-                                new { IdPlan = 3, Descripcion = "Plan Premium", IdEspecialidad = 3, Habilitado = true }
+                entity.HasData(new { IdPlan = 1, Descripcion = "Plan Basico", IdEspecialidad = 1 },
+                                new { IdPlan = 2, Descripcion = "Plan Familiar", IdEspecialidad = 2 },
+                                new { IdPlan = 3, Descripcion = "Plan Premium", IdEspecialidad = 3 }
                               );
             });
 
@@ -157,7 +155,6 @@ namespace Data
                 entity.HasIndex(m => m.Desc_materia).IsUnique();
                 entity.Property(m => m.Hs_semanales).IsRequired();
                 entity.Property(m => m.Hs_totales).IsRequired();
-                entity.Property(m => m.Habilitado).HasDefaultValue(true);
                 entity.HasOne<Plan>()
                       .WithMany()
                       .HasForeignKey(m => m.Id_plan)
@@ -165,15 +162,15 @@ namespace Data
                       .IsRequired();
 
                 entity.HasData(
-                    new { Id_materia = 1, Desc_materia = "Análisis Matemático", Hs_semanales = 4, Hs_totales = 64, Id_plan = 3, Habilitado = true },
-                    new { Id_materia = 2, Desc_materia = "Desarrollo Web", Hs_semanales = 6, Hs_totales = 96, Id_plan = 3, Habilitado = true },
-                    new { Id_materia = 3, Desc_materia = "Diseño de Sistemas", Hs_semanales = 2, Hs_totales = 32, Id_plan = 3, Habilitado = true },
-                    new { Id_materia = 4, Desc_materia = "Dibujo Técnico", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2, Habilitado = true },
-                    new { Id_materia = 5, Desc_materia = "Colores", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2, Habilitado = true },
-                    new { Id_materia = 6, Desc_materia = "Materiales", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2, Habilitado = true },
-                    new { Id_materia = 7, Desc_materia = "Mesa Dulce", Hs_semanales = 5, Hs_totales = 80, Id_plan = 1, Habilitado = true },
-                    new { Id_materia = 8, Desc_materia = "Comida fría", Hs_semanales = 5, Hs_totales = 80, Id_plan = 1, Habilitado = true },
-                    new { Id_materia = 9, Desc_materia = "Parrilla", Hs_semanales = 2, Hs_totales = 32, Id_plan = 1, Habilitado = true }
+                    new { Id_materia = 1, Desc_materia = "Análisis Matemático", Hs_semanales = 4, Hs_totales = 64, Id_plan = 3 },
+                    new { Id_materia = 2, Desc_materia = "Desarrollo Web", Hs_semanales = 6, Hs_totales = 96, Id_plan = 3 },
+                    new { Id_materia = 3, Desc_materia = "Diseño de Sistemas", Hs_semanales = 2, Hs_totales = 32, Id_plan = 3 },
+                    new { Id_materia = 4, Desc_materia = "Dibujo Técnico", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2 },
+                    new { Id_materia = 5, Desc_materia = "Colores", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2 },
+                    new { Id_materia = 6, Desc_materia = "Materiales", Hs_semanales = 3, Hs_totales = 48, Id_plan = 2 },
+                    new { Id_materia = 7, Desc_materia = "Mesa Dulce", Hs_semanales = 5, Hs_totales = 80, Id_plan = 1 },
+                    new { Id_materia = 8, Desc_materia = "Comida fría", Hs_semanales = 5, Hs_totales = 80, Id_plan = 1 },
+                    new { Id_materia = 9, Desc_materia = "Parrilla", Hs_semanales = 2, Hs_totales = 32, Id_plan = 1 }
                     );
             });
 

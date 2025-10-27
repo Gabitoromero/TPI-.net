@@ -26,43 +26,6 @@ namespace WinFormsApp
         {
             try
             {
-                // Validar si la especialidad está deshabilitada
-                if (isEdit && especialidad != null && !especialidad.Habilitado)
-                {
-                    DialogResult result = MessageBox.Show(
-                        "Esta especialidad está deshabilitada.\n\nAl reactivarla se habilitarán:\n" +
-                        "- Todos los planes de la especialidad\n" +
-                        "- Todos los usuarios de esos planes\n" +
-                        "- Todas las comisiones de esos planes\n" +
-                        "- Todas las materias de esos planes\n" +
-                        "- Todos los cursos relacionados\n\n¿Desea darla de alta?",
-                        "Especialidad Deshabilitada",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        try
-                        {
-                            especialidad.Habilitado = true;
-                            await APIEspecialidad.UpdateAsync(especialidad);
-                            MessageBox.Show("Especialidad reactivada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (ArgumentException ex)
-                        {
-                            MessageBox.Show($"Error al reactivar la especialidad: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            this.Close();
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Esta especialidad está deshabilitada y no se puede modificar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        Close();
-                        return;
-                    }
-                }
-
                 if (isEdit && especialidad != null)
                 {
                     txtBoxDescripcion.Text = especialidad.Descripcion;
@@ -95,8 +58,7 @@ namespace WinFormsApp
                     EspecialidadDTO toSend = new EspecialidadDTO 
                     { 
                         Id = especialidad.Id, 
-                        Descripcion = descripcion,
-                        Habilitado = especialidad.Habilitado
+                        Descripcion = descripcion
                     };
                     await APIEspecialidad.UpdateAsync(toSend);
                     MessageBox.Show("Especialidad actualizada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);

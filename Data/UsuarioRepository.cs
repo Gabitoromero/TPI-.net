@@ -94,7 +94,7 @@ namespace Data
             var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario != null)
             {
-                usuario.Habilitado = false;
+                _context.Usuarios.Remove(usuario);  
                 await _context.SaveChangesAsync();
                 return true;
             }

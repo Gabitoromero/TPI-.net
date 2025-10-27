@@ -69,6 +69,12 @@ namespace WinFormsApp
                     MessageBox.Show("El teléfono debe contener exactamente 10 dígitos.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+                string contra = textBoxClave.Text;
+                if(contra.Length < 6)
+                {
+                    MessageBox.Show("La contraseña debe tener como minimo 6 caracteres.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
                 FullUsuarioDTO dto = new FullUsuarioDTO
                 {

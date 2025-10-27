@@ -102,12 +102,12 @@ namespace WinFormsApp
             try
             {
                 List<MateriaDTO> materias = await APIMateria.GetAllAsync();
-                var materiasHabilitadas = materias.Where(m => m.Habilitado).ToList();
-                if (materiasHabilitadas.Count == 0)
+                var materiasDisponibles = materias;
+                if (materiasDisponibles.Count == 0)
                 {
                     MessageBox.Show("No hay materias habilitadas disponibles.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                comboBoxMateria.DataSource = materiasHabilitadas;
+                comboBoxMateria.DataSource = materiasDisponibles;
                 comboBoxMateria.DisplayMember = "Desc_materia";
                 comboBoxMateria.ValueMember = "Id_materia";
             }
@@ -397,3 +397,4 @@ namespace WinFormsApp
         }
     }
 }
+

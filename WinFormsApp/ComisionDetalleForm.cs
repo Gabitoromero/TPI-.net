@@ -58,12 +58,12 @@ namespace WinFormsApp
 
                 var plans = await APIPlan.GetAllAsync();
                 // Filtrar solo planes habilitados
-                var planesHabilitados = plans.Where(p => p.Habilitado).ToList();
-                if (planesHabilitados.Count == 0)
+                var planesDisponibles = plans;
+                if (planesDisponibles.Count == 0)
                 {
                     MessageBox.Show("No hay planes habilitados disponibles.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                comboBoxPlan.DataSource = planesHabilitados;
+                comboBoxPlan.DataSource = planesDisponibles;
                 comboBoxPlan.DisplayMember = "Descripcion";
                 comboBoxPlan.ValueMember = "IdPlan";
             
@@ -137,3 +137,4 @@ namespace WinFormsApp
         }
     }
 }
+

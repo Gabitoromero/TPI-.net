@@ -10,6 +10,5 @@ namespace DTOs
     {
         public int Id { set; get; }
         public string Descripcion { set; get; }
-        public bool Habilitado { set; get; }
     }
 }
