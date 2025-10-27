@@ -2,13 +2,22 @@
 @using API.Clients
 @using DTOs
 @using BlazorApp.Services
+@using BlazorApp.Reports
+@using QuestPDF.Fluent
+@using QuestPDF.Infrastructure
 @inject AuthStateService AuthState
+@inject IJSRuntime JS
 @rendermode InteractiveServer
 
 <PageTitle>Mis Inscripciones</PageTitle>
 
 <AuthorizeView RequireAlumno="true">
-    <h3>Mis Inscripciones</h3>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Mis Inscripciones</h3>
+        <button class="btn btn-primary" @onclick="MostrarModalReporte">
+            <i class="bi bi-file-earmark-pdf me-2"></i>Ver Materias de Mi Plan
+        </button>
+    </div>
 
     @if (alumnoDeshabilitado)
     {
@@ -58,13 +67,28 @@
     }
 </AuthorizeView>
 
+@if (mostrarModal)
+{
+    <ConfirmarReportePlanModal 
+        OnConfirm="GenerarReportePlan" 
+        OnCancel="CerrarModal"
+        IsGenerating="generandoReporte"
+        ErrorMessage="@errorReporte" />
+}
+
 @code {
     private List<InscripcionDisplayDTO> inscripciones;
     private string errorMessage;
     private bool alumnoDeshabilitado = false;
+    private bool mostrarModal = false;
+    private bool generandoReporte = false;
+    private string? errorReporte;
 
     protected override async Task OnInitializedAsync()
     {
+        // Configurar licencia QuestPDF
+        QuestPDF.Settings.License = LicenseType.Community;
+        
         await CargarInscripciones();
     }
 
@@ -123,6 +147,77 @@
         catch (Exception ex)
         {
             errorMessage = $"Error al cargar las inscripciones: {ex.Message}";
+        }
+    }
+
+    private void MostrarModalReporte()
+    {
+        mostrarModal = true;
+        errorReporte = null;
+    }
+
+    private void CerrarModal()
+    {
+        mostrarModal = false;
+        errorReporte = null;
+    }
+
+    private async Task GenerarReportePlan()
+    {
+        generandoReporte = true;
+        errorReporte = null;
+        StateHasChanged();
+
+        try
+        {
+            // Obtener el alumno actual
+            if (AuthState.CurrentUser == null)
+            {
+                errorReporte = "No hay sesión activa";
+                return;
+            }
+
+            ShowUsuarioDTO alumno = await APIUsuario.GetByUsernameAsync(AuthState.CurrentUser.Username);
+
+            if (alumno == null)
+            {
+                errorReporte = "Usuario no encontrado";
+                return;
+            }
+
+            // Obtener datos para el reporte
+            var datosReporte = await ReportePlanAlumnoService.ObtenerDatosReporteAsync(alumno.Id);
+
+            // Generar nombre del archivo
+            string nombreAlumno = datosReporte.NombreCompleto.Replace(" ", "_");
+            string fecha = DateTime.Now.ToString("yyyyMMdd");
+            string nombreArchivo = $"Plan_Estudios_{nombreAlumno}_{fecha}.pdf";
+
+            // Crear el documento PDF
+            var document = new PlanAlumnoReportDocument(datosReporte);
+
+            // Generar el PDF como bytes
+            byte[] pdfBytes = document.GeneratePdf();
+
+            // Descargar el PDF en el navegador usando JavaScript Interop
+            await JS.InvokeVoidAsync("downloadPdf", nombreArchivo, Convert.ToBase64String(pdfBytes));
+
+            // Cerrar el modal después de generar
+            await Task.Delay(500); // Pequeña espera para que se inicie la descarga
+            CerrarModal();
+        }
+        catch (ArgumentException ex)
+        {
+            errorReporte = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorReporte = $"Error al generar el reporte: {ex.Message}";
+        }
+        finally
+        {
+            generandoReporte = false;
+            StateHasChanged();
         }
     }
 }

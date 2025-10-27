@@ -1,0 +1,58 @@
+@using Microsoft.AspNetCore.Components
+
+<div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Generar Reporte PDF</h5>
+                <button type="button" class="btn-close" @onclick="OnCancel" disabled="@IsGenerating"></button>
+            </div>
+            <div class="modal-body">
+                @if (IsGenerating)
+                {
+                    <div class="text-center">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Generando reporte...</span>
+                        </div>
+                        <p>Generando tu reporte PDF, por favor espera...</p>
+                    </div>
+                }
+                else if (!string.IsNullOrEmpty(ErrorMessage))
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        @ErrorMessage
+                    </div>
+                }
+                else
+                {
+                    <p>Se exportará un documento PDF con todas las materias de tu plan de estudios.</p>
+                    <p class="fw-bold">¿Deseas continuar?</p>
+                }
+            </div>
+            <div class="modal-footer">
+                @if (!IsGenerating)
+                {
+                    <button type="button" class="btn btn-secondary" @onclick="OnCancel">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @onclick="OnConfirm">
+                        <i class="bi bi-file-earmark-pdf me-2"></i>Generar Reporte
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnConfirm { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
+    public bool IsGenerating { get; set; }
+
+    [Parameter]
+    public string? ErrorMessage { get; set; }
+}

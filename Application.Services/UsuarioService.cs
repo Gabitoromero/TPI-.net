@@ -52,7 +52,25 @@ namespace Application.Services
 
             return dto;
         }
+        private async Task<ShowUsuarioDTO?> GetReducedUser(int id)
+        {
 
+            Usuario? usuario = await _repository.Get(id);
+
+            if (usuario == null) return null;
+
+
+            ShowUsuarioDTO dto = new ShowUsuarioDTO
+            {
+                Id = usuario.Id,
+                Legajo = usuario.Legajo,
+                Email = usuario.Email,
+                NombreUsuario = usuario.NombreUsuario,
+                Habilitado = usuario.Habilitado
+            };
+
+            return dto;
+        }
         public async Task<ShowUsuarioDTO> GetByUsername(string nombreUsuario)
         {
             var user = await _repository.GetByUsername(nombreUsuario);
@@ -83,7 +101,6 @@ namespace Application.Services
                 Habilitado = usuario.Habilitado
             }).ToList();
         }
-
         public async Task<List<ShowUsuarioDTO>> GetAllProfesores()
         {
             List<Usuario> usuarios = await _repository.GetAllProfesores();
@@ -110,7 +127,6 @@ namespace Application.Services
                 Nota = item.inscripcion.Nota
             }).ToList();
         }
-
         public async Task<List<ShowAlumno_CursoDTO>> GetAlumnosCompletoByCursoAsync(int idCurso)
         {
             var inscripciones = await _inscripcionRepository.GetAlumnosByCursoAsync(idCurso);
@@ -133,7 +149,6 @@ namespace Application.Services
                 Nota = item.inscripcion.Nota
             }).ToList();
         }
-
         public async Task<List<ProfesorCursoDetalleDTO>> GetProfesoresByCursoAsync(int idCurso)
         {
             List<(Profesor_Curso dictado, Usuario profesor)> dictados = await _inscripcionRepository.GetProfesoresByCursoAsync(idCurso);
@@ -146,7 +161,6 @@ namespace Application.Services
                 Cargo = item.dictado.Cargo
             }).ToList();
         }
-
         public async Task<List<ShowUsuarioDTO>> GetAllAlumnos()
         {
             List<Usuario> usuarios = await _repository.GetAllAlumnos();
@@ -190,28 +204,6 @@ namespace Application.Services
         {
             return await _repository.Delete(id);
         }
-
-        private async Task<ShowUsuarioDTO?> GetReducedUser(int id)
-        {
-
-            Usuario? usuario = await _repository.Get(id);
-
-            if (usuario == null) return null;
-
-
-            ShowUsuarioDTO dto = new ShowUsuarioDTO
-            {
-                Id = usuario.Id,
-                Legajo = usuario.Legajo,
-                Email = usuario.Email,
-                NombreUsuario = usuario.NombreUsuario,
-                Habilitado = usuario.Habilitado
-            };
-
-            return dto;
-        }
-
-
         public async Task<bool> Update(PutUsuarioDTO dto)
         {
             if (dto.IdPlan != null)
