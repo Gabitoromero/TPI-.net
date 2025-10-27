@@ -31,7 +31,7 @@ namespace WinFormsApp
             try
             {
                 comboBoxCondicion.Items.Clear();
-                comboBoxCondicion.Items.AddRange(new string[] { "Inscripto", "Regular", "Libre", "Aprobado" });
+                comboBoxCondicion.Items.AddRange(new string[] { "Inscripto", "Regular", "Libre", "Aprobado", "Reprobado" });
 
                 comboBoxCondicion.SelectedItem = alumnoOriginal.Condicion;
 
@@ -57,7 +57,7 @@ namespace WinFormsApp
 
         private void ComboBoxCondicion_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (comboBoxCondicion.SelectedItem?.ToString() == "Aprobado")
+            if (comboBoxCondicion.SelectedItem?.ToString() == "Aprobado" || comboBoxCondicion.SelectedItem?.ToString() == "Reprobado")
             {
                 label2.Visible = true;
                 numericNota.Visible = true;
@@ -106,7 +106,7 @@ namespace WinFormsApp
                 await APIUsuario.PutAlumnoCursoAsync(dto);
 
                 MessageBox.Show("Alumno actualizado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
+
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -115,5 +115,11 @@ namespace WinFormsApp
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        /*
+        private void AlumnoCursoPutForm_Load_1(object sender, EventArgs e)
+        {
+
+        }
+        */
     }
 }

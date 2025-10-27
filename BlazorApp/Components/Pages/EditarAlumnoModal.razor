@@ -30,14 +30,22 @@
                             <option value="Regular">Regular</option>
                             <option value="Libre">Libre</option>
                             <option value="Aprobado">Aprobado</option>
+                            <option value="Reprobado">Reprobado</option>
                         </select>
                     </div>
 
                     @if (condicionSeleccionada == "Aprobado")
                     {
                         <div class="mb-3">
-                            <label class="form-label">Nota</label>
-                            <input type="number" class="form-control" @bind="nota" min="1" max="10" step="1" />
+                            <label class="form-label">Nota (6-10)</label>
+                            <input type="number" class="form-control" @bind="nota" min="6" max="10" step="1" />
+                        </div>
+                    }
+                    else if (condicionSeleccionada == "Reprobado")
+                    {
+                        <div class="mb-3">
+                            <label class="form-label">Nota (1-5)</label>
+                            <input type="number" class="form-control" @bind="nota" min="1" max="5" step="1" />
                         </div>
                     }
                 </div>
@@ -100,28 +108,39 @@
 
             if (condicionSeleccionada == "Inscripto")
             {
-                errorMessage = "No se puede cambiar la condición a 'Inscripto'. Solo puede seleccionar: Regular, Libre o Aprobado.";
+                errorMessage = "No se puede cambiar la condición a 'Inscripto'. Solo puede seleccionar: Regular, Libre, Reprobado o Aprobado.";
                 return;
             }
 
-            if (condicionSeleccionada == "Aprobado" && (!nota.HasValue || nota.Value < 1 || nota.Value > 10))
+            if (condicionSeleccionada == "Aprobado" && (!nota.HasValue || nota.Value < 6 || nota.Value > 10))
             {
-                errorMessage = "Debe ingresar una nota válida entre 1 y 10 para la condición 'Aprobado'.";
+                errorMessage = "Debe ingresar una nota válida entre 6 y 10 para la condición 'Aprobado'.";
+                return;
+            }
+            if (condicionSeleccionada == "Reprobado" && (!nota.HasValue || nota.Value < 1 || nota.Value > 5))
+            {
+                errorMessage = "Debe ingresar una nota válida entre 1 y 5 para la condición 'Reprobado'.";
                 return;
             }
 
             guardando = true;
+           
 
             Alumno_CursoDTO dto = new Alumno_CursoDTO
             {
                 IdInscripcion = AlumnoSeleccionado.IdInscripcion,
                 IdAlumno = AlumnoSeleccionado.Alumno.Id,
                 IdCurso = AlumnoSeleccionado.Curso.Id_curso,
-                Condicion = condicionSeleccionada,
-                Nota = condicionSeleccionada == "Aprobado" ? nota : null
+                Condicion = condicionSeleccionada    
             };
+            if (condicionSeleccionada == "Aprobado" || condicionSeleccionada == "Reprobado")
+            {
+                dto.Nota = nota;
+            }else
+            {
+                dto.Nota = null;
+            }
 
-            // Enviar la actualización al servidor
             await APIUsuario.PutAlumnoCursoAsync(dto);
 
             await OnGuardado.InvokeAsync();

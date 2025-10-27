@@ -208,7 +208,7 @@ namespace WebAPI
                     }
 
                     // Validar que si la condición no es "Aprobado", la nota sea null
-                    if (dto.Condicion != "Aprobado" && dto.Nota != null)
+                    if ((dto.Condicion != "Aprobado" && dto.Condicion != "Reprobado") && dto.Nota != null)
                     {
                         return Results.BadRequest(new { error = "Solo se puede asignar nota cuando la condición es 'Aprobado'" });
                     }
