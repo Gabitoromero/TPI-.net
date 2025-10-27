@@ -1,10 +1,8 @@
 @page "/usuario/perfil"
 @using API.Clients
 @using DTOs
-@using MudBlazor
-@using BlazorApp.Services
-@inject AuthStateService AuthState
-@inject NavigationManager NavigationManager
+@using BlazorApp.Components.Shared
+@inject NavigationManager Navigation
 @rendermode InteractiveServer
 
 <PageTitle>Mi Perfil</PageTitle>
@@ -172,32 +170,33 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await CargarUsuario();
+        await CargarPerfil();
     }
 
-    private async Task CargarUsuario()
+    private async Task CargarPerfil()
     {
         try
         {
             cargando = true;
             
-            if (AuthState.CurrentUser == null)
+            // ?? Obtener el ID directamente del token JWT
+            var usuarioId = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
+            
+            if (usuarioId == null)
             {
-                mensajeError = "No hay sesión activa";
+                mensajeError = "No se pudo obtener el ID del usuario";
                 mostrarModalError = true;
                 return;
             }
 
-            ShowUsuarioDTO usuarioBasico = await APIUsuario.GetByUsernameAsync(AuthState.CurrentUser.Username);
+            usuario = await APIUsuario.GetAsync(usuarioId.Value);
             
-            if (usuarioBasico == null)
+            if (usuario == null)
             {
                 mensajeError = "Usuario no encontrado";
                 mostrarModalError = true;
                 return;
             }
-
-            usuario = await APIUsuario.GetAsync(usuarioBasico.Id);
             
             // Guardar copia original para poder cancelar cambios
             usuarioOriginal = new FullUsuarioDTO
@@ -209,18 +208,16 @@
                 Email = usuario.Email,
                 Direccion = usuario.Direccion,
                 Telefono = usuario.Telefono,
-                FechaNacimiento = usuario.FechaNacimiento,
                 Legajo = usuario.Legajo,
+                FechaNacimiento = usuario.FechaNacimiento,
                 Tipo = usuario.Tipo,
                 Habilitado = usuario.Habilitado,
-                IdPlan = usuario.IdPlan,
-                Clave = usuario.Clave,
-                FechaAlta = usuario.FechaAlta
+                IdPlan = usuario.IdPlan
             };
         }
         catch (Exception ex)
         {
-            mensajeError = $"Error al cargar el usuario: {ex.Message}";
+            mensajeError = $"Error al cargar el perfil: {ex.Message}";
             mostrarModalError = true;
         }
         finally
@@ -397,6 +394,6 @@
 
     private void Volver()
     {
-        NavigationManager.NavigateTo("/");
+        Navigation.NavigateTo("/");
     }
 }

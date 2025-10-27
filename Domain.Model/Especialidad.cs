@@ -8,10 +8,6 @@ namespace Domain.Model
 {
     public class Especialidad
     {
-        //Fields
-        int _id;
-        string _descripcion;
-        //Properties
         public int Id { get; set; }
         public string Descripcion { get; set; }
 

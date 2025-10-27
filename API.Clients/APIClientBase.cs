@@ -8,6 +8,7 @@ namespace API.Clients
     public abstract class APIClientBase
     {
         public static LoginResponse? LoginResponse { get; set; }
+        
         protected static HttpClient CreateHttpClientAsync()
         {
             var client = new HttpClient();
@@ -38,7 +39,8 @@ namespace API.Clients
             }
         }
 
-        protected static bool IsTokenValid()
+        // Cambiar a public para que Blazor pueda acceder
+        public static bool IsTokenValid()
         {
             return !string.IsNullOrEmpty(LoginResponse?.Token) && DateTime.UtcNow < LoginResponse.ExpiresAt;
         }

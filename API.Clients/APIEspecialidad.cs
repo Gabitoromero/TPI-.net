@@ -24,6 +24,13 @@ namespace API.Clients
         {
             try
             {
+                // 🔐 Actualizar el token antes de cada petición
+                AddAuthorizationHeaderAsync(esp);
+                
+                // 🔍 PRUEBA: Ver qué token se está enviando
+                var authHeader = esp.DefaultRequestHeaders.Authorization?.ToString();
+                Console.WriteLine($"🔐 [APIEspecialidad.GetAllAsync] Enviando header: {authHeader}");
+
                 HttpResponseMessage response = await esp.GetAsync("especialidades");
                 if (response.IsSuccessStatusCode)
                 {
@@ -32,19 +39,23 @@ namespace API.Clients
                 else
                 {
                     string errorMessage = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"❌ Error en respuesta: {response.StatusCode} - {errorMessage}");
                     return new List<EspecialidadDTO>();
                 }
             }
             catch (HttpRequestException ex)
             {
+                Console.WriteLine($"❌ HttpRequestException: {ex.Message}");
                 throw new ArgumentException("OOPS! Error al obtener las especialidades");
             }
             catch (TaskCanceledException ex)
             {
+                Console.WriteLine($"❌ TaskCanceledException: {ex.Message}");
                 throw new ArgumentException("OOPS! Error al obtener las especialidades. Timeout superado");
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"❌ Exception: {ex.Message}");
                 throw new ArgumentException("OOPS! Error al obtener las especialidades");
             }
         }
@@ -53,6 +64,9 @@ namespace API.Clients
         {
             try
             {
+                // 🔐 Actualizar el token antes de cada petición
+                AddAuthorizationHeaderAsync(esp);
+                
                 HttpResponseMessage response = await esp.GetAsync("especialidades/" + id);
                 if (response.IsSuccessStatusCode)
                 {
@@ -82,6 +96,9 @@ namespace API.Clients
         {
             try
             {
+                // 🔐 Actualizar el token antes de cada petición
+                AddAuthorizationHeaderAsync(esp);
+                
                 HttpResponseMessage response = await esp.PostAsJsonAsync("especialidades", dto);
                 if (response.IsSuccessStatusCode)
                 {
@@ -111,6 +128,9 @@ namespace API.Clients
         {
             try
             {
+                // 🔐 Actualizar el token antes de cada petición
+                AddAuthorizationHeaderAsync(esp);
+                
                 HttpResponseMessage response = await esp.PutAsJsonAsync("especialidades", dto);
                 if (response.IsSuccessStatusCode)
                 {
@@ -140,6 +160,9 @@ namespace API.Clients
         {
             try
             {
+                // 🔐 Actualizar el token antes de cada petición
+                AddAuthorizationHeaderAsync(esp);
+                
                 HttpResponseMessage response = await esp.DeleteAsync("especialidades/" + id);
                 if (!response.IsSuccessStatusCode)
                 {

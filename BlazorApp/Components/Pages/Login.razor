@@ -1,19 +1,19 @@
-@page "/login"
+Ôªø@page "/login"
 @using API.Clients
 @using DTOs
 @using BlazorApp.Services
-@inject AuthStateService AuthState
+@inject AuthStateContainer AuthStateContainer
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
 
-<PageTitle>Iniciar SesiÛn</PageTitle>
+<PageTitle>Iniciar Sesi√≥n</PageTitle>
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
             <div class="card shadow">
                 <div class="card-body">
-                    <h3 class="card-title text-center mb-4">Iniciar SesiÛn</h3>
+                    <h3 class="card-title text-center mb-4">Iniciar Sesi√≥n</h3>
                     
                     @if (!string.IsNullOrEmpty(errorMessage))
                     {
@@ -35,13 +35,13 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="password" class="form-label">ContraseÒa <span class="text-danger">*</span></label>
+                            <label for="password" class="form-label">Contrase√±a <span class="text-danger">*</span></label>
                             <input type="password" id="password" class="form-control @(errorClave ? "is-invalid" : "")" 
                                    @bind="loginRequest.Clave" @bind:event="oninput"
-                                   placeholder="Ingrese su contraseÒa" disabled="@isLoading" />
+                                   placeholder="Ingrese su contrase√±a" disabled="@isLoading" />
                             @if (errorClave)
                             {
-                                <div class="invalid-feedback">La contraseÒa es requerida</div>
+                                <div class="invalid-feedback">La contrase√±a es requerida</div>
                             }
                         </div>
 
@@ -50,11 +50,11 @@
                                 @if (isLoading)
                                 {
                                     <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                    <span>Iniciando sesiÛn...</span>
+                                    <span>Iniciando sesi√≥n...</span>
                                 }
                                 else
                                 {
-                                    <span>Iniciar SesiÛn</span>
+                                    <span>Iniciar Sesi√≥n</span>
                                 }
                             </button>
                         </div>
@@ -63,7 +63,7 @@
                     <hr class="my-4" />
 
                     <div class="text-center">
-                        <p class="mb-0">øNo tienes cuenta? <a href="/register" class="text-decoration-none fw-bold">RegÌstrate aquÌ</a></p>
+                        <p class="mb-0">¬øNo tienes cuenta? <a href="/register" class="text-decoration-none fw-bold">Reg√≠strate aqu√≠</a></p>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,8 @@
 
     protected override void OnInitialized()
     {
-        if (AuthState.IsAuthenticated)
+        // Verificar si ya est√° autenticado
+        if (APIClientBase.IsTokenValid())
         {
             RedirectToHome();
         }
@@ -105,7 +106,7 @@
             esValido = false;
         }
 
-        // Validar contraseÒa
+        // Validar contrase√±a
         if (string.IsNullOrWhiteSpace(loginRequest.Clave))
         {
             errorClave = true;
@@ -137,31 +138,46 @@
 
             if (loginSuccess)
             {
-                var loginResponse = APIUsuario.LoginResponse;
+                // APIUsuario.LoginAsync ya guard√≥ el token en APIClientBase.LoginResponse
+                var loginResponse = APIClientBase.LoginResponse;
+                
+                // üîç PRUEBA: Imprimir el token en la consola del navegador
+                if (loginResponse != null)
+                {
+                    Console.WriteLine($"üîê Token JWT recibido: {loginResponse.Token}");
+                    Console.WriteLine($"üë§ Usuario: {loginResponse.Username}");
+                    Console.WriteLine($"üé≠ Tipo: {loginResponse.Tipo}");
+                    Console.WriteLine($"‚è∞ Expira: {loginResponse.ExpiresAt}");
+
+                    // Decodificar el token para ver los claims
+                    var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+                    var jsonToken = handler.ReadJwtToken(loginResponse.Token);
+
+                    Console.WriteLine("üìã Claims en el token:");
+                    foreach (var claim in jsonToken.Claims)
+                    {
+                        Console.WriteLine($"  - {claim.Type}: {claim.Value}");
+                    }
+                }
 
                 // Verificar que no sea un administrador
                 if (loginResponse?.Tipo?.ToLower() == "admin")
                 {
-                    errorMessage = "Los administradores no pueden acceder por la aplicaciÛn web. Por favor, use la aplicaciÛn de escritorio.";
+                    errorMessage = "Los administradores no pueden acceder por la aplicaci√≥n web. Por favor, use la aplicaci√≥n de escritorio.";
                     await APIUsuario.LogoutAsync();
                     isLoading = false;
                     return;
                 }
 
-                // Guardar el estado de autenticaciÛn
-                if (loginResponse != null)
-                {
-                    AuthState.SetUser(loginResponse);
-                    RedirectToHome();
-                }
-                else
-                {
-                    errorMessage = "Error al procesar la respuesta del servidor.";
-                }
+                // üîî IMPORTANTE: Notificar que el estado de autenticaci√≥n cambi√≥
+                AuthStateContainer.NotifyStateChanged();
+
+                // Redirigir
+                RedirectToHome();
             }
             else
             {
-                errorMessage = "Usuario o contraseÒa incorrectos.";
+                errorMessage = "Usuario o contrase√±a incorrectos.";
             }
         }
         catch (ArgumentException ex)
@@ -170,7 +186,7 @@
         }
         catch (Exception)
         {
-            errorMessage = "Error al intentar iniciar sesiÛn. Por favor, intente nuevamente.";
+            errorMessage = "Error al intentar iniciar sesi√≥n. Por favor, intente nuevamente.";
         }
         finally
         {
@@ -184,17 +200,23 @@
         {
             Navigation.NavigateTo(ReturnUrl);
         }
-        else if (AuthState.IsAlumno)
-        {
-            Navigation.NavigateTo("/alumno/inscripciones");
-        }
-        else if (AuthState.IsProfesor)
-        {
-            Navigation.NavigateTo("/profesor/cursos");
-        }
         else
         {
-            Navigation.NavigateTo("/");
+            // Usar JwtHelper para obtener el rol
+            var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
+            
+            if (role?.ToLower() == "alumno")
+            {
+                Navigation.NavigateTo("/alumno/inscripciones");
+            }
+            else if (role?.ToLower() == "profesor")
+            {
+                Navigation.NavigateTo("/profesor/cursos");
+            }
+            else
+            {
+                Navigation.NavigateTo("/");
+            }
         }
     }
 }

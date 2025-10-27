@@ -1,5 +1,4 @@
-@using BlazorApp.Services
-@inject AuthStateService AuthState
+@using API.Clients
 @inject NavigationManager Navigation
 @implements IDisposable
 
@@ -31,7 +30,6 @@ else if (isChecking)
 
     protected override void OnInitialized()
     {
-        AuthState.OnAuthStateChanged += CheckAuthorization;
         CheckAuthorization();
     }
 
@@ -39,24 +37,27 @@ else if (isChecking)
     {
         isChecking = false;
 
-        if (!AuthState.IsAuthenticated)
+        // Leer directamente de APIClientBase
+        if (!APIClientBase.IsTokenValid())
         {
             // Redirigir al login con returnUrl
             var returnUrl = Uri.EscapeDataString(Navigation.Uri.Replace(Navigation.BaseUri, "/"));
-            Navigation.NavigateTo($"/login?returnUrl={returnUrl}");
+            Navigation.NavigateTo($"/login?returnUrl={returnUrl}", forceLoad: true);
             return;
         }
 
-        // Verificar roles específicos
-        if (RequireAlumno && !AuthState.IsAlumno)
+        // Verificar roles específicos usando JwtHelper
+        var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
+        
+        if (RequireAlumno && role?.ToLower() != "alumno")
         {
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo("/", forceLoad: true);
             return;
         }
 
-        if (RequireProfesor && !AuthState.IsProfesor)
+        if (RequireProfesor && role?.ToLower() != "profesor")
         {
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo("/", forceLoad: true);
             return;
         }
 
@@ -66,6 +67,6 @@ else if (isChecking)
 
     public void Dispose()
     {
-        AuthState.OnAuthStateChanged -= CheckAuthorization;
+        // Ya no hay eventos a los que desuscribirse
     }
 }

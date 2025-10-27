@@ -1,90 +1,99 @@
 @page "/alumno/inscripciones/nueva"
 @using API.Clients
 @using DTOs
-@using BlazorApp.Services
-@inject AuthStateService AuthState
+@using BlazorApp.Components.Shared
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Nueva Inscripción</PageTitle>
 
 <AuthorizeView RequireAlumno="true">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>Inscribirse a un Curso</h3>
-        <button class="btn btn-secondary" @onclick="Volver">Cancelar</button>
-    </div>
-
-    @if (alumnoDeshabilitado)
-    {
-        <div class="alert alert-warning" role="alert">
-            <strong>Cuenta no habilitada</strong>
-            <p>Su cuenta no está habilitada. No puede realizar nuevas inscripciones.</p>
-        </div>
-    }
-    else if (cursosDisponibles == null)
-    {
-        <p><em>Cargando cursos disponibles...</em></p>
-    }
-    else if (errorMessage != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            @errorMessage
-        </div>
-    }
-    else if (!cursosDisponibles.Any())
-    {
-        <div class="alert alert-info" role="alert">
-            No hay cursos disponibles para inscripción en este momento.
-        </div>
-    }
-    else
-    {
-        <div class="alert alert-info" role="alert">
-            Seleccione un curso y haga clic en el botón "Inscribir" para confirmar su inscripción.
-        </div>
-
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Materia</th>
-                    <th>Comisión</th>
-                    <th>Año</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
+    <div class="container mt-4">
+        <h3>?? Nueva Inscripción</h3>
+        
+        @if (alumnoDeshabilitado)
+        {
+            <div class="alert alert-warning" role="alert">
+                <strong>?? Cuenta Deshabilitada:</strong> Tu cuenta no está habilitada. No puedes realizar nuevas inscripciones.
+            </div>
+            <button class="btn btn-secondary" @onclick="Volver">
+                Volver
+            </button>
+        }
+        else if (cursosDisponibles == null)
+        {
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p>Cargando cursos disponibles...</p>
+            </div>
+        }
+        else if (errorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                <strong>? Error:</strong> @errorMessage
+            </div>
+        }
+        else if (!cursosDisponibles.Any())
+        {
+            <div class="alert alert-info" role="alert">
+                ?? No hay cursos disponibles para inscripción en este momento.
+            </div>
+        }
+        else
+        {
+            <div class="row">
                 @foreach (var curso in cursosDisponibles)
                 {
-                    <tr>
-                        <td>@curso.Materia</td>
-                        <td>@curso.Comision</td>
-                        <td>@curso.Anio</td>
-                        <td>
-                            <button class="btn btn-success btn-sm" 
-                                    @onclick="() => MostrarConfirmacion(curso)"
-                                    disabled="@alumnoDeshabilitado">
-                                Inscribir
-                            </button>
-                        </td>
-                    </tr>
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@curso.Materia</h5>
+                                <p class="card-text">
+                                    <strong>Comisión:</strong> @curso.Comision<br />
+                                    <strong>Año:</strong> @curso.Anio
+                                </p>
+                                <button class="btn btn-primary w-100" @onclick="() => MostrarConfirmacion(curso)">
+                                    Inscribirme
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 }
-            </tbody>
-        </table>
-    }
+            </div>
+        }
 
-    @if (mostrarModalConfirmacion)
+        <div class="mt-3">
+            <button class="btn btn-secondary" @onclick="Volver">
+                ? Volver
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    @if (mostrarModalConfirmacion && cursoSeleccionado != null)
     {
         <ConfirmarInscripcionModal 
-            Curso="cursoSeleccionado"
-            OnConfirmar="InscribirAlumno"
-            OnCancelar="CerrarModal" />
+            Curso="@cursoSeleccionado" 
+            OnConfirm="InscribirAlumno" 
+            OnCancel="CerrarModal" />
     }
 
+    <!-- Modal de Éxito -->
     @if (mostrarModalExito)
     {
         <MensajeExitoModal 
-            Mensaje="@mensajeExito"
-            OnCerrar="CerrarModalExito" />
+            Mensaje="@mensajeExito" 
+            OnClose="CerrarModalExito" />
+    }
+
+    <!-- Modal de Error -->
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <MensajeErrorModal 
+            Mensaje="@errorMessage" 
+            OnClose="@(() => errorMessage = null)" />
     }
 </AuthorizeView>
 
@@ -92,6 +101,7 @@
     private List<CursoDisplayDTO> cursosDisponibles;
     private CursoDisplayDTO cursoSeleccionado;
     private string errorMessage;
+
     private bool alumnoDeshabilitado = false;
     private bool mostrarModalConfirmacion = false;
     private bool mostrarModalExito = false;
@@ -107,26 +117,28 @@
     {
         try
         {
-            // Obtener el alumno actual desde el usuario autenticado
-            if (AuthState.CurrentUser == null)
+            // ?? Obtener el ID directamente del token JWT
+            var alumnoIdFromToken = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
+            
+            if (alumnoIdFromToken == null)
             {
-                errorMessage = "No hay sesión activa";
+                errorMessage = "No se pudo obtener el ID del usuario";
                 return;
             }
 
-            ShowUsuarioDTO alumno = await APIUsuario.GetByUsernameAsync(AuthState.CurrentUser.Username);
+            alumnoId = alumnoIdFromToken.Value;
 
-            // Verificar si el usuario existe
+            // Obtener información del alumno
+            var alumno = await APIUsuario.GetAsync(alumnoId);
+
             if (alumno == null)
             {
                 errorMessage = "Usuario no encontrado";
                 return;
             }
 
-            alumnoId = alumno.Id;
-
             // Verificar si el alumno está habilitado
-            if (!(alumno.Habilitado ?? false))
+            if (!alumno.Habilitado)
             {
                 alumnoDeshabilitado = true;
                 cursosDisponibles = new List<CursoDisplayDTO>();
@@ -134,7 +146,7 @@
             }
 
             List<NewCursoDTO> cursos = await APICurso.GetAllDisponiblesAsync();
-            List<ShowAlumno_CursoDTO> cursosInscriptos = await APIUsuario.GetAlumnoCursosAsync(alumno.Id);
+            List<ShowAlumno_CursoDTO> cursosInscriptos = await APIUsuario.GetAlumnoCursosAsync(alumnoId);
 
             if (cursos == null || !cursos.Any())
             {

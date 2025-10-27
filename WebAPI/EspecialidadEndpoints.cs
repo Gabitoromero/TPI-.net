@@ -22,8 +22,28 @@ namespace WebAPI
                 return Results.Ok(dto);
             }).RequireAuthorization();
 
-            app.MapGet("/especialidades/", async (EspecialidadService service) =>
+            app.MapGet("/especialidades/", async (EspecialidadService service, HttpContext context) =>
             {
+                // 🔍 PRUEBA: Ver si llega el header Authorization
+                var authHeader = context.Request.Headers["Authorization"].ToString();
+                Console.WriteLine("\n=== 🔐 PRUEBA DE AUTENTICACIÓN ===");
+                Console.WriteLine($"Authorization Header: {authHeader}");
+                
+                if (context.User.Identity?.IsAuthenticated == true)
+                {
+                    Console.WriteLine($"✅ Usuario autenticado: {context.User.Identity.Name}");
+                    Console.WriteLine("📋 Claims del usuario:");
+                    foreach (var claim in context.User.Claims)
+                    {
+                        Console.WriteLine($"  - {claim.Type}: {claim.Value}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("❌ Usuario NO autenticado");
+                }
+                Console.WriteLine("=================================\n");
+
                 List<EspecialidadDTO> espDTO = await service.GetAll();
 
                 if (espDTO.Count == 0)

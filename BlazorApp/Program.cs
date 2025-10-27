@@ -1,7 +1,5 @@
 using BlazorApp.Components;
-using API.Clients;
 using BlazorApp.Services;
-
 
 namespace BlazorApp
 {
@@ -15,8 +13,8 @@ namespace BlazorApp
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            // Registrar el servicio de autenticación como Singleton para mantener el estado
-            builder.Services.AddSingleton<AuthStateService>();
+            // Registrar AuthStateContainer como Scoped para notificaciones de cambio de estado
+            builder.Services.AddScoped<AuthStateContainer>();
 
             var app = builder.Build();
 

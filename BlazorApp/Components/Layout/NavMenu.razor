@@ -1,11 +1,11 @@
-﻿@using BlazorApp.Services
-@using API.Clients
-@inject AuthStateService AuthState
+﻿@using API.Clients
+@using BlazorApp.Services
+@inject AuthStateContainer AuthStateContainer
 @inject NavigationManager Navigation
 @implements IDisposable
 @rendermode InteractiveServer
 
-@if (AuthState.IsAuthenticated)
+@if (APIClientBase.IsTokenValid())
 {
     <div class="top-row ps-3 navbar navbar-dark">
         <div class="container-fluid">
@@ -23,7 +23,11 @@
                 </NavLink>
             </div>
 
-            @if (AuthState.IsProfesor)
+            @{
+                var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
+            }
+
+            @if (role?.ToLower() == "profesor")
             {
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="profesor/cursos">
@@ -32,7 +36,7 @@
                 </div>
             }
 
-            @if (AuthState.IsAlumno)
+            @if (role?.ToLower() == "alumno")
             {
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="alumno/inscripciones">
@@ -65,7 +69,14 @@
 @code {
     protected override void OnInitialized()
     {
-        AuthState.OnAuthStateChanged += StateHasChanged;
+        // Suscribirse a cambios de estado de autenticación
+        AuthStateContainer.OnAuthStateChanged += OnAuthStateChanged;
+    }
+
+    private void OnAuthStateChanged()
+    {
+        // Forzar re-renderizado cuando cambie el estado
+        InvokeAsync(StateHasChanged);
     }
 
     private async Task HandleLogout()
@@ -73,18 +84,22 @@
         try
         {
             await APIUsuario.LogoutAsync();
-            AuthState.Logout();
+            
+            // Notificar que el estado cambió
+            AuthStateContainer.NotifyStateChanged();
+            
             Navigation.NavigateTo("/login", forceLoad: true);            
         }
-
         catch (Exception ex)
         {
             Console.WriteLine($"Error en logout: {ex.Message}");
         }
     }
+
     public void Dispose()
     {
-        AuthState.OnAuthStateChanged -= StateHasChanged;
+        // Desuscribirse cuando se destruya el componente
+        AuthStateContainer.OnAuthStateChanged -= OnAuthStateChanged;
     }
 }
 

@@ -2,7 +2,7 @@
 @using API.Clients
 @using DTOs
 @using BlazorApp.Services
-@inject AuthStateService AuthState
+@inject AuthStateContainer AuthStateContainer
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
 
@@ -213,7 +213,7 @@
     protected override async Task OnInitializedAsync()
     {
         // Si ya está autenticado, redirigir
-        if (AuthState.IsAuthenticated)
+        if (APIClientBase.IsTokenValid())
         {
             Navigation.NavigateTo("/");
         }
@@ -373,19 +373,23 @@
 
             if (loginSuccess)
             {
-                var loginResponse = APIUsuario.LoginResponse;
+                // APIUsuario.LoginAsync ya guardó el token en APIClientBase.LoginResponse
+                var loginResponse = APIClientBase.LoginResponse;
 
-                // Guardar el estado de autenticación
                 if (loginResponse != null)
                 {
-                    AuthState.SetUser(loginResponse);
+                    // ?? IMPORTANTE: Notificar que el estado de autenticación cambió
+                    AuthStateContainer.NotifyStateChanged();
+
+                    // Obtener rol desde el token usando JwtHelper
+                    var role = JwtHelper.GetRole(loginResponse.Token);
                     
                     // Redirigir a la página principal según el tipo de usuario
-                    if (AuthState.IsAlumno)
+                    if (role?.ToLower() == "alumno")
                     {
                         Navigation.NavigateTo("/alumno/inscripciones");
                     }
-                    else if (AuthState.IsProfesor)
+                    else if (role?.ToLower() == "profesor")
                     {
                         Navigation.NavigateTo("/profesor/cursos");
                     }

@@ -1,6 +1,5 @@
 ﻿@page "/"
-@using BlazorApp.Services
-@inject AuthStateService AuthState
+@using API.Clients
 @inject NavigationManager Navigation
 
 <PageTitle>Inicio</PageTitle>
@@ -9,13 +8,16 @@
     <div class="text-center">
         <h1 class="display-4">Bienvenido al Sistema Académico</h1>
         
-        @if (AuthState.IsAuthenticated)
+        @if (APIClientBase.IsTokenValid())
         {
+            var username = APIClientBase.LoginResponse?.Username;
+            var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
+            
             <p class="lead mt-4">
-                Hola, <strong>@AuthState.CurrentUser?.Username</strong>!
+                Hola, <strong>@username</strong>!
             </p>
             
-            @if (AuthState.IsAlumno)
+            @if (role?.ToLower() == "alumno")
             {
                 <div class="mt-4">
                     <p>Eres un <strong>Alumno</strong>. Puedes:</p>
@@ -29,7 +31,7 @@
                     </div>
                 </div>
             }
-            else if (AuthState.IsProfesor)
+            else if (role?.ToLower() == "profesor")
             {
                 <div class="mt-4">
                     <p>Eres un <strong>Profesor</strong>. Puedes:</p>
