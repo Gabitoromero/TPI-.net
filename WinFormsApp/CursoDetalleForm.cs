@@ -102,7 +102,6 @@ namespace WinFormsApp
             try
             {
                 List<MateriaDTO> materias = await APIMateria.GetAllAsync();
-                // Filtrar solo materias habilitadas
                 var materiasHabilitadas = materias.Where(m => m.Habilitado).ToList();
                 if (materiasHabilitadas.Count == 0)
                 {
@@ -167,7 +166,7 @@ namespace WinFormsApp
         {
             try
             {
-                var alumnos = await APIUsuario.GetAlumnosByCursoAsync(idCurso);
+                List<AlumnoCursoDetalleDTO> alumnos = await APIUsuario.GetAlumnosByCursoAsync(idCurso);
 
                 dataGridAlumnosCurso.DataSource = null;
                 dataGridAlumnosCurso.DataSource = alumnos;
@@ -200,7 +199,7 @@ namespace WinFormsApp
         {
             try
             {
-                var profesores = await APIUsuario.GetProfesoresByCursoAsync(idCurso);
+                List<ProfesorCursoDetalleDTO> profesores = await APIUsuario.GetProfesoresByCursoAsync(idCurso);
 
                 dataGridProfesoresCurso.DataSource = null;
                 dataGridProfesoresCurso.DataSource = profesores;

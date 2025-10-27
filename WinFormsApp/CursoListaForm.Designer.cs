@@ -33,6 +33,7 @@
             btnAgregar = new Button();
             btnModificar = new Button();
             btnVolver = new Button();
+            btnExportarPDF = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewCursos).BeginInit();
             SuspendLayout();
             // 
@@ -88,11 +89,24 @@
             btnVolver.UseVisualStyleBackColor = true;
             btnVolver.Click += btnVolver_Click;
             // 
+            // btnExportarPDF
+            // 
+            btnExportarPDF.BackColor = Color.DarkOrange;
+            btnExportarPDF.Location = new Point(193, 275);
+            btnExportarPDF.Name = "btnExportarPDF";
+            btnExportarPDF.Size = new Size(101, 23);
+            btnExportarPDF.TabIndex = 8;
+            btnExportarPDF.Text = "Exportar PDF";
+            btnExportarPDF.UseVisualStyleBackColor = false;
+            btnExportarPDF.Visible = false;
+            btnExportarPDF.Click += btnExportarPDF_Click;
+            // 
             // CursoListaForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(711, 320);
+            Controls.Add(btnExportarPDF);
             Controls.Add(btnVolver);
             Controls.Add(btnModificar);
             Controls.Add(btnAgregar);
@@ -111,5 +125,6 @@
         private Button btnAgregar;
         private Button btnModificar;
         private Button btnVolver;
+        private Button btnExportarPDF;
     }
 }

@@ -9,9 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\academiaLuratiRomero.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\academiaLuratiRomero.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
+    <PackageReference Include="QuestPDF" Version="2025.7.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>

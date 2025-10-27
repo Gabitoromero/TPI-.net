@@ -1,10 +1,9 @@
 ﻿using DTOs;
 using API.Clients;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using WinFormsApp.Services;
+using WinFormsApp.Reports;
+using QuestPDF.Companion;
+using QuestPDF.Fluent;
 
 namespace WinFormsApp
 {
@@ -29,31 +28,32 @@ namespace WinFormsApp
         {
             btnModificar.Enabled = dataGridViewCursos.SelectedRows.Count > 0 && dataGridViewCursos.CurrentRow != null;
             btnEliminar.Enabled = dataGridViewCursos.SelectedRows.Count > 0 && dataGridViewCursos.CurrentRow != null;
+            btnExportarPDF.Visible = dataGridViewCursos.SelectedRows.Count > 0 && dataGridViewCursos.CurrentRow != null;
         }
 
         private async Task LoadCursos()
         {
             try
             {
-                
+
                 List<NewCursoDTO> cursos = await APICurso.GetAllAsync();
-                if(cursos.Count == 0)
+                if (cursos.Count == 0)
                 {
                     MessageBox.Show("No se pudieron cargar los cursos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
                 List<ComisionDTO> comisiones = await APIComision.GetAllAsync();
-                if(comisiones.Count == 0)
+                if (comisiones.Count == 0)
                 {
                     MessageBox.Show("No se pudieron cargar las comisiones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
                 List<MateriaDTO> materias = await APIMateria.GetAllAsync();
-                if(materias.Count == 0)
+                if (materias.Count == 0)
                 {
                     MessageBox.Show("No se pudieron cargar las materias.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                
+
 
                 var view = (cursos ?? new List<NewCursoDTO>())
                     .Select(c => new
@@ -62,11 +62,19 @@ namespace WinFormsApp
                         Anio_calendario = c.Anio_calendario,
                         Cupo = c.Cupo,
                         Comision = comisiones.FirstOrDefault(x => x.Id_comision == c.Id_comision)?.Desc_comision ?? "(sin comision)",
-                        Materia = materias.FirstOrDefault(m => m.Id_materia == c.Id_materia)?.Desc_materia ?? "(sin materia)"
+                        Materia = materias.FirstOrDefault(m => m.Id_materia == c.Id_materia)?.Desc_materia ?? "(sin materia)",
+                        CursoDTO = c // Guardar el DTO original para el reporte
                     })
                     .ToList();
 
                 dataGridViewCursos.DataSource = view;
+                
+                // Ocultar columna del DTO original
+                if (dataGridViewCursos.Columns["CursoDTO"] != null)
+                {
+                    dataGridViewCursos.Columns["CursoDTO"].Visible = false;
+                }
+                
                 dataGridViewCursos.ClearSelection();
                 btnModificar.Enabled = false;
             }
@@ -99,7 +107,7 @@ namespace WinFormsApp
 
                 int id = (int)dataGridViewCursos.CurrentRow.Cells["Id_curso"].Value;
                 NewCursoDTO curso = await APICurso.GetAsync(id);
-                
+
                 if (curso == null)
                 {
                     MessageBox.Show("No se pudo obtener el curso seleccionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -165,7 +173,7 @@ namespace WinFormsApp
             {
                 int id = (int)dataGridViewCursos.Rows[e.RowIndex].Cells["Id_curso"].Value;
                 NewCursoDTO curso = await APICurso.GetAsync(id);
-                
+
                 if (curso == null)
                 {
                     MessageBox.Show("No se pudo obtener el curso seleccionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -190,6 +198,56 @@ namespace WinFormsApp
         private void btnVolver_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private async void btnExportarPDF_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridViewCursos.CurrentRow == null)
+                {
+                    MessageBox.Show("Seleccione un curso para generar el reporte.", "Advertencia", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Obtener el curso seleccionado desde la columna oculta
+                var cursoSeleccionado = (NewCursoDTO)dataGridViewCursos.CurrentRow.Cells["CursoDTO"].Value;
+                
+                // Mostrar indicador de carga
+                Cursor = Cursors.WaitCursor;
+                btnExportarPDF.Enabled = false;
+                btnExportarPDF.Text = "Generando...";
+
+                // Obtener datos para el reporte
+                var datosReporte = await ReporteCursoService.ObtenerDatosReporteAsync(cursoSeleccionado);
+                
+                // Generar nombre del archivo (sanitizar caracteres especiales)
+                string nombreMateria = datosReporte.NombreMateria.Replace(" ", "_").Replace("/", "-");
+                string nombreComision = datosReporte.DescripcionComision.Replace(" ", "_").Replace("/", "-");
+                string nombreArchivo = $"Reporte_Curso_{nombreMateria}_{nombreComision}_{datosReporte.AnioCalendario}.pdf";
+                
+                // Crear el documento
+                var document = new CursoReportDocument(datosReporte);
+
+     
+                document.GeneratePdfAndShow();
+            
+
+                MessageBox.Show($"Reporte generado exitosamente: {nombreArchivo}", "Éxito", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al generar el reporte: {ex.Message}", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+                btnExportarPDF.Enabled = true;
+                btnExportarPDF.Text = "Exportar PDF";
+            }
         }
     }
 }
