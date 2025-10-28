@@ -9,22 +9,7 @@
 
 <AuthorizeView RequireProfesor="true">
     <div class="container mt-4">
-        <h3>📚 Mis Cursos Asignados</h3>
-        
-        @{
-            var username = APIClientBase.LoginResponse?.Username;
-            var email = JwtHelper.GetEmail(APIClientBase.LoginResponse?.Token);
-        }
-        
-        <!-- Información del profesor -->
-        <div class="alert alert-info mb-4">
-            <strong>👤 Profesor:</strong> @username
-            @if (!string.IsNullOrEmpty(email))
-            {
-                <br />
-                <strong>📧 Email:</strong> @email
-            }
-        </div>
+        <h3>Mis Cursos Asignados</h3>
 
         @if (loading)
         {
@@ -38,7 +23,7 @@
         else if (errorMessage != null)
         {
             <div class="alert alert-danger" role="alert">
-                <strong>❌ Error:</strong> @errorMessage
+                <strong>Error:</strong> @errorMessage
             </div>
         }
         else if (data == null || !data.Any())
@@ -73,7 +58,7 @@
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-primary" 
                                             @onclick="() => VerAlumnos(curso.IdCurso)">
-                                        👥 Ver Alumnos
+                                        Ver Alumnos
                                     </button>
                                 </td>
                             </tr>
@@ -83,7 +68,7 @@
             </div>
             
             <p class="text-muted">
-                <small>📊 Total de cursos: @data.Count</small>
+                <small>Total de cursos: @data.Count</small>
             </p>
         }
     </div>
@@ -98,7 +83,6 @@
     { 
         try
         {
-            // 🔐 Obtener el ID directamente del token JWT usando JwtHelper
             var profesorId = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
             
             if (profesorId == null)
@@ -107,9 +91,6 @@
                 return;
             }
 
-            Console.WriteLine($"🔐 Cargando cursos para profesor ID: {profesorId}");
-
-            // ✅ Una sola petición en lugar de dos
             var cursosProfesor = await APIUsuario.GetProfesorCursosAsync(profesorId.Value);
 
             if (cursosProfesor == null || !cursosProfesor.Any())
@@ -118,7 +99,6 @@
                 return;
             }
 
-            // Obtener información de materias y comisiones
             var materiaTasks = cursosProfesor.Select(c => APIMateria.GetAsync(c.Curso.Id_materia));
             var comisionTasks = cursosProfesor.Select(c => APIComision.GetAsync(c.Curso.Id_comision));
             
@@ -133,18 +113,14 @@
                 Año = c.Curso.Anio_calendario,
                 Cargo = c.Cargo
             }).ToList();
-
-            Console.WriteLine($"✅ Cursos cargados: {data.Count}");
         }
         catch (ArgumentException ex)
         {
             errorMessage = ex.Message;
-            Console.WriteLine($"❌ ArgumentException: {ex.Message}");
         }
         catch (Exception ex)
         {
             errorMessage = $"Error al cargar los cursos: {ex.Message}";
-            Console.WriteLine($"❌ Exception: {ex}");
         }
         finally
         {
@@ -154,7 +130,6 @@
 
     private void VerAlumnos(int idCurso)
     {
-        Console.WriteLine($"🔗 Navegando a alumnos del curso {idCurso}");
         NavigationManager.NavigateTo($"/profesor/cursos/{idCurso}/alumnos");
     }
 }

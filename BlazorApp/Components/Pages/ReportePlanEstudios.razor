@@ -23,10 +23,10 @@
     else if (!string.IsNullOrEmpty(errorMessage))
     {
         <div class="alert alert-danger" role="alert">
-            <h5>? Error al generar el reporte</h5>
+            <h5>Error al generar el reporte</h5>
             <p>@errorMessage</p>
             <button class="btn btn-primary mt-2" @onclick="Volver">
-                ? Volver a Mis Inscripciones
+                Volver a Mis Inscripciones
             </button>
         </div>
     }
@@ -35,31 +35,21 @@
         <div class="row">
             <div class="col-12 mb-3">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h4>?? @nombreArchivo</h4>
+                    <h4>@nombreArchivo</h4>
                     <div>
-                        <button class="btn btn-success me-2" @onclick="DescargarPDF">
-                            <i class="bi bi-download"></i> Descargar PDF
-                        </button>
                         <button class="btn btn-secondary" @onclick="Volver">
-                            ? Volver
+                            Volver
                         </button>
                     </div>
                 </div>
             </div>
             
             <div class="col-12">
-                <!-- Visor de PDF usando iframe con data URL -->
                 <iframe 
                     src="@($"data:application/pdf;base64,{pdfBase64}")"
                     style="width: 100%; height: 80vh; border: 1px solid #ddd; border-radius: 4px;"
                     title="Reporte Plan de Estudios">
                 </iframe>
-            </div>
-            
-            <div class="col-12 mt-3">
-                <p class="text-muted text-center">
-                    <small>?? Tip: Puedes usar los controles del visor para hacer zoom, imprimir o descargar el PDF.</small>
-                </p>
             </div>
         </div>
     }
@@ -83,7 +73,6 @@
             generando = true;
             StateHasChanged();
 
-            // Obtener ID del alumno desde JWT
             var alumnoId = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
 
             if (alumnoId == null)
@@ -92,19 +81,15 @@
                 return;
             }
 
-            // Obtener datos del reporte
             var datosReporte = await ReportePlanAlumnoService.ObtenerDatosReporteAsync(alumnoId.Value);
 
-            // Generar nombre del archivo
             string nombreAlumno = datosReporte.NombreCompleto.Replace(" ", "_").Replace("/", "-");
             string fecha = DateTime.Now.ToString("yyyyMMdd");
             nombreArchivo = $"Plan_Estudios_{nombreAlumno}_{fecha}.pdf";
 
-            // Generar PDF
             var document = new PlanAlumnoReportDocument(datosReporte);
             byte[] pdfBytes = document.GeneratePdf();
 
-            // Convertir a Base64 para mostrar en iframe
             pdfBase64 = Convert.ToBase64String(pdfBytes);
 
             generando = false;
@@ -119,13 +104,6 @@
             errorMessage = $"Error al generar el reporte: {ex.Message}";
             generando = false;
         }
-    }
-
-    private void DescargarPDF()
-    {
-        // Crear un link de descarga usando JavaScript simple
-        var dataUrl = $"data:application/pdf;base64,{pdfBase64}";
-        Navigation.NavigateTo(dataUrl, forceLoad: true);
     }
 
     private void Volver()

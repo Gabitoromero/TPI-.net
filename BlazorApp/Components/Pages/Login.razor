@@ -83,7 +83,6 @@
 
     protected override void OnInitialized()
     {
-        // Verificar si ya está autenticado
         if (APIClientBase.IsTokenValid())
         {
             RedirectToHome();
@@ -94,19 +93,16 @@
     {
         bool esValido = true;
         
-        // Limpiar errores anteriores
         errorNombreUsuario = false;
         errorClave = false;
         errorMessage = null;
 
-        // Validar nombre de usuario
         if (string.IsNullOrWhiteSpace(loginRequest.NombreUsuario))
         {
             errorNombreUsuario = true;
             esValido = false;
         }
 
-        // Validar contraseña
         if (string.IsNullOrWhiteSpace(loginRequest.Clave))
         {
             errorClave = true;
@@ -123,7 +119,6 @@
 
     private async Task HandleLogin()
     {
-        // Validar antes de proceder
         if (!ValidarFormulario())
         {
             return;
@@ -138,29 +133,8 @@
 
             if (loginSuccess)
             {
-                // APIUsuario.LoginAsync ya guardó el token en APIClientBase.LoginResponse
                 var loginResponse = APIClientBase.LoginResponse;
-                
-                // 🔍 PRUEBA: Imprimir el token en la consola del navegador
-                if (loginResponse != null)
-                {
-                    Console.WriteLine($"🔐 Token JWT recibido: {loginResponse.Token}");
-                    Console.WriteLine($"👤 Usuario: {loginResponse.Username}");
-                    Console.WriteLine($"🎭 Tipo: {loginResponse.Tipo}");
-                    Console.WriteLine($"⏰ Expira: {loginResponse.ExpiresAt}");
 
-                    // Decodificar el token para ver los claims
-                    var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-                    var jsonToken = handler.ReadJwtToken(loginResponse.Token);
-
-                    Console.WriteLine("📋 Claims en el token:");
-                    foreach (var claim in jsonToken.Claims)
-                    {
-                        Console.WriteLine($"  - {claim.Type}: {claim.Value}");
-                    }
-                }
-
-                // Verificar que no sea un administrador
                 if (loginResponse?.Tipo?.ToLower() == "admin")
                 {
                     errorMessage = "Los administradores no pueden acceder por la aplicación web. Por favor, use la aplicación de escritorio.";
@@ -169,10 +143,7 @@
                     return;
                 }
 
-                // 🔔 IMPORTANTE: Notificar que el estado de autenticación cambió
                 AuthStateContainer.NotifyStateChanged();
-
-                // Redirigir
                 RedirectToHome();
             }
             else
@@ -202,7 +173,6 @@
         }
         else
         {
-            // Usar JwtHelper para obtener el rol
             var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
             
             if (role?.ToLower() == "alumno")

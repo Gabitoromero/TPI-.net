@@ -1,6 +1,7 @@
 @page "/alumno/inscripciones/nueva"
 @using API.Clients
 @using DTOs
+@using BlazorApp.Services
 @using BlazorApp.Components.Shared
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
@@ -9,12 +10,12 @@
 
 <AuthorizeView RequireAlumno="true">
     <div class="container mt-4">
-        <h3>?? Nueva Inscripción</h3>
+        <h3>Nueva Inscripción</h3>
         
         @if (alumnoDeshabilitado)
         {
             <div class="alert alert-warning" role="alert">
-                <strong>?? Cuenta Deshabilitada:</strong> Tu cuenta no está habilitada. No puedes realizar nuevas inscripciones.
+                <strong>Cuenta Deshabilitada:</strong> Tu cuenta no está habilitada. No puedes realizar nuevas inscripciones.
             </div>
             <button class="btn btn-secondary" @onclick="Volver">
                 Volver
@@ -32,13 +33,13 @@
         else if (errorMessage != null)
         {
             <div class="alert alert-danger" role="alert">
-                <strong>? Error:</strong> @errorMessage
+                <strong>Error:</strong> @errorMessage
             </div>
         }
         else if (!cursosDisponibles.Any())
         {
             <div class="alert alert-info" role="alert">
-                ?? No hay cursos disponibles para inscripción en este momento.
+                No hay cursos disponibles para inscripción en este momento.
             </div>
         }
         else
@@ -66,7 +67,7 @@
 
         <div class="mt-3">
             <button class="btn btn-secondary" @onclick="Volver">
-                ? Volver
+                Volver
             </button>
         </div>
     </div>
@@ -76,8 +77,8 @@
     {
         <ConfirmarInscripcionModal 
             Curso="@cursoSeleccionado" 
-            OnConfirm="InscribirAlumno" 
-            OnCancel="CerrarModal" />
+            OnConfirmar="InscribirAlumno" 
+            OnCancelar="CerrarModal" />
     }
 
     <!-- Modal de Éxito -->
@@ -85,15 +86,15 @@
     {
         <MensajeExitoModal 
             Mensaje="@mensajeExito" 
-            OnClose="CerrarModalExito" />
+            OnCerrar="CerrarModalExito" />
     }
 
     <!-- Modal de Error -->
-    @if (!string.IsNullOrEmpty(errorMessage))
+    @if (mostrarModalError)
     {
         <MensajeErrorModal 
-            Mensaje="@errorMessage" 
-            OnClose="@(() => errorMessage = null)" />
+            Mensaje="@mensajeError" 
+            OnCerrar="CerrarModalError" />
     }
 </AuthorizeView>
 
@@ -101,10 +102,12 @@
     private List<CursoDisplayDTO> cursosDisponibles;
     private CursoDisplayDTO cursoSeleccionado;
     private string errorMessage;
+    private string mensajeError;
 
     private bool alumnoDeshabilitado = false;
     private bool mostrarModalConfirmacion = false;
     private bool mostrarModalExito = false;
+    private bool mostrarModalError = false;
     private string mensajeExito;
     private int alumnoId;
 
@@ -117,26 +120,24 @@
     {
         try
         {
-
             var alumnoIdFromToken = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
             
             if (alumnoIdFromToken == null)
             {
-                errorMessage = "No se pudo obtener el ID del usuario";
+                mensajeError = "No se pudo obtener el ID del usuario";
+                mostrarModalError = true;
                 return;
             }
 
             alumnoId = alumnoIdFromToken.Value;
-
- 
             var alumno = await APIUsuario.GetAsync(alumnoId);
 
             if (alumno == null)
             {
-                errorMessage = "Usuario no encontrado";
+                mensajeError = "Usuario no encontrado";
+                mostrarModalError = true;
                 return;
             }
-
 
             if (!alumno.Habilitado)
             {
@@ -175,11 +176,13 @@
         }
         catch (ArgumentException ex)
         {
-            errorMessage = ex.Message;
+            mensajeError = ex.Message;
+            mostrarModalError = true;
         }
         catch (Exception ex)
         {
-            errorMessage = $"Error al cargar los cursos: {ex.Message}";
+            mensajeError = $"Error al cargar los cursos: {ex.Message}";
+            mostrarModalError = true;
         }
     }
 
@@ -208,17 +211,17 @@
                 Nota = null
             };
 
-            // Realizar la inscripción
             await APIUsuario.AddAlumnoCursoAsync(inscripcionDTO);
 
-            
             mensajeExito = $"¡Inscripción exitosa!\n\nCurso: {cursoSeleccionado.DisplayText}";
             mostrarModalExito = true;
             CerrarModal();
         }
         catch (Exception ex)
         {
-            errorMessage = ex.Message;
+            mensajeError = ex.Message;
+            mostrarModalError = true;
+            CerrarModal();
         }
     }
 
@@ -226,6 +229,11 @@
     {
         mostrarModalExito = false;
         NavigationManager.NavigateTo("/alumno/inscripciones");
+    }
+
+    private void CerrarModalError()
+    {
+        mostrarModalError = false;
     }
 
     private void Volver()

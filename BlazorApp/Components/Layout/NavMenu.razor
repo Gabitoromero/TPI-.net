@@ -69,13 +69,11 @@
 @code {
     protected override void OnInitialized()
     {
-        // Suscribirse a cambios de estado de autenticación
         AuthStateContainer.OnAuthStateChanged += OnAuthStateChanged;
     }
 
     private void OnAuthStateChanged()
     {
-        // Forzar re-renderizado cuando cambie el estado
         InvokeAsync(StateHasChanged);
     }
 
@@ -84,21 +82,16 @@
         try
         {
             await APIUsuario.LogoutAsync();
-            
-            // Notificar que el estado cambió
             AuthStateContainer.NotifyStateChanged();
-            
             Navigation.NavigateTo("/login", forceLoad: true);            
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Error en logout: {ex.Message}");
         }
     }
 
     public void Dispose()
     {
-        // Desuscribirse cuando se destruya el componente
         AuthStateContainer.OnAuthStateChanged -= OnAuthStateChanged;
     }
 }

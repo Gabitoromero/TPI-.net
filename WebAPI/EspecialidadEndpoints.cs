@@ -26,13 +26,10 @@ namespace WebAPI
             {
                 // 🔍 PRUEBA: Ver si llega el header Authorization
                 var authHeader = context.Request.Headers["Authorization"].ToString();
-                Console.WriteLine("\n=== 🔐 PRUEBA DE AUTENTICACIÓN ===");
-                Console.WriteLine($"Authorization Header: {authHeader}");
+
                 
                 if (context.User.Identity?.IsAuthenticated == true)
                 {
-                    Console.WriteLine($"✅ Usuario autenticado: {context.User.Identity.Name}");
-                    Console.WriteLine("📋 Claims del usuario:");
                     foreach (var claim in context.User.Claims)
                     {
                         Console.WriteLine($"  - {claim.Type}: {claim.Value}");
@@ -42,7 +39,7 @@ namespace WebAPI
                 {
                     Console.WriteLine("❌ Usuario NO autenticado");
                 }
-                Console.WriteLine("=================================\n");
+            
 
                 List<EspecialidadDTO> espDTO = await service.GetAll();
 
@@ -52,7 +49,7 @@ namespace WebAPI
                 }
 
                 return Results.Ok(espDTO);
-            });
+            }).RequireAuthorization();
 
            app.MapPost("/especialidades/", async (EspecialidadService service, EspecialidadDTO dto) =>
             {

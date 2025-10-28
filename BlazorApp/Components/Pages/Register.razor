@@ -198,7 +198,6 @@
     private string telefonoInput = string.Empty;
     private bool isLoading = false;
 
-    // Errores de validación
     private bool errorNombre = false;
     private bool errorApellido = false;
     private bool errorNombreUsuario = false;
@@ -212,13 +211,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Si ya está autenticado, redirigir
         if (APIClientBase.IsTokenValid())
         {
             Navigation.NavigateTo("/");
         }
 
-        // Cargar planes
         await CargarPlanes();
     }
 
@@ -238,7 +235,6 @@
     {
         bool esValido = true;
 
-        // Limpiar errores anteriores
         errorNombre = false;
         errorApellido = false;
         errorNombreUsuario = false;
@@ -249,28 +245,24 @@
         errorTelefono = false;
         errorMessage = null;
 
-        // Validar Nombre
         if (string.IsNullOrWhiteSpace(registerDto.Nombre))
         {
             errorNombre = true;
             esValido = false;
         }
 
-        // Validar Apellido
         if (string.IsNullOrWhiteSpace(registerDto.Apellido))
         {
             errorApellido = true;
             esValido = false;
         }
 
-        // Validar Nombre de Usuario
         if (string.IsNullOrWhiteSpace(registerDto.NombreUsuario))
         {
             errorNombreUsuario = true;
             esValido = false;
         }
 
-        // Validar Email (formato)
         if (string.IsNullOrWhiteSpace(registerDto.Email))
         {
             errorEmail = true;
@@ -284,7 +276,6 @@
             esValido = false;
         }
 
-        // Validar Contraseña (mínimo 6 caracteres)
         if (string.IsNullOrWhiteSpace(registerDto.Clave))
         {
             errorClave = true;
@@ -298,21 +289,18 @@
             esValido = false;
         }
 
-        // Validar Tipo
         if (string.IsNullOrWhiteSpace(registerDto.Tipo))
         {
             errorTipo = true;
             esValido = false;
         }
 
-        // Validar Plan
         if (registerDto.IdPlan == 0)
         {
             errorPlan = true;
             esValido = false;
         }
 
-        // Validar Teléfono (si se ingresó, debe tener 10 dígitos)
         if (!string.IsNullOrWhiteSpace(telefonoInput))
         {
             string digitosTelefono = new string(telefonoInput.Where(char.IsDigit).ToArray());
@@ -350,7 +338,6 @@
 
     private async Task HandleRegister()
     {
-        // Validar antes de proceder
         if (!ValidarFormulario())
         {
             return;
@@ -361,10 +348,8 @@
 
         try
         {
-            // Llamar a la API para registrar el usuario
             PostUsuarioDTO response = await APIUsuario.AddAsync(registerDto);
 
-            // Login automático después del registro exitoso
             bool loginSuccess = await APIUsuario.LoginAsync(new LoginRequest 
             { 
                 NombreUsuario = response.NombreUsuario, 
@@ -373,18 +358,14 @@
 
             if (loginSuccess)
             {
-                // APIUsuario.LoginAsync ya guardó el token en APIClientBase.LoginResponse
                 var loginResponse = APIClientBase.LoginResponse;
 
                 if (loginResponse != null)
                 {
-                    // ?? IMPORTANTE: Notificar que el estado de autenticación cambió
                     AuthStateContainer.NotifyStateChanged();
 
-                    // Obtener rol desde el token usando JwtHelper
                     var role = JwtHelper.GetRole(loginResponse.Token);
                     
-                    // Redirigir a la página principal según el tipo de usuario
                     if (role?.ToLower() == "alumno")
                     {
                         Navigation.NavigateTo("/alumno/inscripciones");
@@ -406,14 +387,12 @@
             else
             {
                 errorMessage = "Usuario registrado, pero no se pudo iniciar sesión automáticamente. Por favor, inicie sesión manualmente.";
-                // Redirigir al login después de 3 segundos
                 await Task.Delay(3000);
                 Navigation.NavigateTo("/login");
             }
         }
         catch (ArgumentException ex)
         {
-            // Capturar errores del backend (email repetido, usuario repetido, etc.)
             errorMessage = ex.Message;
         }
         catch (Exception)

@@ -118,15 +118,11 @@
     private List<InscripcionDisplayDTO> inscripciones;
     private string errorMessage;
     private bool alumnoDeshabilitado = false;
-    private bool mostrarModal = false;
-    private bool generandoReporte = false;
-    private string? errorReporte;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            // 🔐 Obtener el ID directamente del token JWT
             var alumnoId = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
             
             if (alumnoId == null)
@@ -135,7 +131,6 @@
                 return;
             }
 
-            // Obtener información del alumno para verificar si está habilitado
             var alumno = await APIUsuario.GetAsync(alumnoId.Value);
 
             if (alumno == null)
@@ -183,20 +178,6 @@
 
     private void MostrarModalReporte()
     {
-        // ✅ SOLUCIÓN MÁS SIMPLE: Redirigir directamente sin modal
-        // La página de reporte se encarga de todo
-        Navigation.NavigateTo("/reporte/plan-estudios");
-    }
-
-    private void CerrarModal()
-    {
-        mostrarModal = false;
-        errorReporte = null;
-    }
-
-    private void GenerarReportePlan()
-    {
-        // Este método ya no se usa, pero lo dejamos por compatibilidad
         Navigation.NavigateTo("/reporte/plan-estudios");
     }
 }

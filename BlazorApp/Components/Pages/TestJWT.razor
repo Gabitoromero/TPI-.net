@@ -168,39 +168,6 @@
     private bool resultadoExitoso = false;
     private bool tokenCopiado = false;
 
-    protected override void OnInitialized()
-    {
-        // Log del token en la consola del navegador
-        var currentUser = APIClientBase.LoginResponse;
-        
-        if (currentUser?.Token != null)
-        {
-            Console.WriteLine("\n=== ?? TEST JWT - INFORMACIÓN DEL TOKEN ===");
-            Console.WriteLine($"Token: {currentUser.Token}");
-            
-            try
-            {
-                var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-                var jsonToken = handler.ReadJwtToken(currentUser.Token);
-                
-                Console.WriteLine("\n?? Claims en el token:");
-                foreach (var claim in jsonToken.Claims)
-                {
-                    Console.WriteLine($"  {claim.Type} = {claim.Value}");
-                }
-                
-                Console.WriteLine($"\n? Token expira: {jsonToken.ValidTo}");
-                Console.WriteLine($"?? Algoritmo: {jsonToken.SignatureAlgorithm}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"? Error al decodificar token: {ex.Message}");
-            }
-            
-            Console.WriteLine("==========================================\n");
-        }
-    }
-
     private async Task ProbarEndpoint()
     {
         cargando = true;
@@ -211,23 +178,12 @@
 
         try
         {
-            Console.WriteLine("\n=== ?? INICIANDO PETICIÓN AL ENDPOINT ===");
-            Console.WriteLine($"?? Enviando token: {APIClientBase.LoginResponse?.Token?.Substring(0, 20)}...");
-            Console.WriteLine("Endpoint: GET /especialidades");
-            
             especialidades = await APIEspecialidad.GetAllAsync();
-            
-            Console.WriteLine($"? Respuesta recibida: {especialidades?.Count ?? 0} especialidades");
-            Console.WriteLine("==========================================\n");
-
             mensajeResultado = $"Se obtuvieron {especialidades?.Count ?? 0} especialidades correctamente. ¡El token JWT funcionó!";
             resultadoExitoso = true;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"? Error en la petición: {ex.Message}");
-            Console.WriteLine("==========================================\n");
-            
             mensajeResultado = $"Error al llamar al endpoint: {ex.Message}";
             resultadoExitoso = false;
         }
@@ -241,11 +197,7 @@
     {
         if (APIClientBase.LoginResponse?.Token != null)
         {
-            // En Blazor Server, necesitamos usar JavaScript para copiar al portapapeles
-            Console.WriteLine($"?? Token completo:\n{APIClientBase.LoginResponse.Token}");
             tokenCopiado = true;
-            
-            // El token se imprime en la consola para copiarlo manualmente
             await Task.Delay(2000);
             tokenCopiado = false;
         }
