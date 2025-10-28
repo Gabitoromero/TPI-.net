@@ -5,6 +5,7 @@
 @using BlazorApp.Reports
 @using BlazorApp.Components.Shared
 @using QuestPDF.Fluent
+@using QuestPDF.Infrastructure
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
@@ -14,7 +15,7 @@
 <AuthorizeView RequireAlumno="true">
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3>📚 Mis Inscripciones</h3>
+            <h3>Mis Inscripciones</h3>
             <button class="btn btn-primary" @onclick="MostrarModalReporte">
                 <i class="bi bi-file-pdf"></i> Generar Reporte Plan de Estudios
             </button>
@@ -38,13 +39,13 @@
         else if (errorMessage != null)
         {
             <div class="alert alert-danger" role="alert">
-                <strong>❌ Error:</strong> @errorMessage
+                <strong> Error:</strong> @errorMessage
             </div>
         }
         else if (!inscripciones.Any())
         {
             <div class="alert alert-info" role="alert">
-                📭 No tienes inscripciones registradas. 
+                 No tienes inscripciones registradas. 
                 <a href="/alumno/inscripciones/nueva" class="alert-link">Haz clic aquí para inscribirte a un curso</a>.
             </div>
         }
@@ -107,20 +108,10 @@
                 </table>
             </div>
             <p class="text-muted">
-                <small>📊 Total de inscripciones: @inscripciones.Count</small>
+                <small>Total de inscripciones: @inscripciones.Count</small>
             </p>
         }
     </div>
-
-    <!-- Modal para Generar Reporte -->
-    @if (mostrarModal)
-    {
-        <ConfirmarReportePlanModal 
-            OnConfirm="GenerarReportePlan" 
-            OnCancel="CerrarModal"
-            Generando="@generandoReporte"
-            ErrorMessage="@errorReporte" />
-    }
 </AuthorizeView>
 
 @code {
@@ -192,8 +183,9 @@
 
     private void MostrarModalReporte()
     {
-        mostrarModal = true;
-        errorReporte = null;
+        // ✅ SOLUCIÓN MÁS SIMPLE: Redirigir directamente sin modal
+        // La página de reporte se encarga de todo
+        Navigation.NavigateTo("/reporte/plan-estudios");
     }
 
     private void CerrarModal()
@@ -202,56 +194,9 @@
         errorReporte = null;
     }
 
-    private async Task GenerarReportePlan()
+    private void GenerarReportePlan()
     {
-        generandoReporte = true;
-        errorReporte = null;
-        StateHasChanged();
-
-        try
-        {
-            // 🔐 Obtener el ID directamente del token JWT
-            var alumnoId = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
-
-            if (alumnoId == null)
-            {
-                errorReporte = "No se pudo obtener el ID del usuario";
-                return;
-            }
-
-            // Obtener datos para el reporte
-            var datosReporte = await ReportePlanAlumnoService.ObtenerDatosReporteAsync(alumnoId.Value);
-
-            // Generar nombre del archivo
-            string nombreAlumno = datosReporte.NombreCompleto.Replace(" ", "_");
-            string fecha = DateTime.Now.ToString("yyyyMMdd");
-            string nombreArchivo = $"Plan_Estudios_{nombreAlumno}_{fecha}.pdf";
-
-            // Crear el documento PDF
-            var document = new PlanAlumnoReportDocument(datosReporte);
-
-            // Generar el PDF como bytes usando QuestPDF
-            byte[] pdfBytes = document.GeneratePdf();
-
-            // Descargar el PDF en el navegador usando JavaScript Interop
-            await JS.InvokeVoidAsync("downloadPdf", nombreArchivo, Convert.ToBase64String(pdfBytes));
-
-            // Cerrar el modal después de generar
-            await Task.Delay(500); // Pequeña espera para que se inicie la descarga
-            CerrarModal();
-        }
-        catch (ArgumentException ex)
-        {
-            errorReporte = ex.Message;
-        }
-        catch (Exception ex)
-        {
-            errorReporte = $"Error al generar el reporte: {ex.Message}";
-        }
-        finally
-        {
-            generandoReporte = false;
-            StateHasChanged();
-        }
+        // Este método ya no se usa, pero lo dejamos por compatibilidad
+        Navigation.NavigateTo("/reporte/plan-estudios");
     }
 }
