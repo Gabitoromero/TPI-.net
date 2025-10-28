@@ -39,7 +39,11 @@ namespace WebAPI
                 });
 
             builder.Services.AddAuthorization();
-
+            /*
+            builder.Services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = options.DefaultPolicy;
+            });*/
             // DI
             // NOTA: lo normal seria que dependan de una interaz, ejemplo IEspecialidadRepository, de forma que el dia de ma�ana si cambio a EspecialidadRepositoryV2 : IEspecialidadRepository
             // no tengo que cambiar casi nada, pero bueno, lo hicimos con la intencion de probar inyeccion de dependencias, la realidad es que no vamos a cambiar los repos

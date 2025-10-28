@@ -3,17 +3,10 @@ using System.Security.Claims;
 
 namespace API.Clients
 {
-    /// <summary>
-    /// Clase de ayuda para extraer información de tokens JWT
-    /// Reutilizable en Blazor y WinForms
-    /// </summary>
     public static class JwtHelper
     {
         private static readonly JwtSecurityTokenHandler _handler = new();
 
-        /// <summary>
-        /// Obtiene el ID del usuario desde el token JWT
-        /// </summary>
         public static int? GetUserId(string? token)
         {
             if (string.IsNullOrEmpty(token)) return null;
@@ -30,9 +23,6 @@ namespace API.Clients
             }
         }
 
-        /// <summary>
-        /// Obtiene el nombre de usuario desde el token JWT
-        /// </summary>
         public static string? GetUsername(string? token)
         {
             if (string.IsNullOrEmpty(token)) return null;
@@ -48,9 +38,6 @@ namespace API.Clients
             }
         }
 
-        /// <summary>
-        /// Obtiene el email desde el token JWT
-        /// </summary>
         public static string? GetEmail(string? token)
         {
             if (string.IsNullOrEmpty(token)) return null;
@@ -66,9 +53,6 @@ namespace API.Clients
             }
         }
 
-        /// <summary>
-        /// Obtiene el rol del usuario desde el token JWT
-        /// </summary>
         public static string? GetRole(string? token)
         {
             if (string.IsNullOrEmpty(token)) return null;
@@ -84,9 +68,7 @@ namespace API.Clients
             }
         }
 
-        /// <summary>
-        /// Obtiene todos los claims del token JWT
-        /// </summary>
+
         public static IEnumerable<Claim>? GetClaims(string? token)
         {
             if (string.IsNullOrEmpty(token)) return null;
@@ -102,9 +84,7 @@ namespace API.Clients
             }
         }
 
-        /// <summary>
-        /// Verifica si un rol específico coincide con el token
-        /// </summary>
+
         public static bool HasRole(string? token, string role)
         {
             var tokenRole = GetRole(token);

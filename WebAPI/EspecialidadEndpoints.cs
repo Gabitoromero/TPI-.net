@@ -20,7 +20,7 @@ namespace WebAPI
                 }
 
                 return Results.Ok(dto);
-            }).RequireAuthorization();
+            });
 
             app.MapGet("/especialidades/", async (EspecialidadService service, HttpContext context) =>
             {
@@ -49,7 +49,7 @@ namespace WebAPI
                 }
 
                 return Results.Ok(espDTO);
-            }).RequireAuthorization();
+            });
 
            app.MapPost("/especialidades/", async (EspecialidadService service, EspecialidadDTO dto) =>
             {
