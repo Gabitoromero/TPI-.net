@@ -42,6 +42,17 @@
                     </div>
                 </div>
             }
+            else if (role?.ToLower() == "admin")
+            {
+                <div class="mt-4">
+                    <p><strong>Bienvenido Administrador!</strong></p>
+                    <div class="d-grid gap-2 col-6 mx-auto mt-3">
+                        <a href="/comisiones" class="btn btn-primary btn-lg">
+                            Gestionar Comisiones
+                        </a>
+                    </div>
+                </div>
+            }
         }
         else
         {

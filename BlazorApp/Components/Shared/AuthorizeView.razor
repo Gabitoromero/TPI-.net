@@ -25,6 +25,9 @@ else if (isChecking)
     [Parameter]
     public bool RequireProfesor { get; set; } = false;
 
+    [Parameter]
+    public bool RequireAdmin { get; set; } = false;
+
     private bool isAuthorized = false;
     private bool isChecking = true;
 
@@ -37,16 +40,13 @@ else if (isChecking)
     {
         isChecking = false;
 
-        // Leer directamente de APIClientBase
         if (!APIClientBase.IsTokenValid())
         {
-            // Redirigir al login con returnUrl
             var returnUrl = Uri.EscapeDataString(Navigation.Uri.Replace(Navigation.BaseUri, "/"));
             Navigation.NavigateTo($"/login?returnUrl={returnUrl}", forceLoad: true);
             return;
         }
 
-        // Verificar roles específicos usando JwtHelper
         var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
         
         if (RequireAlumno && role?.ToLower() != "alumno")
@@ -61,12 +61,17 @@ else if (isChecking)
             return;
         }
 
+        if (RequireAdmin && role?.ToLower() != "admin")
+        {
+            Navigation.NavigateTo("/", forceLoad: true);
+            return;
+        }
+
         isAuthorized = true;
         StateHasChanged();
     }
 
     public void Dispose()
     {
-        // Ya no hay eventos a los que desuscribirse
     }
 }

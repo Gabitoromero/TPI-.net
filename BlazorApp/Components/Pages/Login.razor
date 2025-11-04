@@ -133,16 +133,6 @@
 
             if (loginSuccess)
             {
-                var loginResponse = APIClientBase.LoginResponse;
-
-                if (loginResponse?.Tipo?.ToLower() == "admin")
-                {
-                    errorMessage = "Los administradores no pueden acceder por la aplicación web. Por favor, use la aplicación de escritorio.";
-                    await APIUsuario.LogoutAsync();
-                    isLoading = false;
-                    return;
-                }
-
                 AuthStateContainer.NotifyStateChanged();
                 RedirectToHome();
             }
@@ -182,6 +172,10 @@
             else if (role?.ToLower() == "profesor")
             {
                 Navigation.NavigateTo("/profesor/cursos");
+            }
+            else if (role?.ToLower() == "admin")
+            {
+                Navigation.NavigateTo("/");
             }
             else
             {
