@@ -48,7 +48,7 @@ namespace WebAPI
                 }
 
                 return Results.Ok(espDTO);
-            }).RequireAuthorization();
+            });
 
            app.MapPost("/especialidades/", async (EspecialidadService service, EspecialidadDTO dto) =>
             {

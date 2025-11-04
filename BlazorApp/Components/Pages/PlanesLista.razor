@@ -1,0 +1,165 @@
+@page "/planes"
+@using API.Clients
+@using DTOs
+@using BlazorApp.Services
+@using BlazorApp.Components.Shared
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>Planes</PageTitle>
+
+<AuthorizeView RequireAdmin="true">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>Planes</h3>
+            <button class="btn btn-primary" @onclick="AgregarPlan">
+                <i class="bi bi-plus-circle"></i> Agregar
+            </button>
+        </div>
+
+        @if (planes == null)
+        {
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p>Cargando planes...</p>
+            </div>
+        }
+        else if (errorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                <strong>Error:</strong> @errorMessage
+            </div>
+        }
+        else if (!planes.Any())
+        {
+            <div class="alert alert-info" role="alert">
+                No hay planes registrados.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Especialidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var plan in planes)
+                        {
+                            <tr>
+                                <td>@plan.IdPlan</td>
+                                <td>@plan.Descripcion</td>
+                                <td>@plan.EspecialidadDescripcion</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => ModificarPlan(plan.IdPlan)">
+                                        <i class="bi bi-pencil"></i> Modificar
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" @onclick="() => MostrarConfirmacionEliminar(plan.IdPlan, plan.Descripcion)">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</AuthorizeView>
+
+@if (mostrarConfirmacion)
+{
+    <MensajeConfirmacionModal 
+        Mensaje="@mensajeConfirmacion"
+        OnConfirmar="ConfirmarEliminar"
+        OnCancelar="CancelarEliminar" />
+}
+
+@code {
+    private List<PlanDisplayDTO>? planes;
+    private string? errorMessage;
+    private bool mostrarConfirmacion = false;
+    private string mensajeConfirmacion = string.Empty;
+    private int idPlanAEliminar;
+    private string descripcionPlanAEliminar = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarPlanes();
+    }
+
+    private async Task CargarPlanes()
+    {
+        try
+        {
+            errorMessage = null;
+            var planesDto = await APIPlan.GetAllAsync();
+            var especialidades = await APIEspecialidad.GetAllAsync();
+
+            planes = planesDto.Select(p => new PlanDisplayDTO
+            {
+                IdPlan = p.IdPlan,
+                Descripcion = p.Descripcion,
+                IdEspecialidad = p.IdEspecialidad,
+                EspecialidadDescripcion = especialidades.FirstOrDefault(e => e.Id == p.IdEspecialidad)?.Descripcion ?? "Sin especialidad"
+            }).ToList();
+        }
+        catch (ArgumentException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los planes: {ex.Message}";
+        }
+    }
+
+    private void AgregarPlan()
+    {
+        Navigation.NavigateTo("/planes/detalle");
+    }
+
+    private void ModificarPlan(int id)
+    {
+        Navigation.NavigateTo($"/planes/detalle/{id}");
+    }
+
+    private void MostrarConfirmacionEliminar(int id, string descripcion)
+    {
+        idPlanAEliminar = id;
+        descripcionPlanAEliminar = descripcion;
+        mensajeConfirmacion = $"¿Está seguro que desea eliminar el plan '{descripcion}'?\n\nEsta acción no se puede deshacer.";
+        mostrarConfirmacion = true;
+    }
+
+    private async Task ConfirmarEliminar()
+    {
+        mostrarConfirmacion = false;
+        
+        try
+        {
+            await APIPlan.DeleteAsync(idPlanAEliminar);
+            await CargarPlanes();
+        }
+        catch (ArgumentException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al eliminar el plan: {ex.Message}";
+        }
+    }
+
+    private void CancelarEliminar()
+    {
+        mostrarConfirmacion = false;
+    }
+}
