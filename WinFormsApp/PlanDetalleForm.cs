@@ -31,35 +31,17 @@ namespace WinFormsApp
         {
             try
             {
-                // Validar si el plan está deshabilitado
-                if (isEdit && plan != null)
-                {
-                    DialogResult result = MessageBox.Show(
-                        "Este plan está deshabilitado.\n\nAl reactivarlo se habilitarán:\n- Todos los usuarios del plan\n- Todas las comisiones del plan\n- Todas las materias del plan\n- Todos los cursos relacionados\n\n¿Desea darlo de alta?",
-                        "Plan Deshabilitado",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question);
 
-                    if (result == DialogResult.Yes)
-                    {
-                        try
-                        {
-                            await APIPlan.UpdateAsync(plan);
-                            MessageBox.Show("Plan reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        catch (ArgumentException ex)
-                        {
-                            MessageBox.Show($"Error al reactivar el plan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            this.Close();
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Este plan está deshabilitado y no se puede modificar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        Close();
-                        return;
-                    }
+                try
+                {
+                    await APIPlan.UpdateAsync(plan);
+                    MessageBox.Show("Plan reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (ArgumentException ex)
+                {
+                    MessageBox.Show($"Error al reactivar el plan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
+                    return;
                 }
 
                 await LoadEspecialidades();

@@ -24,7 +24,6 @@ namespace WebAPI
 
             app.MapGet("/especialidades/", async (EspecialidadService service, HttpContext context) =>
             {
-                // 🔍 PRUEBA: Ver si llega el header Authorization
                 var authHeader = context.Request.Headers["Authorization"].ToString();
 
                 
@@ -37,7 +36,7 @@ namespace WebAPI
                 }
                 else
                 {
-                    Console.WriteLine("❌ Usuario NO autenticado");
+                    Console.WriteLine(" Usuario NO autenticado");
                 }
             
 
@@ -49,7 +48,7 @@ namespace WebAPI
                 }
 
                 return Results.Ok(espDTO);
-            });
+            }).RequireAuthorization();
 
            app.MapPost("/especialidades/", async (EspecialidadService service, EspecialidadDTO dto) =>
             {

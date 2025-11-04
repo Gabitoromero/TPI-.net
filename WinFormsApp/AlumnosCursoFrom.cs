@@ -100,25 +100,33 @@ namespace WinFormsApp
                     return;
                 }
 
-                // Obtener el IdInscripcion de la fila seleccionada
-                int idInscripcion = (int)dataGridViewAlumnosCurso.CurrentRow.Cells["IdInscripcion"].Value;
-
-                // Buscar el alumno completo en nuestra lista
-                var alumnoSeleccionado = alumnosDelCurso.FirstOrDefault(a => a.IdInscripcion == idInscripcion);
-
-                if (alumnoSeleccionado == null)
+                string username = APIClientBase.LoginResponse.Username;
+                ShowUsuarioDTO current = await APIUsuario.GetByUsernameAsync(username);
+                if (!current.Habilitado ?? false)
                 {
-                    MessageBox.Show("No se encontró el alumno seleccionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    MessageBox.Show("Su cuenta no está habilitada. No puede modificar el estado del alumno.", "Cuenta no habilitada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-
-                Hide();
-                using (var formEditar = new AlumnoCursoPutForm(alumnoSeleccionado))
+                else
                 {
-                    DialogResult result = formEditar.ShowDialog();
-                }
-                Show();
+                    // Obtener el IdInscripcion de la fila seleccionada
+                    int idInscripcion = (int)dataGridViewAlumnosCurso.CurrentRow.Cells["IdInscripcion"].Value;
 
+                    // Buscar el alumno completo en nuestra lista
+                    var alumnoSeleccionado = alumnosDelCurso.FirstOrDefault(a => a.IdInscripcion == idInscripcion);
+
+                    if (alumnoSeleccionado == null)
+                    {
+                        MessageBox.Show("No se encontró el alumno seleccionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    Hide();
+                    using (var formEditar = new AlumnoCursoPutForm(alumnoSeleccionado))
+                    {
+                        DialogResult result = formEditar.ShowDialog();
+                    }
+                    Show();
+                }
 
                 await LoadAlumnosCurso();
             }

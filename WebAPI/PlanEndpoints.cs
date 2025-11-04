@@ -25,7 +25,7 @@ namespace WebAPI
                     return Results.NotFound(new { message = "Planes no encontrados" });
                 }
                 return Results.Ok(planDTO);
-            });
+            }).RequireAuthorization();
             app.MapPost("/planes/", async (PlanService service, PlanDTO dto) =>
             {
                 try

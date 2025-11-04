@@ -35,19 +35,32 @@ namespace WinFormsApp
 
                 comboBoxCondicion.SelectedItem = alumnoOriginal.Condicion;
 
-                if (alumnoOriginal.Condicion == "Aprobado" && alumnoOriginal.Nota.HasValue)
+                label2.Visible = false;
+                numericNota.Visible = false;
+
+                if (comboBoxCondicion.SelectedItem?.ToString() == "Aprobado")
                 {
-                    numericNota.Value = alumnoOriginal.Nota.Value;
                     label2.Visible = true;
                     numericNota.Visible = true;
+                    numericNota.Minimum = 6;
+                    numericNota.Maximum = 10;
+                    if (alumnoOriginal.Nota.HasValue)
+                    {
+                        numericNota.Value = alumnoOriginal.Nota.Value;
+                    }
+                    else
+                    {
+                        numericNota.Value = 6;
+                    }
+                    
                 }
-                else
+                if (comboBoxCondicion.SelectedItem?.ToString() == "Reprobado")
                 {
-                    label2.Visible = false;
-                    numericNota.Visible = false;
+                    label2.Visible = true;
+                    numericNota.Visible = true;
+                    numericNota.Minimum = 1;
+                    numericNota.Maximum = 5;
                 }
-
-                Text = $"Alumno: {alumnoOriginal.Alumno.NombreUsuario}";
             }
             catch (Exception ex)
             {
@@ -57,15 +70,23 @@ namespace WinFormsApp
 
         private void ComboBoxCondicion_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (comboBoxCondicion.SelectedItem?.ToString() == "Aprobado" || comboBoxCondicion.SelectedItem?.ToString() == "Reprobado")
+            label2.Visible = false;
+            numericNota.Visible = false;
+
+            if (comboBoxCondicion.SelectedItem?.ToString() == "Aprobado")
             {
                 label2.Visible = true;
                 numericNota.Visible = true;
+                numericNota.Minimum = 6;
+                numericNota.Maximum = 10;
+
             }
-            else
+            if (comboBoxCondicion.SelectedItem?.ToString() == "Reprobado")
             {
-                label2.Visible = false;
-                numericNota.Visible = false;
+                label2.Visible = true;
+                numericNota.Visible = true;
+                numericNota.Minimum = 1;
+                numericNota.Maximum = 5;
             }
         }
 
@@ -99,7 +120,7 @@ namespace WinFormsApp
                     IdAlumno = alumnoOriginal.Alumno.Id,
                     IdCurso = alumnoOriginal.Curso.Id_curso,
                     Condicion = nuevaCondicion,
-                    Nota = nuevaCondicion == "Aprobado" ? (int?)numericNota.Value : null
+                    Nota = (nuevaCondicion == "Aprobado" || nuevaCondicion == "Reprobado") ? (int?)numericNota.Value : null
                 };
 
                 // Enviar la actualización al servidor
@@ -115,11 +136,37 @@ namespace WinFormsApp
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        /*
-        private void AlumnoCursoPutForm_Load_1(object sender, EventArgs e)
-        {
 
+        private void comboBoxCondicion_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (alumnoOriginal.Condicion == "Aprobado")
+            {
+                label2.Visible = true;
+                numericNota.Visible = true;
+                numericNota.Minimum = 6;
+                numericNota.Maximum = 10;
+                if (alumnoOriginal.Nota.HasValue)
+                {
+                    numericNota.Value = alumnoOriginal.Nota.Value;
+                }
+                else
+                {
+                    numericNota.Value = 6;
+                }
+                
+            }
+            if (alumnoOriginal.Condicion == "Reprobado")
+            {
+                label2.Visible = true;
+                numericNota.Visible = true;
+                numericNota.Minimum = 1;
+                numericNota.Maximum = 5;
+            }
+            else
+            {
+                label2.Visible = false;
+                numericNota.Visible = false;
+            }
         }
-        */
     }
 }

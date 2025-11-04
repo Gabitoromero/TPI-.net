@@ -27,19 +27,13 @@ namespace WinFormsApp
                 string username = APIClientBase.LoginResponse.Username;
                 ShowUsuarioDTO current = await APIUsuario.GetByUsernameAsync(username);
 
-                if (!current.Habilitado ?? false)
+                Hide();
+                using (var detalle = new InscripcionDetalle())
                 {
-                    MessageBox.Show("Su cuenta no está habilitada. No puede realizar nuevas inscripciones.", "Cuenta no habilitada", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    detalle.ShowDialog();
                 }
-                else
-                {
-                    Hide();
-                    using (var detalle = new InscripcionDetalle())
-                    {
-                        detalle.ShowDialog();
-                    }
-                    Show();
-                }
+                Show();
+
             }
             catch (Exception ex)
             {

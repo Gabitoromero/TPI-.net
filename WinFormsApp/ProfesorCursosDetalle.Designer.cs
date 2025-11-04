@@ -39,8 +39,10 @@ namespace WinFormsApp
             // 
             dataGridViewCursos.AllowUserToAddRows = false;
             dataGridViewCursos.AllowUserToDeleteRows = false;
+            dataGridViewCursos.AllowUserToResizeRows = false;
             dataGridViewCursos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCursos.Location = new Point(12, 45);
+            dataGridViewCursos.MultiSelect = false;
             dataGridViewCursos.Name = "dataGridViewCursos";
             dataGridViewCursos.ReadOnly = true;
             dataGridViewCursos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -74,7 +76,7 @@ namespace WinFormsApp
             btnDetalle.Name = "btnDetalle";
             btnDetalle.Size = new Size(90, 30);
             btnDetalle.TabIndex = 3;
-            btnDetalle.Text = "Detalle";
+            btnDetalle.Text = "Detalle curso";
             btnDetalle.UseVisualStyleBackColor = true;
             btnDetalle.Click += btnDetalle_Click;
             // 

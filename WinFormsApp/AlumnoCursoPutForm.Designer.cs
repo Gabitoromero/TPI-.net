@@ -107,7 +107,7 @@
             Controls.Add(comboBoxCondicion);
             Name = "AlumnoCursoPutForm";
             Text = "Alumno";
-            //Load += AlumnoCursoPutForm_Load_1;
+            // Load += AlumnoCursoPutForm_Load_1;
             ((System.ComponentModel.ISupportInitialize)numericNota).EndInit();
             ResumeLayout(false);
             PerformLayout();
