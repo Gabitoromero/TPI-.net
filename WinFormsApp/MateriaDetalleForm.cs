@@ -25,7 +25,7 @@ namespace WinFormsApp
         {
             try
             {
-                var plans = await APIPlan.GetAllAsync();
+                List<PlanDTO> plans = await APIPlan.GetAllAsync();
                 comboBoxPlan.DataSource = plans;
                 comboBoxPlan.DisplayMember = "Descripcion";
                 comboBoxPlan.ValueMember = "IdPlan";

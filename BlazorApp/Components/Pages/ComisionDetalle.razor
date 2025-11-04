@@ -119,6 +119,7 @@
 
     private ComisionDTO comision = new ComisionDTO { Habilitado = true };
     private List<PlanDTO>? planes;
+    private ComisionDTO? comisionExistente;
     private string? errorMessage;
     private bool errorDescripcion = false;
     private bool errorAnio = false;
@@ -138,7 +139,7 @@
 
             if (IdComision.HasValue)
             {
-                var comisionExistente = await APIComision.GetAsync(IdComision.Value);
+                comisionExistente = await APIComision.GetAsync(IdComision.Value);
                 
                 if (comisionExistente != null)
                 {

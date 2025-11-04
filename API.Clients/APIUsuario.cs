@@ -525,7 +525,7 @@ namespace API.Clients
                 }
                 else if (response.StatusCode == HttpStatusCode.NotFound)
                 {
-                    throw new ArgumentException($"El alumno con ID: {idAlumno} no tiene cursos asignados o no existe");
+                    return new List<ShowAlumno_CursoDTO>();
                 }
                 else
                 {

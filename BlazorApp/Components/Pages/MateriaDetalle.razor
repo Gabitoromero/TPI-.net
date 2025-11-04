@@ -126,6 +126,7 @@
 
     private MateriaDTO materia = new MateriaDTO();
     private List<PlanDTO>? planes;
+    private MateriaDTO? materiaExistente;
     private string? errorMessage;
     private bool errorDescripcion = false;
     private bool errorHsSemanales = false;
@@ -146,7 +147,7 @@
 
             if (IdMateria.HasValue)
             {
-                var materiaExistente = await APIMateria.GetAsync(IdMateria.Value);
+                 materiaExistente = await APIMateria.GetAsync(IdMateria.Value);
                 
                 if (materiaExistente != null)
                 {

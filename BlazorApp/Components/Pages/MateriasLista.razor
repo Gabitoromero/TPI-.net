@@ -88,6 +88,8 @@
 
 @code {
     private List<MateriaDisplayDTO>? materias;
+    private List<MateriaDTO>? materiasDto;
+    private List<PlanDTO>? planes;
     private string? errorMessage;
     private bool mostrarConfirmacion = false;
     private string mensajeConfirmacion = string.Empty;
@@ -104,8 +106,8 @@
         try
         {
             errorMessage = null;
-            var materiasDto = await APIMateria.GetAllAsync();
-            var planes = await APIPlan.GetAllAsync();
+            materiasDto = await APIMateria.GetAllAsync();
+            planes = await APIPlan.GetAllAsync();
 
             materias = materiasDto.Select(m => new MateriaDisplayDTO
             {
@@ -114,7 +116,7 @@
                 Hs_semanales = m.Hs_semanales,
                 Hs_totales = m.Hs_totales,
                 Id_plan = m.Id_plan,
-                PlanDescripcion = planes.FirstOrDefault(p => p.IdPlan == m.Id_plan)?.Descripcion ?? "Sin plan"
+                PlanDescripcion = planes.FirstOrDefault(p => p.IdPlan == m.Id_plan)?.Descripcion 
             }).ToList();
         }
         catch (ArgumentException ex)

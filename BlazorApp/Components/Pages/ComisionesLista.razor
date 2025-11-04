@@ -86,6 +86,8 @@
 
 @code {
     private List<ComisionDisplayDTO>? comisiones;
+    private List<ComisionDTO>? comisionesDto;
+    private List<PlanDTO>? planes;
     private string? errorMessage;
     private bool mostrarConfirmacion = false;
     private string mensajeConfirmacion = string.Empty;
@@ -102,8 +104,8 @@
         try
         {
             errorMessage = null;
-            var comisionesDto = await APIComision.GetAllAsync();
-            var planes = await APIPlan.GetAllAsync();
+            comisionesDto = await APIComision.GetAllAsync();
+            planes = await APIPlan.GetAllAsync();
 
             comisiones = comisionesDto.Select(c => new ComisionDisplayDTO
             {
@@ -112,7 +114,7 @@
                 Anio_especialidad = c.Anio_especialidad,
                 Id_plan = c.Id_plan,
                 Habilitado = c.Habilitado,
-                PlanDescripcion = planes.FirstOrDefault(p => p.IdPlan == c.Id_plan)?.Descripcion ?? "Sin plan"
+                PlanDescripcion = planes.FirstOrDefault(p => p.IdPlan == c.Id_plan)?.Descripcion 
             }).ToList();
         }
         catch (ArgumentException ex)
