@@ -1,0 +1,262 @@
+@page "/materias/detalle"
+@page "/materias/detalle/{IdMateria:int}"
+@using API.Clients
+@using DTOs
+@using BlazorApp.Services
+@using BlazorApp.Components.Shared
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>@(IdMateria.HasValue ? "Modificar Materia" : "Nueva Materia")</PageTitle>
+
+<AuthorizeView RequireAdmin="true">
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>@(IdMateria.HasValue ? "Modificar Materia" : "Nueva Materia")</h4>
+            </div>
+            <div class="card-body">
+                @if (isLoading)
+                {
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                }
+                else if (errorMessage != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Error:</strong> @errorMessage
+                    </div>
+                }
+                else
+                {
+                    <form @onsubmit="GuardarMateria" @onsubmit:preventDefault="true">
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción <span class="text-danger">*</span></label>
+                            <input type="text" 
+                                   id="descripcion" 
+                                   class="form-control @(errorDescripcion ? "is-invalid" : "")" 
+                                   @bind="materia.Desc_materia"
+                                   @bind:event="oninput"
+                                   placeholder="Ingrese la descripción de la materia" />
+                            @if (errorDescripcion)
+                            {
+                                <div class="invalid-feedback">La descripción es requerida</div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="hsSemanales" class="form-label">Horas Semanales <span class="text-danger">*</span></label>
+                            <input type="number" 
+                                   id="hsSemanales" 
+                                   class="form-control @(errorHsSemanales ? "is-invalid" : "")" 
+                                   @bind="materia.Hs_semanales"
+                                   @bind:event="oninput"
+                                   min="1"
+                                   placeholder="Ingrese las horas semanales" />
+                            @if (errorHsSemanales)
+                            {
+                                <div class="invalid-feedback">@mensajeErrorHsSemanales</div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="hsTotales" class="form-label">Horas Totales <span class="text-danger">*</span></label>
+                            <input type="number" 
+                                   id="hsTotales" 
+                                   class="form-control @(errorHsTotales ? "is-invalid" : "")" 
+                                   @bind="materia.Hs_totales"
+                                   @bind:event="oninput"
+                                   min="1"
+                                   placeholder="Ingrese las horas totales" />
+                            @if (errorHsTotales)
+                            {
+                                <div class="invalid-feedback">@mensajeErrorHsTotales</div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="plan" class="form-label">Plan <span class="text-danger">*</span></label>
+                            <select id="plan" 
+                                    class="form-select @(errorPlan ? "is-invalid" : "")" 
+                                    @bind="materia.Id_plan">
+                                <option value="0">Seleccione un plan</option>
+                                @if (planes != null)
+                                {
+                                    @foreach (var plan in planes)
+                                    {
+                                        <option value="@plan.IdPlan">@plan.Descripcion</option>
+                                    }
+                                }
+                            </select>
+                            @if (errorPlan)
+                            {
+                                <div class="invalid-feedback">Debe seleccionar un plan</div>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary" @onclick="Cancelar">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-success" disabled="@isSaving">
+                                @if (isSaving)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    <span>Guardando...</span>
+                                }
+                                else
+                                {
+                                    <span>Guardar</span>
+                                }
+                            </button>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public int? IdMateria { get; set; }
+
+    private MateriaDTO materia = new MateriaDTO();
+    private List<PlanDTO>? planes;
+    private string? errorMessage;
+    private bool errorDescripcion = false;
+    private bool errorHsSemanales = false;
+    private bool errorHsTotales = false;
+    private bool errorPlan = false;
+    private string mensajeErrorHsSemanales = string.Empty;
+    private string mensajeErrorHsTotales = string.Empty;
+    private bool isLoading = false;
+    private bool isSaving = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+
+        try
+        {
+            planes = await APIPlan.GetAllAsync();
+
+            if (IdMateria.HasValue)
+            {
+                var materiaExistente = await APIMateria.GetAsync(IdMateria.Value);
+                
+                if (materiaExistente != null)
+                {
+                    materia = materiaExistente;
+                }
+                else
+                {
+                    errorMessage = "No se encontró la materia";
+                }
+            }
+        }
+        catch (ArgumentException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los datos: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private bool ValidarFormulario()
+    {
+        bool esValido = true;
+
+        errorDescripcion = false;
+        errorHsSemanales = false;
+        errorHsTotales = false;
+        errorPlan = false;
+        mensajeErrorHsSemanales = string.Empty;
+        mensajeErrorHsTotales = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(materia.Desc_materia))
+        {
+            errorDescripcion = true;
+            esValido = false;
+        }
+
+        if (materia.Hs_semanales <= 0)
+        {
+            errorHsSemanales = true;
+            mensajeErrorHsSemanales = "Las horas semanales deben ser mayores a 0";
+            esValido = false;
+        }
+
+        if (materia.Hs_totales <= 0)
+        {
+            errorHsTotales = true;
+            mensajeErrorHsTotales = "Las horas totales deben ser mayores a 0";
+            esValido = false;
+        }
+        else if (materia.Hs_totales < materia.Hs_semanales)
+        {
+            errorHsTotales = true;
+            mensajeErrorHsTotales = "Las horas totales deben ser mayores o iguales a las horas semanales";
+            esValido = false;
+        }
+
+        if (materia.Id_plan <= 0)
+        {
+            errorPlan = true;
+            esValido = false;
+        }
+
+        return esValido;
+    }
+
+    private async Task GuardarMateria()
+    {
+        if (!ValidarFormulario())
+        {
+            return;
+        }
+
+        isSaving = true;
+        errorMessage = null;
+
+        try
+        {
+            if (IdMateria.HasValue)
+            {
+                await APIMateria.UpdateAsync(materia);
+            }
+            else
+            {
+                await APIMateria.AddAsync(materia);
+            }
+
+            Navigation.NavigateTo("/materias");
+        }
+        catch (ArgumentException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al guardar la materia: {ex.Message}";
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }
+
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/materias");
+    }
+}
