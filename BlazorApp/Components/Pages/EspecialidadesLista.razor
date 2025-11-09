@@ -1,4 +1,4 @@
-@page "/comisiones"
+@page "/especialidades"
 @using API.Clients
 @using DTOs
 @using BlazorApp.Services
@@ -6,24 +6,24 @@
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
 
-<PageTitle>Comisiones</PageTitle>
+<PageTitle>Especialidades</PageTitle>
 
 <AuthorizeView RequireAdmin="true">
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3>Comisiones</h3>
-            <button class="btn btn-primary" @onclick="AgregarComision">
+            <h3>Especialidades</h3>
+            <button class="btn btn-primary" @onclick="AgregarEspecialidad">
                 <i class="bi bi-plus-circle"></i> Agregar
             </button>
         </div>
 
-        @if (comisiones == null)
+        @if (especialidades == null)
         {
             <div class="text-center">
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden">Cargando...</span>
                 </div>
-                <p>Cargando comisiones...</p>
+                <p>Cargando especialidades...</p>
             </div>
         }
         else if (errorMessage != null)
@@ -32,10 +32,10 @@
                 <strong>Error:</strong> @errorMessage
             </div>
         }
-        else if (!comisiones.Any())
+        else if (!especialidades.Any())
         {
             <div class="alert alert-info" role="alert">
-                No hay comisiones registradas.
+                No hay especialidades registradas.
             </div>
         }
         else
@@ -46,24 +46,20 @@
                         <tr>
                             <th>ID</th>
                             <th>Descripción</th>
-                            <th>Año Especialidad</th>
-                            <th>Plan</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var comision in comisiones)
+                        @foreach (var especialidad in especialidades)
                         {
                             <tr>
-                                <td>@comision.Id_comision</td>
-                                <td>@comision.Desc_comision</td>
-                                <td>@comision.Anio_especialidad</td>
-                                <td>@comision.PlanDescripcion</td>
+                                <td>@especialidad.Id</td>
+                                <td>@especialidad.Descripcion</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => ModificarComision(comision.Id_comision)">
+                                    <button class="btn btn-sm btn-outline-primary me-2" @onclick="() => ModificarEspecialidad(especialidad.Id)">
                                         <i class="bi bi-pencil"></i> Modificar
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" @onclick="() => MostrarConfirmacionEliminar(comision.Id_comision, comision.Desc_comision)">
+                                    <button class="btn btn-sm btn-outline-danger" @onclick="() => MostrarConfirmacionEliminar(especialidad.Id, especialidad.Descripcion)">
                                         <i class="bi bi-trash"></i> Eliminar
                                     </button>
                                 </td>
@@ -85,37 +81,24 @@
 }
 
 @code {
-    private List<ComisionDisplayDTO>? comisiones;
-    private List<ComisionDTO>? comisionesDto;
-    private List<PlanDTO>? planes;
+    private List<EspecialidadDTO>? especialidades;
     private string? errorMessage;
     private bool mostrarConfirmacion = false;
     private string mensajeConfirmacion = string.Empty;
-    private int idComisionAEliminar;
-    private string descripcionComisionAEliminar = string.Empty;
+    private int idEspecialidadAEliminar;
+    private string descripcionEspecialidadAEliminar = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        await CargarComisiones();
+        await CargarEspecialidades();
     }
 
-    private async Task CargarComisiones()
+    private async Task CargarEspecialidades()
     {
         try
         {
             errorMessage = null;
-            comisionesDto = await APIComision.GetAllAsync();
-            planes = await APIPlan.GetAllAsync();
-
-            comisiones = comisionesDto.Select(c => new ComisionDisplayDTO
-            {
-                Id_comision = c.Id_comision,
-                Desc_comision = c.Desc_comision,
-                Anio_especialidad = c.Anio_especialidad,
-                Id_plan = c.Id_plan,
-                Habilitado = c.Habilitado,
-                PlanDescripcion = planes.FirstOrDefault(p => p.IdPlan == c.Id_plan)?.Descripcion 
-            }).ToList();
+            especialidades = await APIEspecialidad.GetAllAsync();
         }
         catch (ArgumentException ex)
         {
@@ -123,25 +106,25 @@
         }
         catch (Exception ex)
         {
-            errorMessage = $"Error al cargar las comisiones: {ex.Message}";
+            errorMessage = $"Error al cargar las especialidades: {ex.Message}";
         }
     }
 
-    private void AgregarComision()
+    private void AgregarEspecialidad()
     {
-        Navigation.NavigateTo("/comisiones/detalle");
+        Navigation.NavigateTo("/especialidades/detalle");
     }
 
-    private void ModificarComision(int id)
+    private void ModificarEspecialidad(int id)
     {
-        Navigation.NavigateTo($"/comisiones/detalle/{id}");
+        Navigation.NavigateTo($"/especialidades/detalle/{id}");
     }
 
     private void MostrarConfirmacionEliminar(int id, string descripcion)
     {
-        idComisionAEliminar = id;
-        descripcionComisionAEliminar = descripcion;
-        mensajeConfirmacion = $"¿Está seguro que desea eliminar la comisión '{descripcion}'?\n\nSe darán de baja todos los cursos de esta comisión. Esta acción no se puede deshacer.";
+        idEspecialidadAEliminar = id;
+        descripcionEspecialidadAEliminar = descripcion;
+        mensajeConfirmacion = $"¿Está seguro que desea eliminar la especialidad '{descripcion}'?\n\nEsta acción no se puede deshacer.";
         mostrarConfirmacion = true;
     }
 
@@ -151,8 +134,8 @@
         
         try
         {
-            await APIComision.DeleteAsync(idComisionAEliminar);
-            await CargarComisiones();
+            await APIEspecialidad.DeleteAsync(idEspecialidadAEliminar);
+            await CargarEspecialidades();
         }
         catch (ArgumentException ex)
         {
@@ -160,7 +143,7 @@
         }
         catch (Exception ex)
         {
-            errorMessage = $"Error al eliminar la comisión: {ex.Message}";
+            errorMessage = $"Error al eliminar la especialidad: {ex.Message}";
         }
     }
 
@@ -168,5 +151,4 @@
     {
         mostrarConfirmacion = false;
     }
-
 }

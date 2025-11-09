@@ -22,7 +22,7 @@ namespace WinFormsApp
         {
             InitializeComponent();
             this.idCurso = idCurso;
-            this.ProfesorAgregado = false;
+            ProfesorAgregado = false;
             dataGridProfesores.CellDoubleClick += DataGridProfesores_CellDoubleClick;
         }
 
@@ -38,6 +38,7 @@ namespace WinFormsApp
             try
             {
                 var profesores = await APIUsuario.GetProfesoresAsync();
+                profesores = profesores.Where(p => p.Habilitado == true).ToList();
 
                 dataGridProfesores.DataSource = null;
                 dataGridProfesores.DataSource = profesores;

@@ -1,6 +1,7 @@
 ﻿@page "/alumno/inscripciones"
 @using API.Clients
 @using DTOs
+@using Application.Services
 @using BlazorApp.Services
 @using BlazorApp.Reports
 @using BlazorApp.Components.Shared
@@ -123,7 +124,7 @@
     {
         try
         {
-            var alumnoId = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
+            var alumnoId = AuthService.GetUserIdFromToken(APIClientBase.LoginResponse?.Token);
             
             if (alumnoId == null)
             {

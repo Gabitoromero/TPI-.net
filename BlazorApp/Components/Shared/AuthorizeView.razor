@@ -43,27 +43,27 @@ else if (isChecking)
         if (!APIClientBase.IsTokenValid())
         {
             var returnUrl = Uri.EscapeDataString(Navigation.Uri.Replace(Navigation.BaseUri, "/"));
-            Navigation.NavigateTo($"/login?returnUrl={returnUrl}", forceLoad: true);
+            Navigation.NavigateTo($"/login?returnUrl={returnUrl}", forceLoad: false);
             return;
         }
 
-        var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
+        var role = APIClientBase.LoginResponse?.Tipo;
         
         if (RequireAlumno && role?.ToLower() != "alumno")
         {
-            Navigation.NavigateTo("/", forceLoad: true);
+            Navigation.NavigateTo("/", forceLoad: false);
             return;
         }
 
         if (RequireProfesor && role?.ToLower() != "profesor")
         {
-            Navigation.NavigateTo("/", forceLoad: true);
+            Navigation.NavigateTo("/", forceLoad: false);
             return;
         }
 
         if (RequireAdmin && role?.ToLower() != "admin")
         {
-            Navigation.NavigateTo("/", forceLoad: true);
+            Navigation.NavigateTo("/", forceLoad: false);
             return;
         }
 

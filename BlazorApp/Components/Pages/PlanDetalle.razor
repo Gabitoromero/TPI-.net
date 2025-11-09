@@ -1,0 +1,204 @@
+@page "/planes/detalle"
+@page "/planes/detalle/{IdPlan:int}"
+@using API.Clients
+@using DTOs
+@using BlazorApp.Services
+@using BlazorApp.Components.Shared
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>@(IdPlan.HasValue ? "Modificar Plan" : "Nuevo Plan")</PageTitle>
+
+<AuthorizeView RequireAdmin="true">
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>@(IdPlan.HasValue ? "Modificar Plan" : "Nuevo Plan")</h4>
+            </div>
+            <div class="card-body">
+                @if (isLoading)
+                {
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                }
+                else if (errorMessage != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Error:</strong> @errorMessage
+                    </div>
+                }
+                else
+                {
+                    <form @onsubmit="GuardarPlan" @onsubmit:preventDefault="true">
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción <span class="text-danger">*</span></label>
+                            <input type="text" 
+                                   id="descripcion" 
+                                   class="form-control @(errorDescripcion ? "is-invalid" : "")" 
+                                   @bind="plan.Descripcion"
+                                   @bind:event="oninput"
+                                   placeholder="Ingrese la descripción del plan" />
+                            @if (errorDescripcion)
+                            {
+                                <div class="invalid-feedback">La descripción es requerida</div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="especialidad" class="form-label">Especialidad <span class="text-danger">*</span></label>
+                            <select id="especialidad" 
+                                    class="form-select @(errorEspecialidad ? "is-invalid" : "")" 
+                                    @bind="plan.IdEspecialidad">
+                                <option value="0">Seleccione una especialidad</option>
+                                @if (especialidades != null)
+                                {
+                                    @foreach (var especialidad in especialidades)
+                                    {
+                                        <option value="@especialidad.Id">@especialidad.Descripcion</option>
+                                    }
+                                }
+                            </select>
+                            @if (errorEspecialidad)
+                            {
+                                <div class="invalid-feedback">Debe seleccionar una especialidad</div>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary" @onclick="Cancelar">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-success" disabled="@isSaving">
+                                @if (isSaving)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    <span>Guardando...</span>
+                                }
+                                else
+                                {
+                                    <span>Guardar</span>
+                                }
+                            </button>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public int? IdPlan { get; set; }
+
+    private PlanDTO plan = new PlanDTO();
+    private List<EspecialidadDTO>? especialidades;
+    private string? errorMessage;
+    private bool errorDescripcion = false;
+    private bool errorEspecialidad = false;
+    private bool isLoading = false;
+    private bool isSaving = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+
+        try
+        {
+            especialidades = await APIEspecialidad.GetAllAsync();
+
+            if (IdPlan.HasValue)
+            {
+                var planExistente = await APIPlan.GetAsync(IdPlan.Value);
+                
+                if (planExistente != null)
+                {
+                    plan = planExistente;
+                }
+                else
+                {
+                    errorMessage = "No se encontró el plan";
+                }
+            }
+        }
+        catch (ArgumentException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al cargar los datos: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private bool ValidarFormulario()
+    {
+        bool esValido = true;
+
+        errorDescripcion = false;
+        errorEspecialidad = false;
+
+        if (string.IsNullOrWhiteSpace(plan.Descripcion))
+        {
+            errorDescripcion = true;
+            esValido = false;
+        }
+
+        if (plan.IdEspecialidad <= 0)
+        {
+            errorEspecialidad = true;
+            esValido = false;
+        }
+
+        return esValido;
+    }
+
+    private async Task GuardarPlan()
+    {
+        if (!ValidarFormulario())
+        {
+            return;
+        }
+
+        isSaving = true;
+        errorMessage = null;
+
+        try
+        {
+            if (IdPlan.HasValue)
+            {
+                await APIPlan.UpdateAsync(plan);
+            }
+            else
+            {
+                await APIPlan.AddAsync(plan);
+            }
+
+            Navigation.NavigateTo("/planes");
+        }
+        catch (ArgumentException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al guardar el plan: {ex.Message}";
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }
+
+    private void Cancelar()
+    {
+        Navigation.NavigateTo("/planes");
+    }
+}

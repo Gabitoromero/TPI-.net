@@ -1,5 +1,5 @@
-@page "/comisiones/detalle"
-@page "/comisiones/detalle/{IdComision:int}"
+@page "/materias/detalle"
+@page "/materias/detalle/{IdMateria:int}"
 @using API.Clients
 @using DTOs
 @using BlazorApp.Services
@@ -7,13 +7,13 @@
 @inject NavigationManager Navigation
 @rendermode InteractiveServer
 
-<PageTitle>@(IdComision.HasValue ? "Modificar Comisión" : "Nueva Comisión")</PageTitle>
+<PageTitle>@(IdMateria.HasValue ? "Modificar Materia" : "Nueva Materia")</PageTitle>
 
 <AuthorizeView RequireAdmin="true">
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
-                <h4>@(IdComision.HasValue ? "Modificar Comisión" : "Nueva Comisión")</h4>
+                <h4>@(IdMateria.HasValue ? "Modificar Materia" : "Nueva Materia")</h4>
             </div>
             <div class="card-body">
                 @if (isLoading)
@@ -32,15 +32,15 @@
                 }
                 else
                 {
-                    <form @onsubmit="GuardarComision" @onsubmit:preventDefault="true">
+                    <form @onsubmit="GuardarMateria" @onsubmit:preventDefault="true">
                         <div class="mb-3">
                             <label for="descripcion" class="form-label">Descripción <span class="text-danger">*</span></label>
                             <input type="text" 
                                    id="descripcion" 
                                    class="form-control @(errorDescripcion ? "is-invalid" : "")" 
-                                   @bind="comision.Desc_comision"
+                                   @bind="materia.Desc_materia"
                                    @bind:event="oninput"
-                                   placeholder="Ingrese la descripción de la comisión" />
+                                   placeholder="Ingrese la descripción de la materia" />
                             @if (errorDescripcion)
                             {
                                 <div class="invalid-feedback">La descripción es requerida</div>
@@ -48,17 +48,32 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="anioEspecialidad" class="form-label">Año Especialidad <span class="text-danger">*</span></label>
+                            <label for="hsSemanales" class="form-label">Horas Semanales <span class="text-danger">*</span></label>
                             <input type="number" 
-                                   id="anioEspecialidad" 
-                                   class="form-control @(errorAnio ? "is-invalid" : "")" 
-                                   @bind="comision.Anio_especialidad"
+                                   id="hsSemanales" 
+                                   class="form-control @(errorHsSemanales ? "is-invalid" : "")" 
+                                   @bind="materia.Hs_semanales"
                                    @bind:event="oninput"
                                    min="1"
-                                   placeholder="Ingrese el año de especialidad" />
-                            @if (errorAnio)
+                                   placeholder="Ingrese las horas semanales" />
+                            @if (errorHsSemanales)
                             {
-                                <div class="invalid-feedback">El año debe ser mayor a 0</div>
+                                <div class="invalid-feedback">@mensajeErrorHsSemanales</div>
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="hsTotales" class="form-label">Horas Totales <span class="text-danger">*</span></label>
+                            <input type="number" 
+                                   id="hsTotales" 
+                                   class="form-control @(errorHsTotales ? "is-invalid" : "")" 
+                                   @bind="materia.Hs_totales"
+                                   @bind:event="oninput"
+                                   min="1"
+                                   placeholder="Ingrese las horas totales" />
+                            @if (errorHsTotales)
+                            {
+                                <div class="invalid-feedback">@mensajeErrorHsTotales</div>
                             }
                         </div>
 
@@ -66,7 +81,7 @@
                             <label for="plan" class="form-label">Plan <span class="text-danger">*</span></label>
                             <select id="plan" 
                                     class="form-select @(errorPlan ? "is-invalid" : "")" 
-                                    @bind="comision.Id_plan">
+                                    @bind="materia.Id_plan">
                                 <option value="0">Seleccione un plan</option>
                                 @if (planes != null)
                                 {
@@ -105,29 +120,22 @@
     </div>
 </AuthorizeView>
 
-@if (mostrarConfirmacionReactivacion)
-{
-    <MensajeConfirmacionModal 
-        Mensaje="@mensajeConfirmacion"
-        OnConfirmar="ConfirmarReactivacion"
-        OnCancelar="CancelarReactivacion" />
-}
-
 @code {
     [Parameter]
-    public int? IdComision { get; set; }
+    public int? IdMateria { get; set; }
 
-    private ComisionDTO comision = new ComisionDTO { Habilitado = true };
+    private MateriaDTO materia = new MateriaDTO();
     private List<PlanDTO>? planes;
-    private ComisionDTO? comisionExistente;
+    private MateriaDTO? materiaExistente;
     private string? errorMessage;
     private bool errorDescripcion = false;
-    private bool errorAnio = false;
+    private bool errorHsSemanales = false;
+    private bool errorHsTotales = false;
     private bool errorPlan = false;
+    private string mensajeErrorHsSemanales = string.Empty;
+    private string mensajeErrorHsTotales = string.Empty;
     private bool isLoading = false;
     private bool isSaving = false;
-    private bool mostrarConfirmacionReactivacion = false;
-    private string mensajeConfirmacion = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -137,23 +145,17 @@
         {
             planes = await APIPlan.GetAllAsync();
 
-            if (IdComision.HasValue)
+            if (IdMateria.HasValue)
             {
-                comisionExistente = await APIComision.GetAsync(IdComision.Value);
+                 materiaExistente = await APIMateria.GetAsync(IdMateria.Value);
                 
-                if (comisionExistente != null)
+                if (materiaExistente != null)
                 {
-                    comision = comisionExistente;
-
-                    if (!comision.Habilitado)
-                    {
-                        mensajeConfirmacion = "Esta comisión está deshabilitada.\n\nAl reactivarla se habilitarán todos los cursos relacionados.\n\n¿Desea darla de alta?";
-                        mostrarConfirmacionReactivacion = true;
-                    }
+                    materia = materiaExistente;
                 }
                 else
                 {
-                    errorMessage = "No se encontró la comisión";
+                    errorMessage = "No se encontró la materia";
                 }
             }
         }
@@ -171,48 +173,44 @@
         }
     }
 
-    private async Task ConfirmarReactivacion()
-    {
-        mostrarConfirmacionReactivacion = false;
-        
-        try
-        {
-            comision.Habilitado = true;
-            await APIComision.UpdateAsync(comision);
-        }
-        catch (ArgumentException ex)
-        {
-            errorMessage = ex.Message;
-        }
-    }
-
-    private void CancelarReactivacion()
-    {
-        mostrarConfirmacionReactivacion = false;
-        Navigation.NavigateTo("/comisiones");
-    }
-
     private bool ValidarFormulario()
     {
         bool esValido = true;
 
         errorDescripcion = false;
-        errorAnio = false;
+        errorHsSemanales = false;
+        errorHsTotales = false;
         errorPlan = false;
+        mensajeErrorHsSemanales = string.Empty;
+        mensajeErrorHsTotales = string.Empty;
 
-        if (string.IsNullOrWhiteSpace(comision.Desc_comision))
+        if (string.IsNullOrWhiteSpace(materia.Desc_materia))
         {
             errorDescripcion = true;
             esValido = false;
         }
 
-        if (comision.Anio_especialidad <= 0)
+        if (materia.Hs_semanales <= 0)
         {
-            errorAnio = true;
+            errorHsSemanales = true;
+            mensajeErrorHsSemanales = "Las horas semanales deben ser mayores a 0";
             esValido = false;
         }
 
-        if (comision.Id_plan <= 0)
+        if (materia.Hs_totales <= 0)
+        {
+            errorHsTotales = true;
+            mensajeErrorHsTotales = "Las horas totales deben ser mayores a 0";
+            esValido = false;
+        }
+        else if (materia.Hs_totales < materia.Hs_semanales)
+        {
+            errorHsTotales = true;
+            mensajeErrorHsTotales = "Las horas totales deben ser mayores o iguales a las horas semanales";
+            esValido = false;
+        }
+
+        if (materia.Id_plan <= 0)
         {
             errorPlan = true;
             esValido = false;
@@ -221,7 +219,7 @@
         return esValido;
     }
 
-    private async Task GuardarComision()
+    private async Task GuardarMateria()
     {
         if (!ValidarFormulario())
         {
@@ -233,16 +231,16 @@
 
         try
         {
-            if (IdComision.HasValue)
+            if (IdMateria.HasValue)
             {
-                await APIComision.UpdateAsync(comision);
+                await APIMateria.UpdateAsync(materia);
             }
             else
             {
-                await APIComision.AddAsync(comision);
+                await APIMateria.AddAsync(materia);
             }
 
-            Navigation.NavigateTo("/comisiones");
+            Navigation.NavigateTo("/materias");
         }
         catch (ArgumentException ex)
         {
@@ -250,7 +248,7 @@
         }
         catch (Exception ex)
         {
-            errorMessage = $"Error al guardar la comisión: {ex.Message}";
+            errorMessage = $"Error al guardar la materia: {ex.Message}";
         }
         finally
         {
@@ -260,6 +258,6 @@
 
     private void Cancelar()
     {
-        Navigation.NavigateTo("/comisiones");
+        Navigation.NavigateTo("/materias");
     }
 }

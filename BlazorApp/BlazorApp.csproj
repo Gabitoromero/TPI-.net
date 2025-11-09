@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API.Clients\API.Clients.csproj" />
+    <ProjectReference Include="..\Application.Services\Application.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

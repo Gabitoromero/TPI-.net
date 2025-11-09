@@ -1,6 +1,7 @@
 @page "/reporte/plan-estudios"
 @using API.Clients
 @using DTOs
+@using Application.Services
 @using BlazorApp.Services
 @using BlazorApp.Reports
 @using QuestPDF.Fluent
@@ -73,7 +74,7 @@
             generando = true;
             StateHasChanged();
 
-            var alumnoId = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
+            var alumnoId = AuthService.GetUserIdFromToken(APIClientBase.LoginResponse?.Token);
 
             if (alumnoId == null)
             {
