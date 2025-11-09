@@ -47,7 +47,7 @@ else if (isChecking)
             return;
         }
 
-        var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
+        var role = APIClientBase.LoginResponse?.Tipo;
         
         if (RequireAlumno && role?.ToLower() != "alumno")
         {

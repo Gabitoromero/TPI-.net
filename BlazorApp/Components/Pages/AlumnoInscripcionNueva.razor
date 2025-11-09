@@ -1,6 +1,7 @@
 @page "/alumno/inscripciones/nueva"
 @using API.Clients
 @using DTOs
+@using Application.Services
 @using BlazorApp.Services
 @using BlazorApp.Components.Shared
 @inject NavigationManager NavigationManager
@@ -118,7 +119,7 @@
     {
         try
         {
-            var alumnoIdFromToken = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
+            var alumnoIdFromToken = AuthService.GetUserIdFromToken(APIClientBase.LoginResponse?.Token);
             
             if (alumnoIdFromToken == null)
             {

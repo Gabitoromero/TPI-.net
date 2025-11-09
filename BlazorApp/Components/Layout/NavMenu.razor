@@ -24,7 +24,7 @@
             </div>
 
             @{
-                var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
+                var role = APIClientBase.LoginResponse?.Tipo;
             }
 
             @if (role?.ToLower() == "profesor")

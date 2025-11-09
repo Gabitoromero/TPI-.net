@@ -1,6 +1,7 @@
 ﻿@page "/profesor/cursos"
 @using API.Clients
 @using DTOs
+@using Application.Services
 @using BlazorApp.Components.Shared
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
@@ -83,7 +84,7 @@
     { 
         try
         {
-            var profesorId = JwtHelper.GetUserId(APIClientBase.LoginResponse?.Token);
+            var profesorId = AuthService.GetUserIdFromToken(APIClientBase.LoginResponse?.Token);
             
             if (profesorId == null)
             {

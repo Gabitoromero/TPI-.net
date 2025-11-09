@@ -163,15 +163,15 @@
         }
         else
         {
-            var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
+            var role = APIClientBase.LoginResponse?.Tipo;
             
             if (role?.ToLower() == "alumno")
             {
-                Navigation.NavigateTo("/alumno/inscripciones");
+                Navigation.NavigateTo("/");
             }
             else if (role?.ToLower() == "profesor")
             {
-                Navigation.NavigateTo("/profesor/cursos");
+                Navigation.NavigateTo("/");
             }
             else if (role?.ToLower() == "admin")
             {

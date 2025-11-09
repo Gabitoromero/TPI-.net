@@ -109,7 +109,7 @@ namespace Application.Services
             }
         }
 
-        public int? GetUserIdFromToken(string token)
+        public static int? GetUserIdFromToken(string token)
         {
             try
             {

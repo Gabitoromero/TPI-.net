@@ -11,7 +11,7 @@
         @if (APIClientBase.IsTokenValid())
         {
             var username = APIClientBase.LoginResponse?.Username;
-            var role = JwtHelper.GetRole(APIClientBase.LoginResponse?.Token);
+            var role = APIClientBase.LoginResponse?.Tipo;
             
             <p class="lead mt-4">
                 Hola, <strong>@username</strong>!
