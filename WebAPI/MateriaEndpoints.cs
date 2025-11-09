@@ -32,7 +32,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = err.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapPut("/materias", async (MateriaDTO dto, MateriaService serv) =>
             {
@@ -46,14 +46,14 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = err.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapDelete("/materias/{id}", async (int id, MateriaService serv) =>
             {
                 bool ok = await serv.Delete(id);
                 if (!ok) return Results.NotFound(new { message = "Materia no encontrada" });
                 return Results.NoContent();
-            });
+            }).RequireAuthorization("AdminOnly");
         }
     }
 }

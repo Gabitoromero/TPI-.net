@@ -32,7 +32,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = err.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapPut("/comisiones", async (ComisionDTO dto, ComisionService serv) =>
             {
@@ -46,14 +46,14 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = err.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapDelete("/comisiones/{id}", async (int id, ComisionService serv) =>
             {
                 bool ok = await serv.Delete(id);
                 if (!ok) return Results.NotFound(new { message = "Comision no encontrada" });
                 return Results.NoContent();
-            });
+            }).RequireAuthorization("AdminOnly");
         }
     }
 }

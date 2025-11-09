@@ -1,6 +1,7 @@
 ﻿using Application.Services;
 using Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -39,10 +40,17 @@ namespace WebAPI
                 });
 
             //builder.Services.AddAuthorization();
-            
+
             builder.Services.AddAuthorization(options =>
             {
-                options.FallbackPolicy = options.DefaultPolicy;
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
+                options.AddPolicy("ProfesorOnly", policy => policy.RequireRole("profesor"));
+                options.AddPolicy("AlumnoOnly", policy => policy.RequireRole("alumno"));
+
+                // Exigir autenticación por defecto (si no se especifica otra cosa)
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
             });
 
             // DI
