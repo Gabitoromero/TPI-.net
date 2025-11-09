@@ -1,4 +1,4 @@
-@page "/alumno/inscripciones/nueva"
+Ôªø@page "/alumno/inscripciones/nueva"
 @using API.Clients
 @using DTOs
 @using Application.Services
@@ -7,16 +7,16 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Nueva InscripciÛn</PageTitle>
+<PageTitle>Nueva Inscripci√≥n</PageTitle>
 
 <AuthorizeView RequireAlumno="true">
     <div class="container mt-4">
-        <h3>Nueva InscripciÛn</h3>
+        <h3>Nueva Inscripci√≥n</h3>
         
         @if (alumnoDeshabilitado)
         {
             <div class="alert alert-warning" role="alert">
-                <strong>Cuenta Deshabilitada:</strong> Tu cuenta no est· habilitada. No puedes realizar nuevas inscripciones.
+                <strong>‚ö† Cuenta Deshabilitada:</strong> Tu cuenta no est√° habilitada. No puedes realizar nuevas inscripciones.
             </div>
             
         }
@@ -38,7 +38,7 @@
         else if (!cursosDisponibles.Any())
         {
             <div class="alert alert-info" role="alert">
-                No hay cursos disponibles para inscripciÛn en este momento.
+                No hay cursos disponibles para inscripci√≥n en este momento.
             </div>
         }
         else
@@ -51,8 +51,8 @@
                             <div class="card-body">
                                 <h5 class="card-title">@curso.Materia</h5>
                                 <p class="card-text">
-                                    <strong>ComisiÛn:</strong> @curso.Comision<br />
-                                    <strong>AÒo:</strong> @curso.Anio
+                                    <strong>Comisi√≥n:</strong> @curso.Comision<br />
+                                    <strong>A√±o:</strong> @curso.Anio
                                 </p>
                                 <button class="btn btn-primary w-100" @onclick="() => MostrarConfirmacion(curso)">
                                     Inscribirme
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <!-- Modal de ConfirmaciÛn -->
+    <!-- Modal de Confirmaci√≥n -->
     @if (mostrarModalConfirmacion && cursoSeleccionado != null)
     {
         <ConfirmarInscripcionModal 
@@ -80,7 +80,7 @@
             OnCancelar="CerrarModal" />
     }
 
-    <!-- Modal de …xito -->
+    <!-- Modal de √âxito -->
     @if (mostrarModalExito)
     {
         <MensajeExitoModal 
@@ -212,7 +212,7 @@
 
             await APIUsuario.AddAlumnoCursoAsync(inscripcionDTO);
 
-            mensajeExito = $"°InscripciÛn exitosa!\n\nCurso: {cursoSeleccionado.DisplayText}";
+            mensajeExito = $"¬°Inscripci√≥n exitosa!\n\nCurso: {cursoSeleccionado.DisplayText}";
             mostrarModalExito = true;
             CerrarModal();
         }

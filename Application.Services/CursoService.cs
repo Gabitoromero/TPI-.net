@@ -71,7 +71,7 @@ namespace Application.Services
                     Cupo = curso.Cupo,
                     Id_materia = curso.Id_materia,
                     Id_comision = curso.Id_comision,
-                    Habilitado = curso.Habilitado
+                    Habilitado = true
                 };
                 await _repository.Add(newCurso);
                 curso.Id_curso = newCurso.Id_curso;
