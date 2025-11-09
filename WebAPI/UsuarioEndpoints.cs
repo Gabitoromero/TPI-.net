@@ -36,7 +36,7 @@ namespace WebAPI
                     return Results.NotFound(new { message = "No se encontraron profesores" });
                 }
                 return Results.Ok(dto);
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapGet("/usuarios/alumnos/", async (UsuarioService service) =>
             {
@@ -46,7 +46,7 @@ namespace WebAPI
                     return Results.NotFound(new { message = "No se encontraron alumnos" });
                 }
                 return Results.Ok(dto);
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapGet("/usuarios/", async (UsuarioService service) =>
             {
@@ -69,7 +69,7 @@ namespace WebAPI
                  {
                      return Results.BadRequest(new { error = ex.Message });
                  }
-             });
+             }).RequireAuthorization("AdminOnly");
 
             app.MapDelete("/usuarios/{id}", async (UsuarioService service, int id) =>
             {
@@ -79,7 +79,7 @@ namespace WebAPI
                     return Results.NotFound(new { data = "Usuario no encontrado" });
                 }
                 return Results.NoContent();
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapPut("/usuarios/", async (UsuarioService service, PutUsuarioDTO dto) =>
             {
@@ -97,7 +97,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
 
             // Inscripciones de profesional
 
@@ -132,7 +132,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapPut("/usuarios/profesor_cursos/", async (UsuarioService service, Profesor_CursoDTO dto) =>
             {
@@ -145,7 +145,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapDelete("/usuarios/profesor_cursos/{idDictado}", async (UsuarioService service, int idDictado) =>
             {
@@ -158,7 +158,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
 
             // Inscripciones de alumnos
 
@@ -170,7 +170,7 @@ namespace WebAPI
                     return Results.NotFound(new { message = "El alumno no tiene cursos asignados o no existe" });
                 }
                 return Results.Ok(dto);
-            });
+            }).RequireAuthorization("AlumnoOnly");
 
             app.MapPost("/usuarios/alumno_cursos/", async (UsuarioService service, Alumno_CursoDTO dto) =>
             {
@@ -183,7 +183,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            });
+            }).RequireAuthorization("AlumnoOnly");
 
             app.MapDelete("/usuarios/alumno_cursos/{idInscripcion}", async (UsuarioService service, int idInscripcion) =>
             {
@@ -196,7 +196,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            });
+            }).RequireAuthorization("AlumnoOnly");
 
             app.MapPut("/usuarios/alumno_cursos/{idInscripcion}", async (UsuarioService service, int idInscripcion, Alumno_CursoDTO dto) =>
             {
@@ -273,7 +273,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
         }
     }
 }

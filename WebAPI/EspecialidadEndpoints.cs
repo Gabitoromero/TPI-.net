@@ -20,25 +20,11 @@ namespace WebAPI
                 }
 
                 return Results.Ok(dto);
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapGet("/especialidades/", async (EspecialidadService service, HttpContext context) =>
             {
-                var authHeader = context.Request.Headers["Authorization"].ToString();
-
                 
-                if (context.User.Identity?.IsAuthenticated == true)
-                {
-                    foreach (var claim in context.User.Claims)
-                    {
-                        Console.WriteLine($"  - {claim.Type}: {claim.Value}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine(" Usuario NO autenticado");
-                }
-            
 
                 List<EspecialidadDTO> espDTO = await service.GetAll();
 
@@ -48,9 +34,9 @@ namespace WebAPI
                 }
 
                 return Results.Ok(espDTO);
-            });
+            }).RequireAuthorization("AdminOnly");
 
-           app.MapPost("/especialidades/", async (EspecialidadService service, EspecialidadDTO dto) =>
+            app.MapPost("/especialidades/", async (EspecialidadService service, EspecialidadDTO dto) =>
             {
                 try
                 {
@@ -64,7 +50,7 @@ namespace WebAPI
                     return Results.BadRequest(new { error = er.Message });
                 }
 
-            });
+            }).RequireAuthorization("AdminOnly"); ;
 
             app.MapDelete("/especialidades/{id}", async (EspecialidadService service, int id) =>
             {
@@ -81,7 +67,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = err.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly"); ;
 
             app.MapPut("/especialidades", async (EspecialidadService service, EspecialidadDTO dto) =>
             {
@@ -99,7 +85,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = er.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
         }
     }
 

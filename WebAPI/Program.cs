@@ -1,6 +1,7 @@
 ﻿using Application.Services;
 using Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -38,12 +39,20 @@ namespace WebAPI
                     };
                 });
 
-            builder.Services.AddAuthorization();
-            /*
+            //builder.Services.AddAuthorization();
+
             builder.Services.AddAuthorization(options =>
             {
-                options.FallbackPolicy = options.DefaultPolicy;
-            });*/
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
+                options.AddPolicy("ProfesorOnly", policy => policy.RequireRole("profesor"));
+                options.AddPolicy("AlumnoOnly", policy => policy.RequireRole("alumno"));
+
+                // Exigir autenticación por defecto (si no se especifica otra cosa)
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+
             // DI
             // NOTA: lo normal seria que dependan de una interaz, ejemplo IEspecialidadRepository, de forma que el dia de ma�ana si cambio a EspecialidadRepositoryV2 : IEspecialidadRepository
             // no tengo que cambiar casi nada, pero bueno, lo hicimos con la intencion de probar inyeccion de dependencias, la realidad es que no vamos a cambiar los repos

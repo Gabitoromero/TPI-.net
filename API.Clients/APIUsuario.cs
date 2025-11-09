@@ -30,6 +30,7 @@ namespace API.Clients
                     if (loginResponse != null)
                     {
                         LoginResponse = loginResponse;
+                        AddAuthorizationHeaderAsync(client);
                         return true;
                     }
                     else

@@ -49,7 +49,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = err.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
 
             app.MapPut("/cursos/", async (NewCursoDTO updatedCurso, CursoService cursoService) =>
             {
@@ -66,7 +66,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = err.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly"); ;
 
             app.MapDelete("/cursos/{id}", async (int id, CursoService cursoService) =>
             {
@@ -76,7 +76,7 @@ namespace WebAPI
                     return Results.NotFound(new { data = "Curso no encontrado" });
                 }
                 return Results.NoContent();
-            });
+            }).RequireAuthorization("AdminOnly");
         }
     }
 }

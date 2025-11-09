@@ -16,7 +16,7 @@ namespace WebAPI
                     return Results.NotFound(new { message = "Plan no encontrado" });
                 }
                 return Results.Ok(dto);
-            });
+            }).RequireAuthorization("AdminOnly");
             app.MapGet("/planes/", async (PlanService service) =>
             {
                 List<PlanDTO> planDTO = await service.GetAll();
@@ -25,7 +25,7 @@ namespace WebAPI
                     return Results.NotFound(new { message = "Planes no encontrados" });
                 }
                 return Results.Ok(planDTO);
-            });
+            }).RequireAuthorization("AdminOnly");
             app.MapPost("/planes/", async (PlanService service, PlanDTO dto) =>
             {
                 try
@@ -37,7 +37,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = er.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
             app.MapDelete("/planes/{id}", async (PlanService service, int id) =>
             {
                 try
@@ -52,7 +52,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = err.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
             app.MapPut("/planes/", async (PlanService service, PlanDTO dto) =>
             {
                 try
@@ -68,7 +68,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = er.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
         }
     }
 }
