@@ -257,13 +257,14 @@
                 Email = usuario.Email,
                 Clave = usuario.Clave,
                 Habilitado = usuario.Habilitado,
-                IdPlan = usuario.IdPlan
+                IdPlan = usuario.IdPlan,
+                Direccion = usuario.Direccion,
+                Telefono = usuario.Telefono,
+                FechaNacimiento = usuario.FechaNacimiento
             };
 
-            // Guardar cambios
             await APIUsuario.UpdateAsync(usuarioActualizado);
 
-            // Actualizar la copia original
             usuarioOriginal = new FullUsuarioDTO
             {
                 Id = usuario.Id,

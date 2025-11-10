@@ -69,7 +69,7 @@ namespace WebAPI
                  {
                      return Results.BadRequest(new { error = ex.Message });
                  }
-             }).RequireAuthorization("AdminOnly");
+             });
 
             app.MapDelete("/usuarios/{id}", async (UsuarioService service, int id) =>
             {
@@ -97,7 +97,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            }).RequireAuthorization("AdminOnly");
+            });
 
             // Inscripciones de profesional
 

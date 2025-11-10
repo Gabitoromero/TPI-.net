@@ -223,6 +223,13 @@ namespace Application.Services
             usuario.NombreUsuario = dto.NombreUsuario;
             usuario.Email = dto.Email;
             usuario.Habilitado = dto.Habilitado;
+            usuario.Nombre = dto.Nombre;
+            usuario.Apellido = dto.Apellido;
+            usuario.IdPlan = dto.IdPlan;
+            usuario.Direccion = dto.Direccion;
+            usuario.Telefono = dto.Telefono;
+            usuario.FechaNacimiento = dto.FechaNacimiento;
+            
 
             if (!string.IsNullOrWhiteSpace(dto.Clave)) usuario.SetClave(dto.Clave);
 
