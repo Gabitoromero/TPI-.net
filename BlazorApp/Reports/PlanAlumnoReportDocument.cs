@@ -55,7 +55,6 @@ namespace BlazorApp.Reports
         {
             container.Column(column =>
             {
-                // Logo y encabezado
                 column.Item().Row(row =>
                 {
                     if (_logoBytes.Length > 0)
@@ -74,7 +73,6 @@ namespace BlazorApp.Reports
                 
                 column.Item().PaddingVertical(10).LineHorizontal(1);
                 
-                // Título del reporte
                 column.Item().AlignCenter().Text($"Plan de Estudios - {_datos.NombreCompleto}")
                     .FontSize(18).Bold();
             });
@@ -84,7 +82,6 @@ namespace BlazorApp.Reports
         {
             container.PaddingVertical(10).Column(column =>
             {
-                // Información del alumno y plan
                 column.Item().Element(ComposeInformacion);
                 column.Item().PaddingTop(15).Element(ComposeEstadisticas);
                 column.Item().PaddingTop(15).Element(ComposeListaMaterias);

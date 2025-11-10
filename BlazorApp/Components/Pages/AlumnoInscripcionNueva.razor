@@ -107,7 +107,7 @@
     private bool mostrarModalExito = false;
     private bool mostrarModalError = false;
     private string mensajeExito;
-    private int alumnoId;
+    //private int alumnoId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -135,7 +135,7 @@
             }
 
             List<NewCursoDTO> cursos = await APICurso.GetAllDisponiblesAsync();
-            List<ShowAlumno_CursoDTO> cursosInscriptos = await APIUsuario.GetAlumnoCursosAsync(alumnoId);
+            List<ShowAlumno_CursoDTO> cursosInscriptos = await APIUsuario.GetAlumnoCursosAsync(alumno.Id);
 
             if (cursos == null || !cursos.Any())
             {
@@ -149,9 +149,9 @@
             {
                 MateriaDTO materia = await APIMateria.GetAsync(curso.Id_materia);
                 ComisionDTO comision = await APIComision.GetAsync(curso.Id_comision);
-                
+
                 if (cursosInscriptos.Any(ic => ic.Curso.Id_curso == curso.Id_curso)) continue;
-                
+
                 cursosDisponibles.Add(new CursoDisplayDTO
                 {
                     IdCurso = curso.Id_curso,
@@ -190,10 +190,18 @@
     {
         try
         {
+            var user = await APIUsuario.GetByUsernameAsync(APIClientBase.LoginResponse?.Username);
+            if (user == null)
+            {
+                mensajeError = "No se pudo obtener la información del alumno.";
+                mostrarModalError = true;
+                CerrarModal();
+                
+            }
             Alumno_CursoDTO inscripcionDTO = new Alumno_CursoDTO
             {
                 IdInscripcion = 0,
-                IdAlumno = alumnoId,
+                IdAlumno = user.Id,
                 IdCurso = cursoSeleccionado.IdCurso,
                 Condicion = "Inscripto",
                 Nota = null
