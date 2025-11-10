@@ -89,15 +89,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var profesorId = AuthService.GetUserIdFromToken(APIClientBase.LoginResponse?.Token);
-
-        if (profesorId == null)
-        {
-            errorMessage = "No se pudo obtener el ID del usuario";
-            return;
-        }
-
-        var profesor = await APIUsuario.GetAsync(profesorId.Value);
+        var profesor = await APIUsuario.GetByUsernameAsync(APIClientBase.LoginResponse?.Username);
 
         if (profesor == null)
         {
@@ -105,7 +97,7 @@
             return;
         }
 
-        if (!profesor.Habilitado)
+        if (profesor.Habilitado == false)
         {
             profesorDeshabilitado = true;
             return;

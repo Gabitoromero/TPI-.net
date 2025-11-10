@@ -1,7 +1,6 @@
 ﻿@page "/alumno/inscripciones"
 @using API.Clients
 @using DTOs
-@using Application.Services
 @using BlazorApp.Services
 @using BlazorApp.Reports
 @using BlazorApp.Components.Shared
@@ -124,29 +123,21 @@
     {
         try
         {
-            var alumnoId = AuthService.GetUserIdFromToken(APIClientBase.LoginResponse?.Token);
-            
-            if (alumnoId == null)
-            {
-                errorMessage = "No se pudo obtener el ID del usuario";
-                return;
-            }
-
-            var alumno = await APIUsuario.GetAsync(alumnoId.Value);
+            var alumno = await APIUsuario.GetByUsernameAsync(APIClientBase.LoginResponse?.Username);
 
             if (alumno == null)
             {
                 errorMessage = "Usuario no encontrado";
                 return;
-            }
-            
-            if (!alumno.Habilitado)
+            } 
+
+            if (alumno.Habilitado == false)
             {
                 alumnoDeshabilitado = true;
                 return;
             }
 
-            var inscripcionesAlumno = await APIUsuario.GetAlumnoCursosAsync(alumnoId.Value);
+            var inscripcionesAlumno = await APIUsuario.GetAlumnoCursosAsync(alumno.Id);
 
             if (inscripcionesAlumno == null || !inscripcionesAlumno.Any())
             {

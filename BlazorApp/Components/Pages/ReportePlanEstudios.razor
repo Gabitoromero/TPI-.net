@@ -1,7 +1,6 @@
 @page "/reporte/plan-estudios"
 @using API.Clients
 @using DTOs
-@using Application.Services
 @using BlazorApp.Services
 @using BlazorApp.Reports
 @using QuestPDF.Fluent
@@ -74,15 +73,15 @@
             generando = true;
             StateHasChanged();
 
-            var alumnoId = AuthService.GetUserIdFromToken(APIClientBase.LoginResponse?.Token);
+            var alumno = await APIUsuario.GetByUsernameAsync(APIClientBase.LoginResponse?.Username);
 
-            if (alumnoId == null)
+            if (alumno == null)
             {
                 errorMessage = "No se pudo obtener el ID del usuario. Por favor, inicie sesión nuevamente.";
                 return;
             }
 
-            var datosReporte = await ReportePlanAlumnoService.ObtenerDatosReporteAsync(alumnoId.Value);
+            var datosReporte = await ReportePlanAlumnoService.ObtenerDatosReporteAsync(alumno.Id);
 
             string nombreAlumno = datosReporte.NombreCompleto.Replace(" ", "_").Replace("/", "-");
             string fecha = DateTime.Now.ToString("yyyyMMdd");

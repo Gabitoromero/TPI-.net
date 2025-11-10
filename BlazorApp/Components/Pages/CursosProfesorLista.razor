@@ -1,7 +1,6 @@
 ﻿@page "/profesor/cursos"
 @using API.Clients
 @using DTOs
-@using Application.Services
 @using BlazorApp.Components.Shared
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
@@ -84,15 +83,15 @@
     { 
         try
         {
-            var profesorId = AuthService.GetUserIdFromToken(APIClientBase.LoginResponse?.Token);
+            var profesor = await APIUsuario.GetByUsernameAsync(APIClientBase.LoginResponse?.Username);
             
-            if (profesorId == null)
+            if (profesor == null)
             {
                 errorMessage = "No se pudo obtener tu información de usuario. Por favor, vuelve a iniciar sesión.";
                 return;
             }
 
-            var cursosProfesor = await APIUsuario.GetProfesorCursosAsync(profesorId.Value);
+            var cursosProfesor = await APIUsuario.GetProfesorCursosAsync(profesor.Id);
 
             if (cursosProfesor == null || !cursosProfesor.Any())
             {

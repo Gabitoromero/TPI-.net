@@ -1,7 +1,6 @@
 ﻿@page "/alumno/inscripciones/nueva"
 @using API.Clients
 @using DTOs
-@using Application.Services
 @using BlazorApp.Services
 @using BlazorApp.Components.Shared
 @inject NavigationManager NavigationManager
@@ -119,17 +118,7 @@
     {
         try
         {
-            var alumnoIdFromToken = AuthService.GetUserIdFromToken(APIClientBase.LoginResponse?.Token);
-            
-            if (alumnoIdFromToken == null)
-            {
-                mensajeError = "No se pudo obtener el ID del usuario";
-                mostrarModalError = true;
-                return;
-            }
-
-            alumnoId = alumnoIdFromToken.Value;
-            var alumno = await APIUsuario.GetAsync(alumnoId);
+            var alumno = await APIUsuario.GetByUsernameAsync(APIClientBase.LoginResponse?.Username);
 
             if (alumno == null)
             {
@@ -138,7 +127,7 @@
                 return;
             }
 
-            if (!alumno.Habilitado)
+            if (alumno.Habilitado == false)
             {
                 alumnoDeshabilitado = true;
                 cursosDisponibles = new List<CursoDisplayDTO>();

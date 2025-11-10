@@ -180,16 +180,16 @@
         {
             cargando = true;
             
-            var usuarioId = AuthService.GetUserIdFromToken(APIClientBase.LoginResponse?.Token);
+            var usuariodto = await APIUsuario.GetByUsernameAsync(APIClientBase.LoginResponse?.Username);
             
-            if (usuarioId == null)
+            if (usuariodto == null)
             {
                 mensajeError = "No se pudo obtener el ID del usuario";
                 mostrarModalError = true;
                 return;
             }
 
-            usuario = await APIUsuario.GetAsync(usuarioId.Value);
+            usuario = await APIUsuario.GetAsync(usuariodto.Id);
             
             if (usuario == null)
             {
@@ -198,7 +198,6 @@
                 return;
             }
             
-            // Guardar copia original para poder cancelar cambios
             usuarioOriginal = new FullUsuarioDTO
             {
                 Id = usuario.Id,
@@ -228,10 +227,8 @@
 
     private void MostrarConfirmacion()
     {
-        // Limpiar errores previos
         LimpiarErrores();
 
-        // Validar antes de mostrar confirmación
         if (!ValidarFormulario())
         {
             return;
@@ -251,7 +248,6 @@
         {
             CerrarModalConfirmacion();
 
-            // Crear DTO para actualizar
             PutUsuarioDTO usuarioActualizado = new PutUsuarioDTO
             {
                 Id = usuario.Id,
@@ -305,28 +301,24 @@
     {
         bool esValido = true;
 
-        // Validar nombre
         if (string.IsNullOrWhiteSpace(usuario.Nombre))
         {
             errorNombre = true;
             esValido = false;
         }
 
-        // Validar apellido
         if (string.IsNullOrWhiteSpace(usuario.Apellido))
         {
             errorApellido = true;
             esValido = false;
         }
 
-        // Validar nombre de usuario
         if (string.IsNullOrWhiteSpace(usuario.NombreUsuario))
         {
             errorNombreUsuario = true;
             esValido = false;
         }
 
-        // Validar email
         if (string.IsNullOrWhiteSpace(usuario.Email))
         {
             errorEmail = true;
@@ -366,7 +358,6 @@
 
     private void Cancelar()
     {
-        // Restaurar valores originales
         if (usuarioOriginal != null)
         {
             usuario.Nombre = usuarioOriginal.Nombre;
