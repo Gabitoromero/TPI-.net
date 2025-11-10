@@ -30,7 +30,7 @@ namespace WinFormsApp
                     try
                     {
                         await APIPlan.UpdateAsync(plan);
-                        MessageBox.Show("Plan reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //MessageBox.Show("Plan reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (ArgumentException ex)
                     {
