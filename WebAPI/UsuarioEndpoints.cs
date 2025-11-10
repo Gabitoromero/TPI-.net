@@ -220,7 +220,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = ex.Message });
                 }
-            });
+            }).RequireAuthorization("ProfesorOnly");
 
             app.MapGet("/usuarios/cursos/{idCurso}/alumnos/completo", async (UsuarioService service, int idCurso) =>
             {

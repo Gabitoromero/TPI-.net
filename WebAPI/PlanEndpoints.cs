@@ -37,7 +37,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = er.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
             app.MapDelete("/planes/{id}", async (PlanService service, int id) =>
             {
                 try
@@ -52,7 +52,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = err.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
             app.MapPut("/planes/", async (PlanService service, PlanDTO dto) =>
             {
                 try
@@ -68,7 +68,7 @@ namespace WebAPI
                 {
                     return Results.BadRequest(new { error = er.Message });
                 }
-            });
+            }).RequireAuthorization("AdminOnly");
         }
     }
 }
