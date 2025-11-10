@@ -10,6 +10,7 @@ namespace WinFormsApp
         {
             InitializeComponent();
         }
+
         private void btnCerrar_Click(object sender, EventArgs e)
         {
             Close();
@@ -19,7 +20,6 @@ namespace WinFormsApp
         {
             try
             {
-                // Obtener el alumno actual
                 if (APIUsuario.LoginResponse == null || string.IsNullOrEmpty(APIUsuario.LoginResponse.Username))
                 {
                     MessageBox.Show("Error: No hay sesión activa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -30,9 +30,11 @@ namespace WinFormsApp
                 ShowUsuarioDTO alumno = await APIUsuario.GetByUsernameAsync(APIUsuario.LoginResponse.Username);
                 List<ShowAlumno_CursoDTO>? inscripciones = await APIUsuario.GetAlumnoCursosAsync(alumno.Id);
 
-                if (inscripciones == null) { MessageBox.Show($"Alumno sin inscripciones", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                if (inscripciones == null) 
+                { 
+                    MessageBox.Show($"Alumno sin inscripciones", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                }
 
-                // Obtener información de materias y comisiones
                 var materiaTasks = inscripciones.Select(i => APIMateria.GetAsync(i.Curso.Id_materia)).ToList();
                 var comisionTasks = inscripciones.Select(i => APIComision.GetAsync(i.Curso.Id_comision)).ToList();
                 var materias = await Task.WhenAll(materiaTasks);

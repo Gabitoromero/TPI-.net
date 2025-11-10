@@ -7,17 +7,14 @@ namespace WinFormsApp.Services
     {
         public static async Task<ReporteCursoDTO> ObtenerDatosReporteAsync(NewCursoDTO curso)
         {
-            // Obtener datos de las APIs
             var alumnos = await APIUsuario.GetAlumnosByCursoAsync(curso.Id_curso);
             var profesores = await APIUsuario.GetProfesoresByCursoAsync(curso.Id_curso);
             var materias = await APIMateria.GetAllAsync();
             var comisiones = await APIComision.GetAllAsync();
             
-            // Buscar nombre de materia y comisión
             var materia = materias.FirstOrDefault(m => m.Id_materia == curso.Id_materia);
             var comision = comisiones.FirstOrDefault(c => c.Id_comision == curso.Id_comision);
             
-            // Calcular estadísticas
             var alumnosConNota = alumnos.Where(a => a.Nota.HasValue).ToList();
             var aprobados = alumnos.Where(a => a.Condicion == "Aprobado").Count();
             var reprobados = alumnos.Where(a => a.Condicion == "Reprobado").Count();
@@ -29,7 +26,6 @@ namespace WinFormsApp.Services
             
             int totalInscriptos = alumnos.Count;
             
-            // Calcular distribución de notas por rangos
             var distribucion = new Dictionary<string, int>
             {
                 { "0-3", alumnosConNota.Count(a => a.Nota >= 0 && a.Nota <= 3) },
@@ -37,7 +33,6 @@ namespace WinFormsApp.Services
                 { "7-10", alumnosConNota.Count(a => a.Nota >= 7 && a.Nota <= 10) }
             };
             
-            // Calcular porcentajes
             double totalConCondicion = aprobados + reprobados + sinNota;
             
             return new ReporteCursoDTO

@@ -11,10 +11,12 @@ namespace WinFormsApp
     {
         private MateriaDTO dto;
         private bool isEdit = false;
+
         public MateriaDetalleForm()
         {
             InitializeComponent();
         }
+
         public MateriaDetalleForm(MateriaDTO dto) : this()
         {
             this.dto = dto;
@@ -71,6 +73,7 @@ namespace WinFormsApp
                 {
                     MessageBox.Show($"Ingrese horas positivas", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+
                 MateriaDTO toSend = new MateriaDTO
                 {
                     Id_materia = (dto != null) ? dto.Id_materia : 0,

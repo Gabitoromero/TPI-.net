@@ -87,7 +87,7 @@
             label1.Size = new Size(50, 15);
             label1.TabIndex = 4;
             label1.Text = "Materia:";
-            label1.Click += label1_Click;
+            //label1.Click += label1_Click;
             // 
             // label2
             // 

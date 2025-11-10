@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using API.Clients;
+﻿using API.Clients;
 using DTOs;
 
 namespace WinFormsApp
@@ -52,8 +43,8 @@ namespace WinFormsApp
                     {
                         numericNota.Value = 6;
                     }
-                    
                 }
+
                 if (comboBoxCondicion.SelectedItem?.ToString() == "Reprobado")
                 {
                     label2.Visible = true;
@@ -79,8 +70,8 @@ namespace WinFormsApp
                 numericNota.Visible = true;
                 numericNota.Minimum = 6;
                 numericNota.Maximum = 10;
-
             }
+
             if (comboBoxCondicion.SelectedItem?.ToString() == "Reprobado")
             {
                 label2.Visible = true;
@@ -92,7 +83,6 @@ namespace WinFormsApp
 
         private void BtnVolver_Click(object? sender, EventArgs e)
         {
-            //this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 
@@ -123,7 +113,6 @@ namespace WinFormsApp
                     Nota = (nuevaCondicion == "Aprobado" || nuevaCondicion == "Reprobado") ? (int?)numericNota.Value : null
                 };
 
-                // Enviar la actualización al servidor
                 await APIUsuario.PutAlumnoCursoAsync(dto);
 
                 MessageBox.Show("Alumno actualizado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -153,8 +142,8 @@ namespace WinFormsApp
                 {
                     numericNota.Value = 6;
                 }
-                
             }
+
             if (alumnoOriginal.Condicion == "Reprobado")
             {
                 label2.Visible = true;

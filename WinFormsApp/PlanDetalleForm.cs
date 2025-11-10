@@ -1,14 +1,6 @@
 ﻿using DTOs;
 using API.Clients;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
 
 namespace WinFormsApp
 {
@@ -17,10 +9,12 @@ namespace WinFormsApp
     {
         private PlanDTO plan;
         private bool isEdit = false;
+
         public PlanDetalleForm()
         {
             InitializeComponent();
         }
+
         public PlanDetalleForm(PlanDTO plan) : this()
         {
             this.plan = plan;
@@ -31,17 +25,19 @@ namespace WinFormsApp
         {
             try
             {
-
-                try
+                if (isEdit && plan != null)
                 {
-                    await APIPlan.UpdateAsync(plan);
-                    MessageBox.Show("Plan reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (ArgumentException ex)
-                {
-                    MessageBox.Show($"Error al reactivar el plan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    this.Close();
-                    return;
+                    try
+                    {
+                        await APIPlan.UpdateAsync(plan);
+                        MessageBox.Show("Plan reactivado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        MessageBox.Show($"Error al reactivar el plan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        this.Close();
+                        return;
+                    }
                 }
 
                 await LoadEspecialidades();

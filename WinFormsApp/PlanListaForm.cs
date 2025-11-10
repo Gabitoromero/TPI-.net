@@ -1,13 +1,5 @@
 ﻿using DTOs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using API.Clients;
 
 
@@ -49,11 +41,9 @@ namespace WinFormsApp
                     MessageBox.Show("No se pudieron cargar los planes.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
-                // Build dictionary for fast lookup (handle nulls)
                 var espDict = (especialidades ?? new List<EspecialidadDTO>())
                               .ToDictionary(x => x.Id, x => x.Descripcion);
 
-                // Project to a view model that shows Especialidad description instead of Id
                 var view = (planes ?? new List<PlanDTO>()).Select(p => new
                 {
                     IdPlan = p.IdPlan,
@@ -70,11 +60,6 @@ namespace WinFormsApp
             {
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void btnCerrar_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
         
         private async void btnEliminar_Click(object sender, EventArgs e)

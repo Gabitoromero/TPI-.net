@@ -1,21 +1,12 @@
 ﻿using API.Clients;
 using DTOs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace WinFormsApp
 {
     public partial class RegisterForm : Form
     {
-        private readonly bool isAutoRegistro; // true = desde login, false = desde admin (UsuarioList)
+        private readonly bool isAutoRegistro;
 
         public RegisterForm(bool autoRegistro = true)
         {
@@ -36,7 +27,6 @@ namespace WinFormsApp
 
                 if(isAutoRegistro) 
                 {
-                    // Si es registro por admin, permitir ambos tipos
                     string[] tiposUsuario = { "alumno", "profesor" };
                     comboBoxTipoUsuario.DataSource = tiposUsuario;
                     comboBoxTipoUsuario.SelectedIndex = -1;
@@ -44,11 +34,10 @@ namespace WinFormsApp
                 }
                 else
                 {
-                    // Si es autoregistro desde login, solo permitir registro de profesores
                     string[] tiposUsuario = { "profesor" };
                     comboBoxTipoUsuario.DataSource = tiposUsuario;
-                    comboBoxTipoUsuario.SelectedIndex = 0; // Seleccionar "profesor" por defecto
-                    comboBoxTipoUsuario.Enabled = false; // Deshabilitar para que no se pueda cambiar
+                    comboBoxTipoUsuario.SelectedIndex = 0;
+                    comboBoxTipoUsuario.Enabled = false;
                 }
             }
             catch
@@ -61,7 +50,6 @@ namespace WinFormsApp
         {
             try
             {
-                // Validar telefono: debe contener 10 dígitos
                 string rawTelefono = maskedTextBoxTelefono.Text ?? string.Empty;
                 string digitsTelefono = new string(rawTelefono.Where(char.IsDigit).ToArray());
                 if (digitsTelefono.Length != 10)
@@ -94,14 +82,12 @@ namespace WinFormsApp
                     Tipo = comboBoxTipoUsuario.SelectedItem != null ? comboBoxTipoUsuario.SelectedItem.ToString()! : string.Empty
                 };
 
-                // Llamada al API que acepta FullUsuarioDTO y devuelve PostUsuarioDTO (ID and credentials)
                 PostUsuarioDTO response = await APIUsuario.AddAsync(dto);
 
                 MessageBox.Show("Usuario registrado exitosamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 if (isAutoRegistro)
                 {
-                    // Autoregistro desde login: hacer login automático y abrir MenuForm
                     bool loginSuccess = await APIUsuario.LoginAsync(new LoginRequest { NombreUsuario = response.NombreUsuario, Clave = response.Clave });
 
                     if (loginSuccess)
@@ -112,7 +98,6 @@ namespace WinFormsApp
                     else
                     {
                         MessageBox.Show("Error al loguear automáticamente, intente de nuevo", "Error de servidor", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        
                     }
                 }
                 else

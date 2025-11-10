@@ -39,7 +39,7 @@ namespace WinFormsApp
                 {
                     MessageBox.Show("No se pudieron cargar las comisiones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                // Filtrar solo comisiones habilitadas
+
                 var comisionesHabilitadas = comisiones.Where(c => c.Habilitado).ToList();
                 if (comisionesHabilitadas.Count == 0)
                 {
@@ -54,7 +54,7 @@ namespace WinFormsApp
                 {
                     MessageBox.Show("No se pudieron cargar las materias.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                // Filtrar solo materias habilitadas
+
                 var materiasDisponibles = materias;
                 if (materiasDisponibles.Count == 0)
                 {
@@ -99,6 +99,8 @@ namespace WinFormsApp
                 MessageBox.Show($"{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        
     }
 }
 

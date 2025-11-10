@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 using API.Clients;
 using DTOs;
 
@@ -43,7 +35,6 @@ namespace WinFormsApp
                 dataGridProfesores.DataSource = null;
                 dataGridProfesores.DataSource = profesores;
 
-                // Configurar headers
                 if (dataGridProfesores.Columns["Id"] != null)
                     dataGridProfesores.Columns["Id"].HeaderText = "ID";
 
@@ -66,7 +57,7 @@ namespace WinFormsApp
 
         private void DataGridProfesores_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return; 
+            if (e.RowIndex < 0) return;
 
             try
             {
@@ -102,7 +93,7 @@ namespace WinFormsApp
                 {
                     Profesor_CursoDTO dto = new Profesor_CursoDTO
                     {
-                        IdDictado = 0, 
+                        IdDictado = 0,
                         IdProfesor = idProfesorSeleccionado,
                         IdCurso = idCurso,
                         Cargo = cargo

@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using DTOs;
+﻿using DTOs;
 using API.Clients;
-using Microsoft.AspNetCore.Http.Timeouts;
 
 namespace WinFormsApp
 {
@@ -20,6 +10,7 @@ namespace WinFormsApp
             InitializeComponent();
             this.VisibleChanged += LoginForm_VisibleChanged;
         }
+
         private void LoginForm_VisibleChanged(object? sender, EventArgs e)
         {
             if (this.Visible)
@@ -83,7 +74,6 @@ namespace WinFormsApp
                     MessageBox.Show("Datos inválidos, pruebe de nuevo.", "Datos incorrectos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 buttonLogin.Enabled = true;
-
             }
             catch (ArgumentException ex)
             {
@@ -95,27 +85,23 @@ namespace WinFormsApp
         {
             try
             {
-                var registerForm = new RegisterForm(autoRegistro: true); // Indica que es autoregistro
+                var registerForm = new RegisterForm(autoRegistro: true);
                 Hide();
                 DialogResult result = registerForm.ShowDialog();
                 
                 if(result == DialogResult.OK)
                 {
-                    
-                    // Registro exitoso, abrir MenuForm
                     var menuForm = new MenuForm();
                     menuForm.FormClosed += (s, args) =>
                     {
-                        Show(); // Vuelve a mostrar login al cerrar menú
+                        Show();
                     };
                     menuForm.Show();
                 }
                 else
                 {
-                    // Usuario canceló el registro, volver a mostrar login
                     Show();
                 }
-                
             }
             catch (Exception ex)
             {

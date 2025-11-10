@@ -35,7 +35,6 @@ namespace WinFormsApp
         {
             try
             {
-
                 List<NewCursoDTO> cursos = await APICurso.GetAllAsync();
                 if (cursos.Count == 0)
                 {
@@ -54,7 +53,6 @@ namespace WinFormsApp
                     MessageBox.Show("No se pudieron cargar las materias.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
-
                 var view = (cursos ?? new List<NewCursoDTO>())
                     .Select(c => new
                     {
@@ -63,13 +61,12 @@ namespace WinFormsApp
                         Cupo = c.Cupo,
                         Comision = comisiones.FirstOrDefault(x => x.Id_comision == c.Id_comision)?.Desc_comision ?? "(sin comision)",
                         Materia = materias.FirstOrDefault(m => m.Id_materia == c.Id_materia)?.Desc_materia ?? "(sin materia)",
-                        CursoDTO = c // Guardar el DTO original para el reporte
+                        CursoDTO = c
                     })
                     .ToList();
 
                 dataGridViewCursos.DataSource = view;
                 
-                // Ocultar columna del DTO original
                 if (dataGridViewCursos.Columns["CursoDTO"] != null)
                 {
                     dataGridViewCursos.Columns["CursoDTO"].Visible = false;
@@ -144,14 +141,12 @@ namespace WinFormsApp
                 string comisionDesc = dataGridViewCursos.CurrentRow.Cells["Comision"].Value?.ToString() ?? "desconocida";
                 int anio = (int)dataGridViewCursos.CurrentRow.Cells["Anio_calendario"].Value;
 
-                // Mostrar mensaje de confirmación
                 DialogResult confirmResult = MessageBox.Show(
                     $"¿Está seguro que desea eliminar el curso?\n\nMateria: {materiaDesc}\nComisión: {comisionDesc}\nAño: {anio}\n\nEsta acción no se puede deshacer.",
                     "Confirmar Eliminación",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
 
-                // Solo eliminar si el usuario confirma
                 if (confirmResult == DialogResult.Yes)
                 {
                     await APICurso.DeleteAsync(id);
@@ -167,7 +162,7 @@ namespace WinFormsApp
 
         private async void DataGridViewCursos_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return; // Ignorar clic en el header
+            if (e.RowIndex < 0) return;
 
             try
             {
@@ -211,28 +206,20 @@ namespace WinFormsApp
                     return;
                 }
 
-                // Obtener el curso seleccionado desde la columna oculta
                 var cursoSeleccionado = (NewCursoDTO)dataGridViewCursos.CurrentRow.Cells["CursoDTO"].Value;
                 
-                // Mostrar indicador de carga
                 Cursor = Cursors.WaitCursor;
                 btnExportarPDF.Enabled = false;
                 btnExportarPDF.Text = "Generando...";
 
-                // Obtener datos para el reporte
                 var datosReporte = await ReporteCursoService.ObtenerDatosReporteAsync(cursoSeleccionado);
                 
-                // Generar nombre del archivo (sanitizar caracteres especiales)
                 string nombreMateria = datosReporte.NombreMateria.Replace(" ", "_").Replace("/", "-");
                 string nombreComision = datosReporte.DescripcionComision.Replace(" ", "_").Replace("/", "-");
                 string nombreArchivo = $"Reporte_Curso_{nombreMateria}_{nombreComision}_{datosReporte.AnioCalendario}.pdf";
                 
-                // Crear el documento
                 var document = new CursoReportDocument(datosReporte);
-
-     
                 document.GeneratePdfAndShow();
-            
 
                 MessageBox.Show($"Reporte generado exitosamente: {nombreArchivo}", "Éxito", 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);

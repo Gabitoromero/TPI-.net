@@ -27,7 +27,6 @@ namespace WinFormsApp
                 ShowUsuarioDTO profesor = await APIUsuario.GetByUsernameAsync(APIUsuario.LoginResponse.Username);
                 var cursosProfesor = await APIUsuario.GetProfesorCursosAsync(profesor.Id);
 
-                // Obtener información de materias y comisiones
                 var materiaTasks = cursosProfesor.Select(c => APIMateria.GetAsync(c.Curso.Id_materia)).ToList();
                 var comisionTasks = cursosProfesor.Select(c => APIComision.GetAsync(c.Curso.Id_comision)).ToList();
                 var materias = await Task.WhenAll(materiaTasks);
@@ -44,7 +43,6 @@ namespace WinFormsApp
 
                 dataGridViewCursos.DataSource = data;
 
-                // Ocultar la columna IdCurso
                 if (dataGridViewCursos.Columns["IdCurso"] != null)
                 {
                     dataGridViewCursos.Columns["IdCurso"].Visible = false;

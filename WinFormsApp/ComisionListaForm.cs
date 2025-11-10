@@ -26,7 +26,6 @@ namespace WinFormsApp
 
         private void DataGridViewComisiones_SelectionChanged(object? sender, EventArgs e)
         {
-
             bool haySeleccion = dataGridViewComisiones.SelectedRows.Count > 0 && dataGridViewComisiones.CurrentRow != null;
             btnModificar.Enabled = haySeleccion;
             btnEliminar.Enabled = haySeleccion;
@@ -59,7 +58,7 @@ namespace WinFormsApp
                 dataGridViewComisiones.DataSource = view;
                 dataGridViewComisiones.ClearSelection();
                 btnModificar.Enabled = false;
-                btnEliminar.Enabled = false; // Deshabilitar después de limpiar selección
+                btnEliminar.Enabled = false;
             }
             catch (ArgumentException ex)
             {
@@ -121,22 +120,18 @@ namespace WinFormsApp
                 }
                 int id = (int)dataGridViewComisiones.CurrentRow.Cells["Id_comision"].Value;
 
-                // Mostrar mensaje de confirmación
                 DialogResult confirmResult = MessageBox.Show(
                     $"¿Está seguro que desea eliminar la comisión'{id}'?\n\nSe darán de baja todos los cursos de esta comisión. Esta acción no se puede deshacer.",
                     "Confirmar Eliminación",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
 
-                // Solo eliminar si el usuario confirma
                 if (confirmResult == DialogResult.Yes)
                 {
                     await APIComision.DeleteAsync(id);
                     MessageBox.Show("Comisión eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     await LoadComisiones();
                 }
-
-
             }
             catch (ArgumentException ex)
             {

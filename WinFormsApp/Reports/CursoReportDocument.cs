@@ -55,7 +55,6 @@ namespace WinFormsApp.Reports
         {
             container.Column(column =>
             {
-                // Logo y encabezado
                 column.Item().Row(row =>
                 {
                     if (_logoBytes.Length > 0)
@@ -74,7 +73,6 @@ namespace WinFormsApp.Reports
                 
                 column.Item().PaddingVertical(10).LineHorizontal(1);
                 
-                // Título del reporte
                 column.Item().AlignCenter().Text($"Reporte de Curso - {_datos.NombreMateria}")
                     .FontSize(18).Bold();
                 
@@ -87,7 +85,6 @@ namespace WinFormsApp.Reports
         {
             container.PaddingVertical(10).Column(column =>
             {
-                // Información general
                 column.Item().Element(ComposeInformacionGeneral);
                 column.Item().PaddingTop(15).Element(ComposeEstadisticas);
                 column.Item().PaddingTop(15).Element(ComposeGraficos);
@@ -145,7 +142,6 @@ namespace WinFormsApp.Reports
             {
                 column.Item().Background(Colors.Grey.Lighten3).Padding(8).Text("Distribución de Notas").FontSize(14).Bold();
                 
-                // Gráfico de torta (simulado con barras de colores)
                 column.Item().PaddingTop(10).Text("Porcentaje por Condición").FontSize(12).Bold();
                 column.Item().PaddingTop(5).Row(row =>
                 {
@@ -166,7 +162,6 @@ namespace WinFormsApp.Reports
                     }
                 });
                 
-                // Distribución por rangos
                 column.Item().PaddingTop(15).Text("Distribución por Rango de Notas").FontSize(12).Bold();
                 column.Item().PaddingTop(5).Row(row =>
                 {

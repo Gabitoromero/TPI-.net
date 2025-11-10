@@ -34,7 +34,6 @@ namespace WinFormsApp
 
         private void MenuProfesor_Load(object sender, EventArgs e)
         {
-            // Puedes agregar lógica de inicialización si es necesario
         }
     }
 }

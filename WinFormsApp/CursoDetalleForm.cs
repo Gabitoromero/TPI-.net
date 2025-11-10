@@ -8,7 +8,7 @@ namespace WinFormsApp
     {
         private NewCursoDTO curso;
         private bool isEdit = false;
-        private bool isEditingMode = false; // Para controlar el estado de edición
+        private bool isEditingMode = false;
 
         public CursoDetalleForm()
         {
@@ -37,7 +37,6 @@ namespace WinFormsApp
         {
             try
             {
-                // Validar si el curso está deshabilitado
                 if (isEdit && curso != null && !curso.Habilitado)
                 {
                     DialogResult result = MessageBox.Show(
@@ -77,7 +76,7 @@ namespace WinFormsApp
                     {
                         MessageBox.Show("No se pudieron cargar las comisiones.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
-                    // Filtrar solo comisiones habilitadas
+
                     var comisionesHabilitadas = comisiones.Where(c => c.Habilitado).ToList();
                     if (comisionesHabilitadas.Count == 0)
                     {
@@ -145,10 +144,8 @@ namespace WinFormsApp
                         comboBoxMateria.SelectedIndex = -1;
                     }
                 }
-                // Cargar alumnos del curso
-                await LoadAlumnosCurso(curso.Id_curso);
 
-                // Cargar profesores del curso
+                await LoadAlumnosCurso(curso.Id_curso);
                 await LoadProfesoresCurso(curso.Id_curso);
 
                 SetEditingMode(false);
@@ -307,20 +304,17 @@ namespace WinFormsApp
                 string nombreAlumno = dataGridAlumnosCurso.CurrentRow.Cells["Alumno"].Value?.ToString() ?? "este alumno";
                 string condicion = dataGridAlumnosCurso.CurrentRow.Cells["Condicion"].Value?.ToString() ?? "desconocida";
 
-                // Mostrar mensaje de confirmación
                 DialogResult confirmResult = MessageBox.Show(
                     $"¿Está seguro que desea eliminar la inscripción del alumno '{nombreAlumno}'?\n\nCondición: {condicion}\n\nEsta acción no se puede deshacer.",
                     "Confirmar Eliminación",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
 
-                // Solo eliminar si el usuario confirma
                 if (confirmResult == DialogResult.Yes)
                 {
                     await APIUsuario.DeleteAlumnoCursoAsync(idInscripcion);
                     MessageBox.Show("Inscripción eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Recargar la lista de alumnos
                     await LoadAlumnosCurso(curso.Id_curso);
                 }
             }
@@ -344,20 +338,17 @@ namespace WinFormsApp
                 string nombreProfesor = dataGridProfesoresCurso.CurrentRow.Cells["Nombre"].Value?.ToString() ?? "este profesor";
                 string cargo = dataGridProfesoresCurso.CurrentRow.Cells["Cargo"].Value?.ToString() ?? "desconocido";
 
-                // Mostrar mensaje de confirmación
                 DialogResult confirmResult = MessageBox.Show(
                     $"¿Está seguro que desea eliminar la asignación del profesor '{nombreProfesor}'?\n\nCargo: {cargo}\n\nEsta acción no se puede deshacer.",
                     "Confirmar Eliminación",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
 
-                // Solo eliminar si el usuario confirma
                 if (confirmResult == DialogResult.Yes)
                 {
                     await APIUsuario.DeleteProfesorCursoAsync(idDictado);
                     MessageBox.Show("Asignación eliminada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Recargar la lista de profesores
                     await LoadProfesoresCurso(curso.Id_curso);
                 }
             }
@@ -376,7 +367,6 @@ namespace WinFormsApp
                 {
                     formSeleccion.ShowDialog();
 
-                    // Si se agregó un profesor, recargar la lista
                     if (formSeleccion.ProfesorAgregado)
                     {
                         _ = LoadProfesoresCurso(curso.Id_curso);

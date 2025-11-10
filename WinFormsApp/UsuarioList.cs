@@ -14,12 +14,14 @@ namespace WinFormsApp
 {
     public partial class UsuarioList : Form
     {
-        private string? activeFilter = null; // null = all, "alumno" or "profesor"
+        private string? activeFilter = null;
+
         public UsuarioList()
         {
             InitializeComponent();
             dataGridViewUsuarios.SelectionChanged += DataGridViewUsuarios_SelectionChanged;
         }
+
         private void DataGridViewUsuarios_SelectionChanged(object? sender, EventArgs e)
         {
             bool haySeleccion = dataGridViewUsuarios.SelectedRows.Count > 0 && dataGridViewUsuarios.CurrentRow != null;
@@ -31,7 +33,7 @@ namespace WinFormsApp
         {
             try
             {
-                await ApplyFilterAsync(null); // load all and update UI
+                await ApplyFilterAsync(null);
             }
             catch (Exception ex)
             {
@@ -68,14 +70,12 @@ namespace WinFormsApp
             }
             else
             {
-                // If DTO has Tipo property but column not auto-generated yet, force refresh
                 dataGridViewUsuarios.Refresh();
             }
         }
 
         private void UpdateFilterButtonsAppearance()
         {
-            // Reset to default
             btnAlumnos.UseVisualStyleBackColor = false;
             btnProfesores.UseVisualStyleBackColor = false;
 
@@ -104,7 +104,6 @@ namespace WinFormsApp
 
         private async Task ApplyFilterAsync(string? tipo)
         {
-            // Toggle behavior: if tipo equals activeFilter, clear filter (show all)
             if (tipo != null && activeFilter == tipo)
             {
                 tipo = null;
@@ -134,19 +133,17 @@ namespace WinFormsApp
                 int idUser = (int)dataGridViewUsuarios.CurrentRow.Cells["Id"].Value;
                 string nombreUsuario = dataGridViewUsuarios.CurrentRow.Cells["NombreUsuario"].Value?.ToString() ?? "este usuario";
 
-                // Mostrar mensaje de confirmación
                 DialogResult confirmResult = MessageBox.Show(
                     $"¿Está seguro que desea eliminar al usuario '{nombreUsuario}'?\n\nEsta acción no se puede deshacer.",
                     "Confirmar Eliminación",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
 
-                // Solo eliminar si el usuario confirma
                 if (confirmResult == DialogResult.Yes)
                 {
                     await APIUsuario.DeleteAsync(idUser);
                     MessageBox.Show("Usuario eliminado con éxito", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    UsuarioList_Load(sender, e); // Recargar la lista de usuarios
+                    UsuarioList_Load(sender, e);
                 }
             }
             catch (Exception ex)
@@ -197,7 +194,7 @@ namespace WinFormsApp
                     userDetailForm.ShowDialog();
                 }
                 this.Show();
-                UsuarioList_Load(sender, e); // Recargar la lista de usuarios después de modificar
+                UsuarioList_Load(sender, e);
             }
             catch (Exception ex)
             {
@@ -275,7 +272,7 @@ namespace WinFormsApp
                 
                 if (result == DialogResult.OK)
                 {
-                    UsuarioList_Load(sender, new EventArgs()); // Recargar la lista de usuarios después de agregar uno nuevo
+                    UsuarioList_Load(sender, new EventArgs());
                 }
             }
             this.Show();
