@@ -43,6 +43,12 @@
             checkBoxHabilitado = new CheckBox();
             fechaAlta = new Label();
             textBoxFechaAlta = new TextBox();
+            txtBoxDireccion = new TextBox();
+            textBoxTel = new TextBox();
+            monthCalendar1 = new MonthCalendar();
+            labelDirecc = new Label();
+            labelFecha = new Label();
+            label3 = new Label();
             SuspendLayout();
             // 
             // btnGuardar
@@ -172,11 +178,64 @@
             textBoxFechaAlta.Size = new Size(189, 23);
             textBoxFechaAlta.TabIndex = 16;
             // 
+            // txtBoxDireccion
+            // 
+            txtBoxDireccion.Location = new Point(488, 25);
+            txtBoxDireccion.Name = "txtBoxDireccion";
+            txtBoxDireccion.Size = new Size(173, 23);
+            txtBoxDireccion.TabIndex = 17;
+            // 
+            // textBoxTel
+            // 
+            textBoxTel.Location = new Point(488, 58);
+            textBoxTel.Name = "textBoxTel";
+            textBoxTel.Size = new Size(173, 23);
+            textBoxTel.TabIndex = 18;
+            // 
+            // monthCalendar1
+            // 
+            monthCalendar1.Location = new Point(418, 135);
+            monthCalendar1.Name = "monthCalendar1";
+            monthCalendar1.TabIndex = 19;
+            // 
+            // labelDirecc
+            // 
+            labelDirecc.AutoSize = true;
+            labelDirecc.Location = new Point(414, 28);
+            labelDirecc.Name = "labelDirecc";
+            labelDirecc.Size = new Size(66, 15);
+            labelDirecc.TabIndex = 20;
+            labelDirecc.Text = "Direccion : ";
+            // 
+            // labelFecha
+            // 
+            labelFecha.AutoSize = true;
+            labelFecha.Location = new Point(415, 62);
+            labelFecha.Name = "labelFecha";
+            labelFecha.Size = new Size(59, 15);
+            labelFecha.TabIndex = 21;
+            labelFecha.Text = "Telefono :";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(418, 101);
+            label3.Name = "label3";
+            label3.Size = new Size(123, 15);
+            label3.TabIndex = 22;
+            label3.Text = "Fecha de nacimiento: ";
+            // 
             // UsuarioDetalle
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(435, 388);
+            ClientSize = new Size(673, 388);
+            Controls.Add(label3);
+            Controls.Add(labelFecha);
+            Controls.Add(labelDirecc);
+            Controls.Add(monthCalendar1);
+            Controls.Add(textBoxTel);
+            Controls.Add(txtBoxDireccion);
             Controls.Add(textBoxFechaAlta);
             Controls.Add(fechaAlta);
             Controls.Add(checkBoxHabilitado);
@@ -216,5 +275,11 @@
         private CheckBox checkBoxHabilitado;
         private Label fechaAlta;
         private TextBox textBoxFechaAlta;
+        private TextBox txtBoxDireccion;
+        private TextBox textBoxTel;
+        private MonthCalendar monthCalendar1;
+        private Label labelDirecc;
+        private Label labelFecha;
+        private Label label3;
     }
 }
